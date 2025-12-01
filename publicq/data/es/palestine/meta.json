@@ -1,9 +1,0 @@
-{
-  "name": "Palestina",
-  "sections": [
-    { "id": "descripcion", "label": "Descripción del conflicto" },
-    { "id": "testimonios", "label": "Testimonios" },
-    { "id": "analisis", "label": "Análisis" },
-    { "id": "genocidios", "label": "Genocidio" }
-  ]
-}
