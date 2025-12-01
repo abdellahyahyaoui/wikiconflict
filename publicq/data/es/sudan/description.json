@@ -1,0 +1,11 @@
+{
+  "title": "Guerra en Sudán",
+  "intro": "Sudán vive una guerra brutal entre FSR y Ejército.",
+  "sections": [
+    {
+      "id": "origenes",
+      "title": "Orígenes del conflicto",
+      "content": "Tras años de tensiones políticas..."
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+/* Fixing map container to fill available space correctly */
+.map-wrapper {
+  width: 100%;
+  height: 70vh; /* Fixed height relative to viewport */
+  min-height: 500px;
+  /* margin: 2rem auto; */
+  position: fixed;
+  /* margin-top: 250px; */
+}
+
+/* Removed tooltip-card styles as it's no longer used */
+
+/* Fixed backslash and double semicolon syntax errors */
+.tooltip-card h3 {
+  color: #16a34a;
+  font-size: 1.5rem;
+  font-family: Cormorant Garamond;
+}
+
+/* Adding pulsating circle animation for conflict zones */
+@keyframes pulsate {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.conflict-marker {
+  position: absolute;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.conflict-marker-pin {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ef4444;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 52;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.6);
+}
+
+.conflict-marker-pin:hover {
+  background: #dc2626;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.conflict-marker-pulse {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ef4444;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulsate 2.5s ease-out infinite;
+  pointer-events: none;
+}
+
+.conflict-marker-pulse:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.conflict-marker-pulse:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.conflict-marker-pulse:nth-child(4) {
+  animation-delay: 1.5s;
+}
+
+/* Updated styles for teardrop pin markers */
+.capital-marker-pin {
+  transition: transform 0.2s ease, fill 0.2s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.capital-marker-pin:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* Updated popup to show on hover without close button */
+.country-popup {
+  background: #ffffff;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  overflow: hidden;
+  position: fixed;
+  transform: translate(-50%, 0);
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.country-popup-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.country-popup-content {
+  padding: 24px;
+}
+
+.country-popup-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  font-family: "Cormorant Garamond", serif;
+}
+
+.country-popup-description {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+/* --- EFECTO PAÍS SE LEVANTA SUAVEMENTE --- */
+.country-lift {
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.country-lift:hover {
+  transform: translateY(4px);
+  filter: drop-shadow(0 0 6px rgba(212, 203, 203, 0.25));
+}
+
+
+/* --- EFECTO VIBRACIÓN PARA PAÍSES EN CONFLICTO --- */
+@keyframes shake {
+  0% { transform: translate(0px, 0px); }
+  20% { transform: translate(1px, -1px); }
+  40% { transform: translate(-1px, 1px); }
+  60% { transform: translate(1px, 1px); }
+  80% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+.conflict-country {
+  animation: shake 0.45s infinite linear;
+}
+.country-lifted {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.25));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+/* Ondas de conflicto más grandes y más oscuras */
+.conflict-wave {
+  fill: none;
+  stroke: rgb(49, 3, 3);   /* rojo oscuro, elegante */
+  stroke-width: 2.4;
+  opacity: 0;
+  animation: conflictPulse 3.4s ease-out infinite;
+  transform-origin: center;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+/* Desfase entre ondas */
+.conflict-wave:nth-child(1) { animation-delay: 0s; }
+.conflict-wave:nth-child(2) { animation-delay: 0.7s; }
+.conflict-wave:nth-child(3) { animation-delay: 1.4s; }
+
+/* ✨ Ondas más grandes */
+@keyframes conflictPulse {
+  0% {
+    r: 0;
+    opacity: 0.60; /* más visible al inicio */
+  }
+  70% {
+    opacity: 0.20;
+  }
+  100% {
+    r: 40px; /* <<–– ANTES era 22px — ahora MUCHO más grande */
+    opacity: 0;
+  }
+}
+
+/* Hover: vibración + elevación */
+.conflict-marker-group {
+  pointer-events: all;
+  transform-origin: center;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.conflict-marker-group:hover {
+  transform: translateY(-4px) scale(1.08);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+  animation: conflictVibrate 0.25s linear infinite;
+}
+
+/* Vibración sutil */
+@keyframes conflictVibrate {
+  0%   { transform: translateY(-4px) translateX(0px)  scale(1.08); }
+  25%  { transform: translateY(-4px) translateX(1px)  scale(1.08); }
+  50%  { transform: translateY(-4px) translateX(-1px) scale(1.08); }
+  75%  { transform: translateY(-4px) translateX(1px)  scale(1.08); }
+  100% { transform: translateY(-4px) translateX(0px)  scale(1.08); }
+}
+.country-popup-circle {
+  position: absolute;
+  top: -90px;
+  left: 320px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffffee;
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); */
+  padding: 10px;
+  text-align: center;
+font-family: Bonheur Royale;
+  font-style: italic;
+}

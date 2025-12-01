@@ -1,0 +1,26 @@
+{
+  "title": "Conflicto en Palestina",
+  "intro": "El conflicto palestino-israelí es uno de los conflictos más largos y documentados del mundo.",
+  "sections": [
+    {
+      "id": "historia",
+      "title": "Historia Detallada",
+      "content": "La historia del conflicto palestino comienza a finales del siglo XIX..."
+    },
+    {
+      "id": "eventos",
+      "title": "Eventos Clave",
+      "content": "Listado de eventos clave: 1948, 1967, 1987, 2000..."
+    },
+    {
+      "id": "actual",
+      "title": "Situación Actual",
+      "content": "En la actualidad, Gaza enfrenta un bloqueo total..."
+    },
+    {
+      "id": "actores",
+      "title": "Actores Principales",
+      "content": "Entre los actores principales encontramos: resistencia, ocupación..."
+    }
+  ]
+}

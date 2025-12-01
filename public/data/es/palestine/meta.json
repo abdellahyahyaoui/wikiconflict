@@ -1,0 +1,24 @@
+{
+  "name": "Palestina",
+  "sections": [
+    {
+      "id": "description",
+      "label": "Descripción del conflicto",
+      "chapters": [
+        { "id": "origenes", "title": "Orígenes del Conflicto" },
+        { "id": "mandato", "title": "Mandato Británico" },
+        { "id": "nakba", "title": "La Nakba (1948)" },
+        { "id": "ocupacion", "title": "Ocupación de 1967" },
+        { "id": "actualidad", "title": "Situación Actual" }
+      ]
+    },
+    { "id": "testimonies", "label": "Testimonios" },
+    
+
+    {
+  "id": "media-gallery",
+  "label": "Fototeca "
+}
+
+  ]
+}

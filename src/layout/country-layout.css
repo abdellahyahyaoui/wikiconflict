@@ -1,0 +1,265 @@
+/* Improved layout for better responsive behavior and no-scroll on home */
+.country-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.country-body {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 68px);
+  overflow: hidden;
+}
+
+.country-sidebar {
+  flex-shrink: 0;
+}
+
+.country-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  background: #ffffff;
+  scrollbar-width: none;
+}
+
+/* Footer styling */
+.country-footer {
+  padding: 24px 32px;
+  text-align: center;
+  font-size: 12px;
+  background: #1a1a1a;
+  color: #07202bff;
+  border-top: 1px solid #333;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-family: Cormorant Garamond,serif;
+  font-style: italic;
+}
+
+.footer-line {
+  height: 1px;
+  background: #e0e0e0;
+  margin-bottom: 12px;
+  display: none;
+}
+
+.country-loading {
+  padding: 60px 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-style: italic;
+}
+
+/* Responsive: Tablet view */
+@media (max-width: 1024px) {
+  .country-body {
+    height: calc(100vh - 68px);
+  }
+}
+
+/* Responsive: Mobile - stack vertically */
+@media (max-width: 860px) {
+  .country-body {
+    flex-direction: column;
+  }
+
+  .country-sidebar {
+    display: none;
+  }
+
+  .country-content-wrapper {
+    flex: 1;
+    order: -1;
+  }
+}
+
+/* Responsive: Small mobile */
+@media (max-width: 480px) {
+  .country-layout {
+    height: 100vh;
+     display: flex;
+  flex-direction: column-reverse;
+  }
+
+  .country-loading {
+    padding: 40px 20px;
+    font-size: 14px;
+  }
+}
+
+/* Refined mobile header for Wikipedia aesthetic */
+.mobile-wiki-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Added mobile header top container for logo and menu button side by side */
+.mobile-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-logo-large {
+  font-size: 1.8rem;
+  cursor: pointer;
+  flex: 1;
+  text-align: left;
+}
+
+/* Added mobile search bar styles for country pages */
+.mobile-search-bar {
+  width: 100%;
+  padding: 0.5rem 0;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  background: #f8f8f8;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.mobile-search-input:focus {
+  border-color: #8b0000;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+  background: #fff;
+}
+
+.mobile-search-input::placeholder {
+  color: #999;
+}
+/* </CHANGE> */
+
+.logo-wiki {
+  color: #333;
+}
+
+.logo-conflicts {
+  color: #d32f2f;
+}
+
+.mobile-country-title {
+  font-size: 1.6rem;
+  margin: 0;
+  text-align: center;
+  color: var(--wiki-black);
+  font-family: var(--wiki-font-serif);
+  border-bottom: 1px solid #a2a9b1;
+  padding-bottom: 0.5rem;
+  width: 100%;
+}
+
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger-line {
+  width: 30px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+.mobile-content-padding {
+  padding: 1rem;
+}
+
+/* Styling the mobile header specific elements */
+.mobile-menu-toggle-btn {
+  background: transparent;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.mobile-menu-toggle-btn:active {
+  background: #f0f0f0;
+}
+
+.hamburger-box {
+  width: 16px;
+  height: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-box::before,
+.hamburger-box::after,
+.hamburger-inner {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+.menu-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444;
+}
+
+/* Wiki styling tweaks */
+.logo-wiki {
+  
+    font-family: Cormorant Garamond, serif;
+    font-style: italic;
+    font-weight: 100;
+  color: #ddf5ffd0;
+    background:  #061b23;
+    padding: 10px;
+    border-radius: 50%;
+
+}
+.logo-conflicts {
+  font-family: Cormorant Garamond,serif;
+ 
+  font-weight: 900;
+    color: #0c3344;
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}

@@ -1,0 +1,19 @@
+{
+  "items": [
+    {
+      "id": "nakba",
+      "name": "La Nakba (1948)",
+      "image": "/placeholder.svg?height=80&width=80"
+    },
+    {
+      "id": "gaza2023",
+      "name": "Guerra de Gaza 2023-2024",
+      "image": "/placeholder.svg?height=80&width=80"
+    },
+    {
+      "id": "g2023",
+      "name": "Genocidio 2023",
+      "image": "/placeholder.svg?height=80&width=80"
+    }
+  ]
+}

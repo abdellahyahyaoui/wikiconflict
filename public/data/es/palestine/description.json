@@ -1,0 +1,67 @@
+{
+  "title": "Descripción del Conflicto",
+  "chapters": [
+    {
+      "id": "origenes",
+      "title": "Orígenes del Conflicto",
+      "content": "El conflicto comenzó a finales del siglo XIX, cuando la inmigración judía a Palestina aumentó debido al sionismo y la persecución en Europa. La población árabe local se mostró preocupada por la pérdida de sus tierras y derechos, lo que marcó el inicio de tensiones que se prolongan hasta hoy.",
+      "paragraphs": [
+        "La región de Palestina estaba bajo dominio otomano y la coexistencia entre comunidades árabes y judías era tensa pero relativamente estable.",
+        "El auge del nacionalismo judío y árabe a principios del siglo XX exacerbó los conflictos locales y sentó las bases para futuros enfrentamientos."
+      ],
+      "image": "/images/origenes.jpg"
+    },
+    {
+      "id": "mandato",
+      "title": "Mandato Británico",
+      "content": "Durante el Mandato Británico (1920-1948), Palestina se convirtió en un territorio administrado por Reino Unido, con la obligación de establecer un hogar nacional judío según la Declaración Balfour.",
+      "paragraphs": [
+        "El Mandato Británico intentó equilibrar los derechos de la población árabe y la inmigración judía, pero las medidas fueron insuficientes.",
+        "Surgieron revueltas y enfrentamientos entre comunidades, especialmente en 1929 y 1936-1939, con importantes consecuencias políticas y sociales."
+      ],
+      "image": "/images/mandato.jpg"
+    },
+    {
+      "id": "nakba",
+      "title": "La Nakba (1948)",
+      "content": "En 1948, con la creación del Estado de Israel, más de 700.000 palestinos fueron desplazados o expulsados de sus hogares, un evento que se conoce como la Nakba.",
+      "paragraphs": [
+        "Las ciudades y aldeas palestinas fueron destruidas o ocupadas por fuerzas israelíes.",
+        "El éxodo masivo generó campos de refugiados en países vecinos y un conflicto humanitario que persiste hasta hoy."
+      ],
+      "image": "/images/nakba.jpg"
+    },
+    {
+      "id": "ocupacion",
+      "title": "Ocupación de 1967",
+      "content": "Tras la Guerra de los Seis Días, Israel ocupó Gaza, Cisjordania y Jerusalén Este, consolidando un control militar que continúa generando tensiones.",
+      "paragraphs": [
+        "Se establecieron asentamientos y barreras de seguridad, lo que ha complicado el proceso de paz.",
+        "La ocupación ha afectado la economía, la movilidad y los derechos humanos de la población palestina."
+      ],
+      "image": "/images/ocupacion.jpg"
+    },
+    {
+      "id": "intifadas",
+      "title": "Primera y Segunda Intifada",
+      "content": "Entre 1987 y 2005, Palestina vivió dos levantamientos populares conocidos como Intifadas, contra la ocupación israelí.",
+      "paragraphs": [
+        "La Primera Intifada (1987-1993) fue un movimiento espontáneo con protestas y boicots.",
+        "La Segunda Intifada (2000-2005) fue más violenta, con atentados y represalias militares.",
+        "Estos levantamientos marcaron un cambio en la dinámica del conflicto y aumentaron la presión internacional para un acuerdo de paz."
+      ],
+      "image": "/images/intifadas.jpg"
+    },
+    {
+      "id": "situacion-actual",
+      "title": "Situación Actual",
+      "content": "Hoy, Gaza enfrenta un bloqueo total desde 2007, mientras que Cisjordania está fragmentada por barreras y asentamientos. La vida diaria se ve afectada por restricciones de movimiento y tensiones constantes.",
+      "paragraphs": [
+        "Existen negociaciones periódicas de paz, pero los avances son limitados.",
+        "La comunidad internacional sigue buscando soluciones que respeten los derechos de todas las partes.",
+        "Los jóvenes palestinos y la diáspora mantienen viva la memoria del conflicto y la esperanza de una resolución pacífica."
+      ],
+      "image": "/images/actualidad.jpg"
+    }
+  ]
+}
