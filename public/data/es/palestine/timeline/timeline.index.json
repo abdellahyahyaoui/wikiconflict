@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "id": "nakba-1948",
+      "date": "15 de mayo de 1948",
+      "year": 1948,
+      "title": "La Nakba - El Comienzo del Éxodo",
+      "image": "/imagenes/chohada.png",
+      "summary": "Más de 700.000 palestinos fueron expulsados de sus hogares durante la creación del Estado de Israel."
+    },
+    {
+      "id": "guerra-1967",
+      "date": "5-10 de junio de 1967",
+      "year": 1967,
+      "title": "La Guerra de los Seis Días",
+      "image": "/imagenes/chohada2.png",
+      "summary": "Israel ocupa Cisjordania, Gaza, los Altos del Golán y la Península del Sinaí."
+    },
+    {
+      "id": "primera-intifada",
+      "date": "9 de diciembre de 1987",
+      "year": 1987,
+      "title": "Primera Intifada",
+      "image": "/imagenes/1.png",
+      "summary": "Levantamiento popular palestino contra la ocupación israelí."
+    },
+    {
+      "id": "acuerdos-oslo",
+      "date": "13 de septiembre de 1993",
+      "year": 1993,
+      "title": "Acuerdos de Oslo",
+      "image": "/imagenes/2.png",
+      "summary": "Primeros acuerdos de paz directos entre Israel y la OLP."
+    },
+    {
+      "id": "octubre-2023",
+      "date": "7 de octubre de 2023",
+      "year": 2023,
+      "title": "Escalada en Gaza",
+      "image": "/imagenes/3.png",
+      "summary": "Inicio de la ofensiva militar israelí sobre Gaza tras los ataques de Hamas."
+    }
+  ]
+}
