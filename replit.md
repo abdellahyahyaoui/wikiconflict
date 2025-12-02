@@ -116,6 +116,15 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-02**: Major feature additions
+  - Added Timeline section with newspaper-style layout showing chronological events
+  - Added Resistance section for "Guardianes" stories (same structure as Testimonios)
+  - Added Collaborate button in header linking to PayPal donations
+  - Added social media icons in footer (Twitter, Instagram, Telegram, YouTube)
+  - Improved map design: cleaner, more professional look, subtle hover effects
+  - Updated translations in 4 languages (es, en, ar, eu)
+  - Configured new section order: Description → Timeline → Testimonios → Resistencia → Fototeca
+
 - **2024-12-02**: Initial Replit environment setup
   - Installed all dependencies
   - Configured environment variables for Replit proxy
