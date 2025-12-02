@@ -1,0 +1,275 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+
+export default function FototecaEditor({ countryCode }) {
+  const { user, getAuthHeaders } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: '',
+    date: '',
+    description: '',
+    type: 'image',
+    url: ''
+  });
+
+  useEffect(() => {
+    loadItems();
+  }, [countryCode]);
+
+  async function loadItems() {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/fototeca`, { 
+        headers: getAuthHeaders() 
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setItems(data.items || []);
+      }
+    } catch (error) {
+      console.error('Error loading fototeca:', error);
+    }
+    setLoading(false);
+  }
+
+  function openAddModal() {
+    setEditingItem(null);
+    setFormData({
+      title: '',
+      date: new Date().toISOString().split('T')[0],
+      description: '',
+      type: 'image',
+      url: ''
+    });
+    setShowModal(true);
+  }
+
+  function openEditModal(item) {
+    setEditingItem(item);
+    setFormData({
+      title: item.title || '',
+      date: item.date || '',
+      description: item.description || '',
+      type: item.type || 'image',
+      url: item.url || ''
+    });
+    setShowModal(true);
+  }
+
+  async function handleFileUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append('images', file);
+
+    try {
+      const res = await fetch('/api/upload/images', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: uploadFormData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.files && data.files.length > 0) {
+          setFormData(prev => ({ ...prev, url: data.files[0].url }));
+        }
+      } else {
+        alert('Error al subir archivo');
+      }
+    } catch (error) {
+      console.error('Error uploading:', error);
+    }
+    setUploading(false);
+  }
+
+  async function handleSave() {
+    if (!formData.title.trim() || !formData.url.trim()) {
+      alert('El título y la URL son obligatorios');
+      return;
+    }
+
+    try {
+      const method = editingItem ? 'PUT' : 'POST';
+      const url = editingItem 
+        ? `/api/cms/countries/${countryCode}/fototeca/${editingItem.id}`
+        : `/api/cms/countries/${countryCode}/fototeca`;
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        setShowModal(false);
+        loadItems();
+      } else {
+        const error = await res.json();
+        alert(error.error || 'Error al guardar');
+      }
+    } catch (error) {
+      console.error('Error saving:', error);
+    }
+  }
+
+  async function handleDelete(item) {
+    if (!window.confirm(`¿Eliminar "${item.title}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/fototeca/${item.id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+
+      if (res.ok) {
+        loadItems();
+      }
+    } catch (error) {
+      console.error('Error deleting:', error);
+    }
+  }
+
+  if (loading) {
+    return <div className="admin-loading">Cargando fototeca...</div>;
+  }
+
+  return (
+    <div className="admin-editor">
+      <div className="admin-editor-header">
+        <h2>Fototeca</h2>
+        <button className="admin-btn-primary" onClick={openAddModal}>
+          + Agregar elemento
+        </button>
+      </div>
+
+      <div className="admin-fototeca-grid">
+        {items.map(item => (
+          <div key={item.id} className="admin-fototeca-item">
+            <div className="admin-fototeca-media">
+              {item.type === 'image' ? (
+                <img src={item.url} alt={item.title} />
+              ) : (
+                <video src={item.url} />
+              )}
+              <span className="admin-fototeca-type">{item.type === 'image' ? '🖼️' : '🎬'}</span>
+            </div>
+            <div className="admin-fototeca-info">
+              <span className="admin-fototeca-date">{item.date}</span>
+              <h4 className="admin-fototeca-title">{item.title}</h4>
+            </div>
+            <div className="admin-fototeca-actions">
+              <button onClick={() => openEditModal(item)} title="Editar">✏️</button>
+              <button onClick={() => handleDelete(item)} title="Eliminar">🗑️</button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && (
+          <div className="admin-empty">
+            <p>No hay elementos en la fototeca</p>
+            <button className="admin-btn-primary" onClick={openAddModal}>
+              Agregar primer elemento
+            </button>
+          </div>
+        )}
+      </div>
+
+      {showModal && (
+        <div className="admin-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingItem ? 'Editar elemento' : 'Nuevo elemento'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowModal(false)}>×</button>
+            </div>
+            <div className="admin-modal-body">
+              <div className="admin-form-group">
+                <label>Tipo</label>
+                <select
+                  value={formData.type}
+                  onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
+                >
+                  <option value="image">Imagen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+
+              <div className="admin-form-group">
+                <label>Título *</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Título del elemento"
+                />
+              </div>
+
+              <div className="admin-form-group">
+                <label>Fecha</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={e => setFormData(prev => ({ ...prev, date: e.target.value }))}
+                />
+              </div>
+
+              <div className="admin-form-group">
+                <label>Descripción</label>
+                <textarea
+                  value={formData.description}
+                  onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Descripción del elemento"
+                  rows={3}
+                />
+              </div>
+
+              <div className="admin-form-group">
+                <label>Archivo *</label>
+                <div className="admin-file-upload">
+                  <input
+                    type="file"
+                    accept={formData.type === 'image' ? 'image/*' : 'video/*'}
+                    onChange={handleFileUpload}
+                    disabled={uploading}
+                  />
+                  {uploading && <span>Subiendo...</span>}
+                </div>
+                {formData.url && (
+                  <div className="admin-file-preview">
+                    {formData.type === 'image' ? (
+                      <img src={formData.url} alt="Preview" />
+                    ) : (
+                      <video src={formData.url} controls />
+                    )}
+                    <input
+                      type="text"
+                      value={formData.url}
+                      onChange={e => setFormData(prev => ({ ...prev, url: e.target.value }))}
+                      placeholder="O ingresa la URL directamente"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="admin-modal-footer">
+              <button className="admin-btn-secondary" onClick={() => setShowModal(false)}>
+                Cancelar
+              </button>
+              <button className="admin-btn-primary" onClick={handleSave} disabled={uploading}>
+                {editingItem ? 'Guardar cambios' : 'Crear elemento'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -124,6 +124,11 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
         setView(json.items?.length ? "timeline" : "empty")
+      } else if (section === "fototeca") {
+        const res = await fetch(`/data/${lang}/${countryCode}/fototeca/fototeca.index.json`)
+        const json = res.ok ? await res.json() : { items: [] }
+        setItems(json.items || [])
+        setView(json.items?.length ? "fototeca" : "empty")
       } else if (["media-gallery-images", "media-gallery-videos"].includes(section)) {
         let mediaItems = []
 
@@ -825,6 +830,79 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
                   ))}
                 </ul>
               </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (view === "fototeca") {
+    return (
+      <div className="fototeca-container">
+        <div className="fototeca-header">
+          <h2>{t("fototeca") || "Fototeca"}</h2>
+          <p>{t("fototeca-subtitle") || "Archivo visual del conflicto"}</p>
+        </div>
+        <div className="fototeca-grid">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className={`fototeca-item ${item.type}`}
+              onClick={() => {
+                setSelectedItem(item)
+                setView("fototeca-detail")
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  setSelectedItem(item)
+                  setView("fototeca-detail")
+                }
+              }}
+            >
+              <div className="fototeca-media">
+                {item.type === "image" ? (
+                  <img src={item.url} alt={item.title} />
+                ) : (
+                  <div className="fototeca-video-thumb">
+                    <video src={item.url} />
+                    <div className="play-overlay">▶</div>
+                  </div>
+                )}
+              </div>
+              <div className="fototeca-info">
+                <span className="fototeca-date">{item.date}</span>
+                <h3 className="fototeca-title">{item.title}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (view === "fototeca-detail" && selectedItem) {
+    return (
+      <div className="content-inner">
+        <button className="back-button" onClick={() => setView("fototeca")}>
+          {t("back-button")}
+        </button>
+        <div className="fototeca-detail">
+          <div className="fototeca-detail-media">
+            {selectedItem.type === "image" ? (
+              <img src={selectedItem.url} alt={selectedItem.title} />
+            ) : (
+              <video src={selectedItem.url} controls autoPlay />
+            )}
+          </div>
+          <div className="fototeca-detail-info">
+            <span className="fototeca-detail-date">{selectedItem.date}</span>
+            <h1 className="fototeca-detail-title">{selectedItem.title}</h1>
+            {selectedItem.description && (
+              <p className="fototeca-detail-description">{selectedItem.description}</p>
             )}
           </div>
         </div>

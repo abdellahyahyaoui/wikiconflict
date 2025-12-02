@@ -726,3 +726,199 @@ font-family: Georgia, "Times New Roman", serif;
     font-size: 14px;
   }
 }
+
+/* =====================================
+   FOTOTECA SECTION STYLES
+   ===================================== */
+.fototeca-container {
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.fototeca-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.fototeca-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0c3344;
+  margin-bottom: 8px;
+}
+
+.fototeca-header p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.fototeca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.fototeca-item {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fototeca-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.fototeca-media {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.fototeca-media img,
+.fototeca-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fototeca-video-thumb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.fototeca-video-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(139, 0, 0, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  transition: all 0.2s ease;
+}
+
+.fototeca-item:hover .play-overlay {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(139, 0, 0, 1);
+}
+
+.fototeca-info {
+  padding: 16px;
+}
+
+.fototeca-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  color: #8b0000;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.fototeca-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0c3344;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Fototeca Detail View */
+.fototeca-detail {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.fototeca-detail-media {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.fototeca-detail-media img,
+.fototeca-detail-media video {
+  width: 100%;
+  display: block;
+}
+
+.fototeca-detail-info {
+  text-align: center;
+  padding: 0 20px;
+}
+
+.fototeca-detail-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #8b0000;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.fototeca-detail-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0c3344;
+  margin: 0 0 16px 0;
+  line-height: 1.3;
+}
+
+.fototeca-detail-description {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  color: #444;
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .fototeca-container {
+    padding: 16px;
+  }
+
+  .fototeca-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .fototeca-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .fototeca-detail-title {
+    font-size: 1.5rem;
+  }
+
+  .fototeca-detail-description {
+    font-size: 1rem;
+  }
+}

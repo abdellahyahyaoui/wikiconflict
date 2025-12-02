@@ -15,6 +15,6 @@
     { "id": "timeline", "label": "Timeline" },
     { "id": "testimonies", "label": "Testimonios" },
     { "id": "resistance", "label": "Resistencia" },
-    { "id": "media-gallery", "label": "Fototeca" }
+    { "id": "fototeca", "label": "Fototeca" }
   ]
 }

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import TimelineEditor from './components/TimelineEditor';
 import TestimoniesEditor from './components/TestimoniesEditor';
 import AnalystsEditor from './components/AnalystsEditor';
-import MediaEditor from './components/MediaEditor';
+import FototecaEditor from './components/FototecaEditor';
 import ResistanceEditor from './components/ResistanceEditor';
 import './admin.css';
 
@@ -51,7 +51,7 @@ export default function AdminCountry() {
     { id: 'testimonies', label: 'Testimonios', icon: '👤' },
     { id: 'resistance', label: 'Resistencia', icon: '✊' },
     { id: 'analysts', label: 'Analistas', icon: '📊' },
-    { id: 'media', label: 'Fototeca', icon: '🖼️' }
+    { id: 'fototeca', label: 'Fototeca', icon: '🖼️' }
   ];
 
   return (
@@ -95,8 +95,8 @@ export default function AdminCountry() {
           {activeSection === 'analysts' && (
             <AnalystsEditor countryCode={countryCode} />
           )}
-          {activeSection === 'media' && (
-            <MediaEditor countryCode={countryCode} />
+          {activeSection === 'fototeca' && (
+            <FototecaEditor countryCode={countryCode} />
           )}
         </main>
       </div>

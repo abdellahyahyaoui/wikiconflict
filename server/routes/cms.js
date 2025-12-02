@@ -669,4 +669,130 @@ router.post('/pending/:changeId/reject', authenticateToken, (req, res) => {
   res.json({ success: true, message: 'Cambio rechazado' });
 });
 
+router.get('/countries/:countryCode/fototeca', authenticateToken, (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const indexPath = path.join(dataDir, lang, countryCode, 'fototeca', 'fototeca.index.json');
+  
+  const data = readJSON(indexPath) || { items: [] };
+  res.json(data);
+});
+
+router.post('/countries/:countryCode/fototeca', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, date, description, type, url } = req.body;
+
+  if (!title || !url) {
+    return res.status(400).json({ error: 'Título y URL son requeridos' });
+  }
+
+  const fototecaDir = path.join(dataDir, lang, countryCode, 'fototeca');
+  ensureDir(fototecaDir);
+
+  const indexPath = path.join(fototecaDir, 'fototeca.index.json');
+  const indexData = readJSON(indexPath) || { items: [] };
+
+  const id = uuidv4();
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'create',
+      section: 'fototeca',
+      countryCode,
+      lang,
+      data: { id, title, date, description, type, url },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const newItem = { id, title, date: date || '', description: description || '', type: type || 'image', url };
+  indexData.items.push(newItem);
+  writeJSON(indexPath, indexData);
+
+  res.json({ success: true, item: newItem });
+});
+
+router.put('/countries/:countryCode/fototeca/:itemId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
+  const { countryCode, itemId } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, date, description, type, url } = req.body;
+
+  const indexPath = path.join(dataDir, lang, countryCode, 'fototeca', 'fototeca.index.json');
+  const indexData = readJSON(indexPath);
+
+  if (!indexData) {
+    return res.status(404).json({ error: 'Fototeca no encontrada' });
+  }
+
+  const itemIndex = indexData.items.findIndex(i => i.id === itemId);
+  if (itemIndex === -1) {
+    return res.status(404).json({ error: 'Elemento no encontrado' });
+  }
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'fototeca',
+      countryCode,
+      lang,
+      itemId,
+      data: { title, date, description, type, url },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  indexData.items[itemIndex] = {
+    ...indexData.items[itemIndex],
+    title: title || indexData.items[itemIndex].title,
+    date: date !== undefined ? date : indexData.items[itemIndex].date,
+    description: description !== undefined ? description : indexData.items[itemIndex].description,
+    type: type || indexData.items[itemIndex].type,
+    url: url || indexData.items[itemIndex].url
+  };
+
+  writeJSON(indexPath, indexData);
+  res.json({ success: true, item: indexData.items[itemIndex] });
+});
+
+router.delete('/countries/:countryCode/fototeca/:itemId', authenticateToken, checkCountryPermission, checkPermission('delete'), (req, res) => {
+  const { countryCode, itemId } = req.params;
+  const lang = req.query.lang || 'es';
+
+  const indexPath = path.join(dataDir, lang, countryCode, 'fototeca', 'fototeca.index.json');
+  const indexData = readJSON(indexPath);
+
+  if (!indexData) {
+    return res.status(404).json({ error: 'Fototeca no encontrada' });
+  }
+
+  const itemIndex = indexData.items.findIndex(i => i.id === itemId);
+  if (itemIndex === -1) {
+    return res.status(404).json({ error: 'Elemento no encontrado' });
+  }
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'delete',
+      section: 'fototeca',
+      countryCode,
+      lang,
+      itemId,
+      data: indexData.items[itemIndex],
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  indexData.items.splice(itemIndex, 1);
+  writeJSON(indexPath, indexData);
+
+  res.json({ success: true, message: 'Elemento eliminado' });
+});
+
 module.exports = router;

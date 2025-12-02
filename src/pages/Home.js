@@ -2,7 +2,7 @@
 
 import "./Home.css"
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import WorldMap from "../components/WorldMap"
 import MapLatinAmerica from "../components/MapLatinAmerica"
@@ -10,11 +10,48 @@ import MapAfrica from "../components/MapAfrica"
 import MapEurope from "../components/MapEurope"
 import MapAsia from "../components/MapAsia"
 
+const regions = [
+  {
+    name: "Oriente Medio",
+    countries: [
+      { id: "palestine", name: "Palestina", flag: "/flags/pa.png", hasConflict: true },
+      { id: "lebanon", name: "Líbano", flag: "/flags/li.png", hasConflict: true },
+      { id: "yemen", name: "Yemen", flag: "/flags/ye.png", hasConflict: true },
+      { id: "syria", name: "Siria", flag: "/flags/sy.png", hasConflict: true },
+      { id: "iran", name: "Irán", flag: "/flags/ir.png", hasConflict: true },
+      { id: "iraq", name: "Irak", flag: "/flags/ira.png", hasConflict: false },
+    ]
+  },
+  {
+    name: "África",
+    countries: [
+      { id: "sudan", name: "Sudán", flag: "/flags/su.png", hasConflict: true },
+      { id: "morocco", name: "Marruecos", flag: "/flags/ma.png", hasConflict: false },
+      { id: "algeria", name: "Argelia", flag: "/flags/ar.png", hasConflict: false },
+      { id: "libya", name: "Libia", flag: "/flags/li.png", hasConflict: false },
+      { id: "egypt", name: "Egipto", flag: "/flags/eg.png", hasConflict: false },
+    ]
+  },
+  {
+    name: "Europa",
+    countries: [
+      { id: "ukraine", name: "Ucrania", flag: "/flags/ukr.png", hasConflict: true },
+    ]
+  },
+  {
+    name: "América Latina",
+    countries: [
+      { id: "venezuela", name: "Venezuela", flag: "/flags/ve.png", hasConflict: true },
+    ]
+  }
+]
+
 function Home() {
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimated, setIsAnimated] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [mapIndex, setMapIndex] = useState(0)
+  const navigate = useNavigate()
 
   const maps = [
     <WorldMap key="arab" />, 
@@ -37,13 +74,20 @@ function Home() {
     checkMobile()
     window.addEventListener("resize", checkMobile)
 
-    const timer = setTimeout(() => setIsAnimated(true), 1500)
+    const timer = setTimeout(() => setIsAnimated(true), 800)
 
     return () => {
       window.removeEventListener("resize", checkMobile)
       clearTimeout(timer)
     }
   }, [])
+
+  const filteredRegions = regions.map(region => ({
+    ...region,
+    countries: region.countries.filter(country => 
+      country.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  })).filter(region => region.countries.length > 0)
 
   if (isMobile) {
     return (
@@ -73,12 +117,36 @@ function Home() {
           </p>
         </div>
         
-        <div className="mobile-maps-container">
-          <button onClick={prevMap} className="mobile-map-arrow left">◀</button>
-          <div className="mobile-map-wrapper">
-            {maps[mapIndex]}
-          </div>
-          <button onClick={nextMap} className="mobile-map-arrow right">▶</button>
+        <div className="mobile-countries-container">
+          {filteredRegions.map((region) => (
+            <div key={region.name} className="mobile-region">
+              <h3 className="mobile-region-title">{region.name}</h3>
+              <div className="mobile-countries-grid">
+                {region.countries.map((country) => (
+                  <div
+                    key={country.id}
+                    className={`mobile-country-circle ${country.hasConflict ? 'has-conflict' : ''}`}
+                    onClick={() => navigate(`/country/${country.id}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        navigate(`/country/${country.id}`)
+                      }
+                    }}
+                  >
+                    <div className="country-circle-inner">
+                      <span className="country-circle-name">{country.name}</span>
+                      {country.hasConflict && (
+                        <span className="country-conflict-badge"></span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     )

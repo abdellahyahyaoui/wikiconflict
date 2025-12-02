@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "title": "Refugiados palestinos en 1948",
+      "type": "image",
+      "url": "/data/es/palestine/media/images/image1.png",
+      "date": "1948-05-15",
+      "description": "Familias palestinas abandonan sus hogares durante la Nakba"
+    },
+    {
+      "id": "2",
+      "title": "Documental: Voces de Gaza",
+      "type": "video",
+      "url": "/media/videos/video1.mp4",
+      "date": "2023-10-15",
+      "description": "Testimonios directos de residentes de Gaza"
+    }
+  ]
+}
