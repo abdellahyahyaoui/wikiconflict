@@ -116,6 +116,17 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-02**: Complete CMS Implementation
+  - Added Express.js backend server on port 3001 for CMS functionality
+  - Implemented username/password authentication system (JSON-based, no database)
+  - Created admin panel with WikiConflicts editorial design style
+  - Built comprehensive content editors: Timeline, Testimonies, Analysts, Media
+  - Added file upload system for images and videos with security protections
+  - Implemented granular permission system (create/edit/delete per user)
+  - Added country-based access control for editors
+  - Security improvements: auto-generated JWT secrets, path traversal protection, random initial passwords
+  - Map hover effects with elevation and shadow already implemented
+
 - **2024-12-02**: Major feature additions
   - Added Timeline section with newspaper-style layout showing chronological events
   - Added Resistance section for "Guardianes" stories (same structure as Testimonios)
@@ -131,14 +142,60 @@ Each country has its own folder under `/public/data/es/` with:
   - Set up workflow on port 5000
   - Verified application runs successfully
 
+## CMS Architecture
+
+### Backend (Express.js - Port 3001)
+```
+server/
+├── index.js              # Main server entry point
+├── middleware/
+│   └── auth.js           # JWT authentication & permissions
+├── routes/
+│   ├── auth.js           # Login/logout endpoints
+│   ├── cms.js            # Country/section CRUD operations
+│   └── upload.js         # Image/video upload handling
+└── data/
+    ├── users.json        # User accounts (JSON storage)
+    ├── pending-changes.json  # Changes awaiting approval
+    └── jwt-secret.key    # Auto-generated JWT secret
+```
+
+### Admin Panel (React)
+```
+src/admin/
+├── AdminLogin.js         # Login page
+├── AdminDashboard.js     # Main dashboard
+├── AdminCountry.js       # Country content editor
+├── AdminUsers.js         # User management
+├── AdminPending.js       # Pending approvals
+└── components/
+    ├── TimelineEditor.js
+    ├── TestimoniesEditor.js
+    ├── AnalystsEditor.js
+    └── MediaEditor.js
+```
+
+### Authentication & Permissions
+- **Roles**: admin, editor
+- **Permissions per user**: canCreate, canEdit, canDelete, requiresApproval
+- **Country access**: Specific countries or 'all'
+- **JWT tokens**: Auto-generated secrets, stored securely
+
+### Security Features
+- JWT secrets auto-generated on first run
+- Path traversal protection on file deletion
+- Random initial admin password (shown in logs)
+- CORS configured for development
+
 ## Deployment
-This is a static React application that can be deployed using:
-- Static hosting (configured for Replit deployment)
-- Build output: `/build` folder
-- No backend required
+This application requires both frontend and backend:
+- **Frontend**: React app on port 5000
+- **Backend**: Express.js API on port 3001
+- **Storage**: JSON files (no database required)
+- Use `npm start` to run both servers concurrently
 
 ## Notes
-- The application is primarily in Spanish (es) language
-- Data is stored as static JSON files in the public folder
-- No database or backend API required
-- All content is client-side rendered
+- Multi-language support (es, en, ar, eu)
+- Data stored as JSON files in `/public/data/` and `/server/data/`
+- CMS panel accessible at `/admin/login`
+- Initial admin credentials shown in server logs on first run
