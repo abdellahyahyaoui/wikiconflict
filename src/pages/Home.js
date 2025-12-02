@@ -2,11 +2,9 @@
 
 import "./Home.css"
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
-// Tu mapa original (mundo árabe)
 import WorldMap from "../components/WorldMap"
-
-// Nuevos mapas que te crearé ahora
 import MapLatinAmerica from "../components/MapLatinAmerica"
 import MapAfrica from "../components/MapAfrica"
 import MapEurope from "../components/MapEurope"
@@ -50,6 +48,10 @@ function Home() {
   if (isMobile) {
     return (
       <div className={`mobile-home ${isAnimated ? "animated" : ""}`}>
+        <Link to="/admin/login" className="admin-button-mobile">
+          Admin
+        </Link>
+        
         <div className="mobile-home-search">
           <input
             type="search"
@@ -70,14 +72,24 @@ function Home() {
             "Y mientras el verdugo insista en escribir la historia, mi deber será arrancarle la pluma."
           </p>
         </div>
+        
+        <div className="mobile-maps-container">
+          <button onClick={prevMap} className="mobile-map-arrow left">◀</button>
+          <div className="mobile-map-wrapper">
+            {maps[mapIndex]}
+          </div>
+          <button onClick={nextMap} className="mobile-map-arrow right">▶</button>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="home-container">
+      <Link to="/admin/login" className="admin-button">
+        Admin
+      </Link>
 
-      {/* TÍTULO Y SUBTÍTULO (NO TOCO NADA) */}
       <div className="title-block">
         <h1 className="title-main">
           <span className="title-wiki">Wiki</span>
