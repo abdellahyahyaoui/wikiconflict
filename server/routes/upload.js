@@ -109,7 +109,23 @@ router.get('/list', authenticateToken, (req, res) => {
 
 router.delete('/:filename', authenticateToken, (req, res) => {
   const { filename } = req.params;
-  const filePath = path.join(imagenesDir, filename);
+  
+  const sanitizedFilename = path.basename(filename);
+  
+  if (sanitizedFilename !== filename || 
+      sanitizedFilename.includes('..') || 
+      sanitizedFilename.includes('/') || 
+      sanitizedFilename.includes('\\')) {
+    return res.status(400).json({ error: 'Nombre de archivo inválido' });
+  }
+  
+  const filePath = path.join(imagenesDir, sanitizedFilename);
+  const resolvedPath = path.resolve(filePath);
+  const resolvedDir = path.resolve(imagenesDir);
+  
+  if (!resolvedPath.startsWith(resolvedDir + path.sep)) {
+    return res.status(403).json({ error: 'Acceso denegado' });
+  }
 
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: 'Archivo no encontrado' });

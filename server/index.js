@@ -25,14 +25,18 @@ if (!fs.existsSync(dataDir)) {
 }
 
 const usersFile = path.join(dataDir, 'users.json');
-if (!fs.existsSync(usersFile)) {
+const isFirstRun = !fs.existsSync(usersFile);
+if (isFirstRun) {
   const bcrypt = require('bcryptjs');
+  const crypto = require('crypto');
+  const initialPassword = process.env.ADMIN_INITIAL_PASSWORD || crypto.randomBytes(12).toString('base64').slice(0, 16);
+  
   const defaultAdmin = {
     users: [
       {
         id: 'admin',
         username: 'admin',
-        password: bcrypt.hashSync('admin123', 10),
+        password: bcrypt.hashSync(initialPassword, 10),
         role: 'admin',
         name: 'Administrador',
         countries: ['all'],
@@ -42,11 +46,19 @@ if (!fs.existsSync(usersFile)) {
           canDelete: true,
           requiresApproval: false
         },
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        mustChangePassword: true
       }
     ]
   };
   fs.writeFileSync(usersFile, JSON.stringify(defaultAdmin, null, 2));
+  
+  console.log('\n=== PRIMERA EJECUCION ===');
+  console.log('Usuario administrador creado:');
+  console.log('  Usuario: admin');
+  console.log(`  Contraseña: ${initialPassword}`);
+  console.log('IMPORTANTE: Cambie esta contraseña inmediatamente desde el panel de admin.');
+  console.log('===========================\n');
 }
 
 const pendingFile = path.join(dataDir, 'pending-changes.json');

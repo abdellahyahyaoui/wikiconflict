@@ -1,8 +1,28 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'wikiconflicts-secret-key-2024';
+const secretFile = path.join(__dirname, '../data/jwt-secret.key');
+function getJWTSecret() {
+  if (process.env.JWT_SECRET) {
+    return process.env.JWT_SECRET;
+  }
+  
+  if (fs.existsSync(secretFile)) {
+    return fs.readFileSync(secretFile, 'utf8').trim();
+  }
+  
+  const secret = crypto.randomBytes(64).toString('hex');
+  const dir = path.dirname(secretFile);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(secretFile, secret, { mode: 0o600 });
+  return secret;
+}
+
+const JWT_SECRET = getJWTSecret();
 
 function authenticateToken(req, res, next) {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
