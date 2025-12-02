@@ -202,6 +202,30 @@
   text-align: left;
 }
 
+/* -------- COLLABORATE BUTTON -------- */
+.collaborate-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.6rem 1.3rem;
+  background: linear-gradient(to right, #8b0000, #a02020);
+  color: white;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(139, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+.collaborate-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(139, 0, 0, 0.3);
+}
+
 /* -------- GREEN LANGUAGE SELECTOR -------- */
 .language-button-green {
   display: inline-flex;
@@ -212,7 +236,7 @@
   padding: 0.6rem 1.3rem;
   background: linear-gradient(to right, #061b23, #0d394a);
   color: white;
-  font-family: "Cinzel";
+  font-family: "Cinzel", serif;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;

@@ -80,8 +80,16 @@ export default function CountryHeader({ onHomeClick = () => {}, onSearch = () =>
       </div>
 
       <div className="header-right">
-        
-        {/* ⭐ NUEVO BOTÓN VERDE — SUSTITUYE AL 🌐 */}
+        <a
+          href="https://www.paypal.com/donate"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="collaborate-button"
+          aria-label={t("collaborate")}
+        >
+          {t("collaborate")}
+        </a>
+
         <button
           className="language-button-green"
           onClick={toggleMenu}
@@ -92,7 +100,6 @@ export default function CountryHeader({ onHomeClick = () => {}, onSearch = () =>
           Language
         </button>
 
-        {/* ⭐ NUEVO MENÚ ESTILO LanguageSelector */}
         <div className={`language-dropdown ${open ? "open" : ""}`} role="menu">
           {LANGS.map((l) => (
             <div
@@ -106,7 +113,6 @@ export default function CountryHeader({ onHomeClick = () => {}, onSearch = () =>
             </div>
           ))}
         </div>
-
       </div>
     </header>
   )

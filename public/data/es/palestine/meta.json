@@ -3,22 +3,18 @@
   "sections": [
     {
       "id": "description",
-      "label": "Descripción del conflicto",
+      "label": "Descripcion del conflicto",
       "chapters": [
-        { "id": "origenes", "title": "Orígenes del Conflicto" },
-        { "id": "mandato", "title": "Mandato Británico" },
+        { "id": "origenes", "title": "Origenes del Conflicto" },
+        { "id": "mandato", "title": "Mandato Britanico" },
         { "id": "nakba", "title": "La Nakba (1948)" },
-        { "id": "ocupacion", "title": "Ocupación de 1967" },
-        { "id": "actualidad", "title": "Situación Actual" }
+        { "id": "ocupacion", "title": "Ocupacion de 1967" },
+        { "id": "actualidad", "title": "Situacion Actual" }
       ]
     },
+    { "id": "timeline", "label": "Timeline" },
     { "id": "testimonies", "label": "Testimonios" },
-    
-
-    {
-  "id": "media-gallery",
-  "label": "Fototeca "
-}
-
+    { "id": "resistance", "label": "Resistencia" },
+    { "id": "media-gallery", "label": "Fototeca" }
   ]
 }

@@ -1,11 +1,10 @@
 /* Fixing map container to fill available space correctly */
 .map-wrapper {
   width: 100%;
-  height: 70vh; /* Fixed height relative to viewport */
+  height: 70vh;
   min-height: 500px;
-  /* margin: 2rem auto; */
   position: fixed;
-  /* margin-top: 250px; */
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
 }
 
 /* Removed tooltip-card styles as it's no longer used */
@@ -148,51 +147,37 @@
 }
 
 
-/* --- EFECTO VIBRACIÓN PARA PAÍSES EN CONFLICTO --- */
-@keyframes shake {
-  0% { transform: translate(0px, 0px); }
-  20% { transform: translate(1px, -1px); }
-  40% { transform: translate(-1px, 1px); }
-  60% { transform: translate(1px, 1px); }
-  80% { transform: translate(-1px, -1px); }
-  100% { transform: translate(0px, 0px); }
-}
-
+/* --- EFECTO SUTIL PARA PAÍSES EN CONFLICTO --- */
 .conflict-country {
-  animation: shake 0.45s infinite linear;
+  filter: brightness(1.1);
+  transition: filter 0.3s ease;
 }
 .country-lifted {
   transform: translateY(-4px);
   filter: drop-shadow(0 0 6px rgba(0,0,0,0.25));
   transition: transform 0.25s ease, filter 0.25s ease;
 }
-/* Ondas de conflicto más grandes y más oscuras */
+/* Ondas de conflicto elegantes */
 .conflict-wave {
   fill: none;
-  stroke: rgb(49, 3, 3);   /* rojo oscuro, elegante */
-  stroke-width: 2.4;
+  stroke: #8b0000;
+  stroke-width: 1.5;
   opacity: 0;
-  animation: conflictPulse 3.4s ease-out infinite;
+  animation: conflictPulse 3s ease-out infinite;
   transform-origin: center;
-  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-/* Desfase entre ondas */
 .conflict-wave:nth-child(1) { animation-delay: 0s; }
-.conflict-wave:nth-child(2) { animation-delay: 0.7s; }
-.conflict-wave:nth-child(3) { animation-delay: 1.4s; }
+.conflict-wave:nth-child(2) { animation-delay: 1s; }
+.conflict-wave:nth-child(3) { animation-delay: 2s; }
 
-/* ✨ Ondas más grandes */
 @keyframes conflictPulse {
   0% {
     r: 0;
-    opacity: 0.60; /* más visible al inicio */
-  }
-  70% {
-    opacity: 0.20;
+    opacity: 0.5;
   }
   100% {
-    r: 40px; /* <<–– ANTES era 22px — ahora MUCHO más grande */
+    r: 30px;
     opacity: 0;
   }
 }
@@ -222,17 +207,18 @@
   position: absolute;
   top: -90px;
   left: 320px;
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffffee;
-  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); */
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 15px;
   text-align: center;
-font-family: Bonheur Royale;
-  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }

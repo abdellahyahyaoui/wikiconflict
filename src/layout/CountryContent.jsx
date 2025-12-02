@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useLanguage } from "../context/LanguageContext"
 import "./country-content.css"
+import "./timeline.css"
 import MediaGallery from "./MediaGallery"
 
 export default function CountryContent({ countryCode, section, searchTerm = "" }) {
@@ -89,11 +90,16 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         const categoryData = json.categories.find((c) => c.id === category)
         if (categoryData) setAvailableLetters(categoryData.letters.map((l) => l.toUpperCase()))
         setView("letters")
-      } else if (["testimonies", "analysts", "genocides"].includes(section)) {
+      } else if (["testimonies", "analysts", "genocides", "resistance"].includes(section)) {
         const res = await fetch(`/data/${lang}/${countryCode}/${section}.index.json`)
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
         setView(json.items?.length ? "grid" : "empty")
+      } else if (section === "timeline") {
+        const res = await fetch(`/data/${lang}/${countryCode}/timeline/timeline.index.json`)
+        const json = res.ok ? await res.json() : { items: [] }
+        setItems(json.items || [])
+        setView(json.items?.length ? "timeline" : "empty")
       } else if (["media-gallery-images", "media-gallery-videos"].includes(section)) {
         let mediaItems = []
 
@@ -189,6 +195,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
       if (section === "testimonies") path = `/data/${lang}/${countryCode}/testimonies/${item.id}.json`
       else if (section === "analysts") path = `/data/${lang}/${countryCode}/analysts/${item.id}.json`
       else if (section === "genocides") path = `/data/${lang}/${countryCode}/genocides/${item.id}.json`
+      else if (section === "resistance") path = `/data/${lang}/${countryCode}/resistance/${item.id}.json`
 
       if (path) {
         const res = await fetch(path)
@@ -219,11 +226,13 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
 
   async function loadSpecificAnalysis(analysisId) {
     try {
-     const isTestimony = analysesIndex?.type === "testimony"
-const baseFolder = isTestimony ? "testimonies" : "analysts"
+      const isTestimony = analysesIndex?.type === "testimony"
+      const isResistance = section === "resistance"
+      let baseFolder = "analysts"
+      if (isTestimony) baseFolder = "testimonies"
+      if (isResistance) baseFolder = "resistance"
 
-const path = `/data/${lang}/${countryCode}/${baseFolder}/${analysesIndex.id}/${analysisId}.json`
-
+      const path = `/data/${lang}/${countryCode}/${baseFolder}/${analysesIndex.id}/${analysisId}.json`
 
       const res = await fetch(path)
       if (res.ok) {
@@ -233,6 +242,20 @@ const path = `/data/${lang}/${countryCode}/${baseFolder}/${analysesIndex.id}/${a
       }
     } catch (err) {
       console.error("[v0] Error loading specific analysis:", err)
+    }
+  }
+
+  async function loadTimelineDetail(item) {
+    try {
+      const path = `/data/${lang}/${countryCode}/timeline/${item.id}.json`
+      const res = await fetch(path)
+      if (res.ok) {
+        const json = await res.json()
+        setSelectedItem(json)
+        setView("timeline-article")
+      }
+    } catch (err) {
+      console.error("[v0] Error loading timeline item:", err)
     }
   }
 
@@ -651,6 +674,77 @@ const path = `/data/${lang}/${countryCode}/${baseFolder}/${analysesIndex.id}/${a
             </div>
           </div>
         </article>
+      </div>
+    )
+  }
+
+  if (view === "timeline") {
+    return (
+      <div className="timeline-container">
+        <div className="timeline-header">
+          <h2>{t("timeline")}</h2>
+          <p>{t("timeline-subtitle")}</p>
+        </div>
+        <div className="timeline-line">
+          {filteredItems.map((item) => (
+            <div
+              key={item.id}
+              className="timeline-event"
+              onClick={() => loadTimelineDetail(item)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  loadTimelineDetail(item)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="timeline-date">{item.date}</div>
+              <div className="timeline-title">{item.title}</div>
+              <div className="timeline-summary">{item.summary}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (view === "timeline-article" && selectedItem) {
+    return (
+      <div className="content-inner">
+        <button className="back-button" onClick={() => loadSection()}>
+          {t("back-button")}
+        </button>
+        <div className="timeline-article">
+          <div className="timeline-article-media">
+            {selectedItem.image && (
+              <img src={selectedItem.image} alt={selectedItem.title} />
+            )}
+            {selectedItem.video && (
+              <video src={selectedItem.video} controls />
+            )}
+          </div>
+          <div className="timeline-article-content">
+            <div className="timeline-article-date">{selectedItem.date}</div>
+            <h1 className="timeline-article-title">{selectedItem.title}</h1>
+            <div className="timeline-article-text">
+              {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+            {selectedItem.sources && (
+              <div className="timeline-sources">
+                <h4>{t("sources")}</h4>
+                <ul>
+                  {selectedItem.sources.map((source, i) => (
+                    <li key={i}>{source}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     )
   }
