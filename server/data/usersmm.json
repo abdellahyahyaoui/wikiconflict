@@ -3,20 +3,19 @@
     {
       "id": "admin",
       "username": "admin",
-      "password": "$2b$10$8roWYFKhNDgmW/7oBUjbXOL5yXE2.qMXTuRFV70fnC2mpljhfpUZi",
+    "password": "$2a$10$kWXoCaLVFNezu2nkoulVnOMbWFSyqDNoT2owSUdWCvT0kSqZEAUbm",
+
       "role": "admin",
       "name": "Administrador",
-      "countries": [
-        "all"
-      ],
+      "countries": ["all"],
       "permissions": {
         "canCreate": true,
         "canEdit": true,
         "canDelete": true,
         "requiresApproval": false
       },
-      "createdAt": "2025-12-02T14:51:48.384Z",
-      "mustChangePassword": true
+      "createdAt": "2025-12-02T13:37:43.232Z",
+      "mustChangePassword": false
     }
   ]
 }
