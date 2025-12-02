@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "id": "admin",
+      "username": "admin",
+      "password": "$2b$10$Cbhk/jNbsmkUb5eQsVr6HubcCVAEybHViLGLwNjpLM/OALTeHn/ue",
+      "role": "admin",
+      "name": "Administrador",
+      "countries": [
+        "all"
+      ],
+      "permissions": {
+        "canCreate": true,
+        "canEdit": true,
+        "canDelete": true,
+        "requiresApproval": false
+      },
+      "createdAt": "2025-12-02T13:37:43.232Z"
+    }
+  ]
+}

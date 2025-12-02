@@ -295,3 +295,96 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+.admin-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  color: #0c3344;
+  border: 1px solid #0c3344;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 100;
+  transition: all 0.2s ease;
+}
+
+.admin-button:hover {
+  background: #0c3344;
+  color: white;
+}
+
+.admin-button-mobile {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  background: transparent;
+  color: #0c3344;
+  border: 1px solid #0c3344;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 100;
+  transition: all 0.2s ease;
+}
+
+.admin-button-mobile:hover {
+  background: #0c3344;
+  color: white;
+}
+
+.mobile-maps-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 10px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.mobile-map-wrapper {
+  width: 100%;
+  max-width: 90vw;
+  height: 50vh;
+  overflow: hidden;
+}
+
+.mobile-map-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-map-arrow {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: absolute;
+}
+
+.mobile-map-arrow:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-map-arrow.left {
+  left: 10px;
+}
+
+.mobile-map-arrow.right {
+  right: 10px;
+}
