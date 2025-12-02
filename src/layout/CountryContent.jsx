@@ -19,6 +19,23 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   const [globalTerminologyResults, setGlobalTerminologyResults] = useState([])
   const [isGlobalSearching, setIsGlobalSearching] = useState(false)
   const [isChaptersMenuOpen, setIsChaptersMenuOpen] = useState(false)
+  const [filterYear, setFilterYear] = useState("")
+  const [filterMonth, setFilterMonth] = useState("")
+
+  const months = [
+    { value: 1, label: "Enero" },
+    { value: 2, label: "Febrero" },
+    { value: 3, label: "Marzo" },
+    { value: 4, label: "Abril" },
+    { value: 5, label: "Mayo" },
+    { value: 6, label: "Junio" },
+    { value: 7, label: "Julio" },
+    { value: 8, label: "Agosto" },
+    { value: 9, label: "Septiembre" },
+    { value: 10, label: "Octubre" },
+    { value: 11, label: "Noviembre" },
+    { value: 12, label: "Diciembre" }
+  ]
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
@@ -80,6 +97,8 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
     setAnalysesIndex(null)
     setGlobalTerminologyResults([])
     setIsGlobalSearching(false)
+    setFilterYear("")
+    setFilterMonth("")
 
     try {
       if (section.startsWith("terminology-")) {
@@ -445,6 +464,11 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "analyses-index" && analysesIndex) {
+    const itemsList = analysesIndex.type === "testimony" 
+      ? analysesIndex.testimonies 
+      : (analysesIndex.entries || analysesIndex.analyses)
+    const hasMultipleItems = itemsList && itemsList.length > 1
+
     return (
       <div className="content-inner">
         <button className="back-button" onClick={() => loadSection()}>
@@ -459,20 +483,19 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
             {analysesIndex.bio && <p className="analyst-bio">{analysesIndex.bio}</p>}
           </div>
         </div>
-       <h2 className="analyses-list-title">
-  {analysesIndex.type === "testimony"
-    ? t("available-testimonies")
-    : t("available-analyses")}
-</h2>
+        <h2 className="analyses-list-title">
+          {analysesIndex.type === "testimony"
+            ? t("available-testimonies")
+            : section === "resistance" 
+              ? (t("resistance-entries") || "Entradas de resistencia")
+              : t("available-analyses")}
+        </h2>
 
-<div className="analyses-list">
-  {(analysesIndex.type === "testimony"
-    ? analysesIndex.testimonies
-    : analysesIndex.analyses
-  ).map((analysis) => (
+        <div className={`analyses-list ${hasMultipleItems ? "timeline-style" : ""}`}>
+          {itemsList?.map((analysis, index) => (
             <div
               key={analysis.id}
-              className="analysis-card"
+              className={`analysis-card ${hasMultipleItems ? "timeline-card" : ""}`}
               onClick={() => loadSpecificAnalysis(analysis.id)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -484,9 +507,12 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
               tabIndex={0}
               style={{ cursor: "pointer" }}
             >
-              <h3 className="analysis-title">{analysis.title}</h3>
-              {analysis.date && <p className="analysis-date">{analysis.date}</p>}
-              {analysis.summary && <p className="analysis-summary">{analysis.summary}</p>}
+              {hasMultipleItems && <div className="timeline-dot"></div>}
+              <div className="analysis-card-content">
+                <h3 className="analysis-title">{analysis.title}</h3>
+                {analysis.date && <p className="analysis-date">{analysis.date}</p>}
+                {analysis.summary && <p className="analysis-summary">{analysis.summary}</p>}
+              </div>
             </div>
           ))}
         </div>
@@ -684,33 +710,85 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "timeline") {
+    const years = [...new Set(items.map(i => i.year).filter(Boolean))].sort((a, b) => b - a)
+    
+    const timelineFiltered = items.filter(item => {
+      if (filterYear && item.year !== parseInt(filterYear)) return false
+      if (filterMonth && item.month !== parseInt(filterMonth)) return false
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase()
+        return (
+          item.title?.toLowerCase().includes(searchLower) ||
+          item.summary?.toLowerCase().includes(searchLower) ||
+          item.date?.toLowerCase().includes(searchLower)
+        )
+      }
+      return true
+    })
+
     return (
       <div className="timeline-container">
         <div className="timeline-header">
           <h2>{t("timeline")}</h2>
           <p>{t("timeline-subtitle")}</p>
         </div>
-        <div className="timeline-line">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              className="timeline-event"
-              onClick={() => loadTimelineDetail(item)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  loadTimelineDetail(item)
-                }
-              }}
-              role="button"
-              tabIndex={0}
+        <div className="timeline-filters">
+          <select 
+            value={filterYear} 
+            onChange={(e) => setFilterYear(e.target.value)}
+            className="timeline-filter-select"
+          >
+            <option value="">{t("all-years") || "Todos los años"}</option>
+            {years.map(y => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+          <select 
+            value={filterMonth} 
+            onChange={(e) => setFilterMonth(e.target.value)}
+            className="timeline-filter-select"
+          >
+            <option value="">{t("all-months") || "Todos los meses"}</option>
+            {months.map(m => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
+          {(filterYear || filterMonth) && (
+            <button 
+              className="timeline-filter-clear"
+              onClick={() => { setFilterYear(""); setFilterMonth(""); }}
             >
-              <div className="timeline-date">{item.date}</div>
-              <div className="timeline-title">{item.title}</div>
-              <div className="timeline-summary">{item.summary}</div>
-            </div>
-          ))}
+              {t("clear-filters") || "Limpiar filtros"}
+            </button>
+          )}
         </div>
+        {timelineFiltered.length === 0 ? (
+          <div className="timeline-empty">
+            {t("no-events-found") || "No se encontraron eventos con los filtros seleccionados"}
+          </div>
+        ) : (
+          <div className="timeline-line">
+            {timelineFiltered.map((item) => (
+              <div
+                key={item.id}
+                className="timeline-event"
+                onClick={() => loadTimelineDetail(item)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    loadTimelineDetail(item)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="timeline-date">{item.date}</div>
+                <div className="timeline-title">{item.title}</div>
+                <div className="timeline-summary">{item.summary}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     )
   }

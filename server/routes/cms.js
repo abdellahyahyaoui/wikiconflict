@@ -411,6 +411,161 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
   res.json({ success: true, item: newTestimonyRef });
 });
 
+router.get('/countries/:countryCode/resistance', authenticateToken, (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const indexPath = path.join(dataDir, lang, countryCode, 'resistance', 'resistance.index.json');
+  
+  const data = readJSON(indexPath) || { items: [] };
+  res.json(data);
+});
+
+router.post('/countries/:countryCode/resistance', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const { id, name, image, bio, social } = req.body;
+
+  if (!id || !name) {
+    return res.status(400).json({ error: 'ID y nombre son requeridos' });
+  }
+
+  const resistanceDir = path.join(dataDir, lang, countryCode, 'resistance');
+  ensureDir(resistanceDir);
+  ensureDir(path.join(resistanceDir, id));
+
+  const indexPath = path.join(resistanceDir, 'resistance.index.json');
+  const indexData = readJSON(indexPath) || { items: [] };
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'create',
+      section: 'resistance',
+      countryCode,
+      lang,
+      data: { id, name, image, bio, social },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const newIndexItem = { id, name, image: image || null };
+  indexData.items.push(newIndexItem);
+  writeJSON(indexPath, indexData);
+
+  const resistorData = {
+    id,
+    name,
+    bio: bio || '',
+    image: image || null,
+    social: social || {},
+    entries: []
+  };
+  writeJSON(path.join(resistanceDir, `${id}.json`), resistorData);
+
+  res.json({ success: true, item: newIndexItem });
+});
+
+router.get('/countries/:countryCode/resistance/:resistorId', authenticateToken, (req, res) => {
+  const { countryCode, resistorId } = req.params;
+  const lang = req.query.lang || 'es';
+  const resistorPath = path.join(dataDir, lang, countryCode, 'resistance', `${resistorId}.json`);
+  
+  const data = readJSON(resistorPath);
+  if (!data) {
+    return res.status(404).json({ error: 'Entrada no encontrada' });
+  }
+  res.json(data);
+});
+
+router.put('/countries/:countryCode/resistance/:resistorId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
+  const { countryCode, resistorId } = req.params;
+  const lang = req.query.lang || 'es';
+  const updates = req.body;
+
+  const resistanceDir = path.join(dataDir, lang, countryCode, 'resistance');
+  const indexPath = path.join(resistanceDir, 'resistance.index.json');
+  const resistorPath = path.join(resistanceDir, `${resistorId}.json`);
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'resistance',
+      countryCode,
+      lang,
+      itemId: resistorId,
+      data: updates,
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const indexData = readJSON(indexPath);
+  if (indexData) {
+    const itemIndex = indexData.items.findIndex(i => i.id === resistorId);
+    if (itemIndex !== -1) {
+      if (updates.name) indexData.items[itemIndex].name = updates.name;
+      if (updates.image) indexData.items[itemIndex].image = updates.image;
+      writeJSON(indexPath, indexData);
+    }
+  }
+
+  const resistorData = readJSON(resistorPath) || { id: resistorId };
+  Object.assign(resistorData, updates);
+  writeJSON(resistorPath, resistorData);
+
+  res.json({ success: true, item: resistorData });
+});
+
+router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
+  const { countryCode, resistorId } = req.params;
+  const lang = req.query.lang || 'es';
+  const { id, title, summary, date, paragraphs } = req.body;
+
+  if (!id || !title) {
+    return res.status(400).json({ error: 'ID y título son requeridos' });
+  }
+
+  const resistanceDir = path.join(dataDir, lang, countryCode, 'resistance');
+  const resistorPath = path.join(resistanceDir, `${resistorId}.json`);
+  const resistorFolder = path.join(resistanceDir, resistorId);
+  ensureDir(resistorFolder);
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'create',
+      section: 'resistance-entry',
+      countryCode,
+      lang,
+      resistorId,
+      data: { id, title, summary, date, paragraphs },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const resistorData = readJSON(resistorPath);
+  if (!resistorData) {
+    return res.status(404).json({ error: 'Entrada de resistencia no encontrada' });
+  }
+
+  const newEntryRef = { id, title, summary: summary || '', date: date || '' };
+  resistorData.entries = resistorData.entries || [];
+  resistorData.entries.push(newEntryRef);
+  writeJSON(resistorPath, resistorData);
+
+  const entryData = {
+    id,
+    title,
+    paragraphs: paragraphs || []
+  };
+  writeJSON(path.join(resistorFolder, `${id}.json`), entryData);
+
+  res.json({ success: true, item: newEntryRef });
+});
+
 router.get('/countries/:countryCode/analysts', authenticateToken, (req, res) => {
   const { countryCode } = req.params;
   const lang = req.query.lang || 'es';

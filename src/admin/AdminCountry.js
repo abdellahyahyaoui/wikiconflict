@@ -5,6 +5,7 @@ import TimelineEditor from './components/TimelineEditor';
 import TestimoniesEditor from './components/TestimoniesEditor';
 import AnalystsEditor from './components/AnalystsEditor';
 import MediaEditor from './components/MediaEditor';
+import ResistanceEditor from './components/ResistanceEditor';
 import './admin.css';
 
 export default function AdminCountry() {
@@ -48,8 +49,9 @@ export default function AdminCountry() {
   const sections = [
     { id: 'timeline', label: 'Timeline', icon: '📅' },
     { id: 'testimonies', label: 'Testimonios', icon: '👤' },
+    { id: 'resistance', label: 'Resistencia', icon: '✊' },
     { id: 'analysts', label: 'Analistas', icon: '📊' },
-    { id: 'media', label: 'Medios', icon: '🖼️' }
+    { id: 'media', label: 'Fototeca', icon: '🖼️' }
   ];
 
   return (
@@ -86,6 +88,9 @@ export default function AdminCountry() {
           )}
           {activeSection === 'testimonies' && (
             <TestimoniesEditor countryCode={countryCode} />
+          )}
+          {activeSection === 'resistance' && (
+            <ResistanceEditor countryCode={countryCode} />
           )}
           {activeSection === 'analysts' && (
             <AnalystsEditor countryCode={countryCode} />
