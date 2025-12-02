@@ -90,8 +90,13 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         const categoryData = json.categories.find((c) => c.id === category)
         if (categoryData) setAvailableLetters(categoryData.letters.map((l) => l.toUpperCase()))
         setView("letters")
-      } else if (["testimonies", "analysts", "genocides", "resistance"].includes(section)) {
+      } else if (["testimonies", "analysts", "genocides"].includes(section)) {
         const res = await fetch(`/data/${lang}/${countryCode}/${section}.index.json`)
+        const json = res.ok ? await res.json() : { items: [] }
+        setItems(json.items || [])
+        setView(json.items?.length ? "grid" : "empty")
+      } else if (section === "resistance") {
+        const res = await fetch(`/data/${lang}/${countryCode}/resistance/resistance.index.json`)
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
         setView(json.items?.length ? "grid" : "empty")

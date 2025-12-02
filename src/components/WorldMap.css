@@ -182,26 +182,16 @@
   }
 }
 
-/* Hover: vibración + elevación */
+/* Hover: elevacion suave sin vibracion */
 .conflict-marker-group {
   pointer-events: all;
   transform-origin: center;
-  transition: transform 0.18s ease, filter 0.18s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .conflict-marker-group:hover {
-  transform: translateY(-4px) scale(1.08);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
-  animation: conflictVibrate 0.25s linear infinite;
-}
-
-/* Vibración sutil */
-@keyframes conflictVibrate {
-  0%   { transform: translateY(-4px) translateX(0px)  scale(1.08); }
-  25%  { transform: translateY(-4px) translateX(1px)  scale(1.08); }
-  50%  { transform: translateY(-4px) translateX(-1px) scale(1.08); }
-  75%  { transform: translateY(-4px) translateX(1px)  scale(1.08); }
-  100% { transform: translateY(-4px) translateX(0px)  scale(1.08); }
+  transform: translateY(-3px) scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
 }
 .country-popup-circle {
   position: absolute;
