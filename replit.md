@@ -116,6 +116,11 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-02**: Fototeca API Routes Fixed
+  - Corrected API routes to follow `/countries/:countryCode/fototeca` convention
+  - Updated FototecaEditor.js to use the correct API endpoints
+  - All CRUD operations now work correctly in CMS
+
 - **2024-12-02**: Complete CMS Implementation
   - Added Express.js backend server on port 3001 for CMS functionality
   - Implemented username/password authentication system (JSON-based, no database)
