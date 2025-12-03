@@ -140,17 +140,41 @@ export default function TestimoniesEditor({ countryCode, lang = 'es' }) {
     setShowTestimonyModal(true);
   }
 
-  function openEditTestimonyModal(testimony) {
-    setEditingTestimony(testimony);
-    setTestimonyForm({
-      id: testimony.id,
-      title: testimony.title || '',
-      summary: testimony.summary || '',
-      date: testimony.date || '',
-      contentBlocks: testimony.contentBlocks || convertParagraphsToBlocks(testimony.paragraphs),
-      media: testimony.media || []
-    });
-    setShowTestimonyModal(true);
+  async function openEditTestimonyModal(testimony) {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony/${testimony.id}?lang=${lang}`, {
+        headers: getAuthHeaders()
+      });
+      
+      let fullTestimony = testimony;
+      if (res.ok) {
+        const data = await res.json();
+        fullTestimony = { ...testimony, ...data };
+      }
+      
+      setEditingTestimony(fullTestimony);
+      setTestimonyForm({
+        id: fullTestimony.id,
+        title: fullTestimony.title || '',
+        summary: fullTestimony.summary || '',
+        date: fullTestimony.date || '',
+        contentBlocks: fullTestimony.contentBlocks || convertParagraphsToBlocks(fullTestimony.paragraphs),
+        media: fullTestimony.media || []
+      });
+      setShowTestimonyModal(true);
+    } catch (error) {
+      console.error('Error loading testimony:', error);
+      setEditingTestimony(testimony);
+      setTestimonyForm({
+        id: testimony.id,
+        title: testimony.title || '',
+        summary: testimony.summary || '',
+        date: testimony.date || '',
+        contentBlocks: testimony.contentBlocks || convertParagraphsToBlocks(testimony.paragraphs),
+        media: testimony.media || []
+      });
+      setShowTestimonyModal(true);
+    }
   }
 
   function convertParagraphsToBlocks(paragraphs) {

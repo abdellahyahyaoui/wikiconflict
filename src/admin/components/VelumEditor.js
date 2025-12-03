@@ -64,27 +64,41 @@ export default function VelumEditor({ countryCode, lang = 'es' }) {
     setShowModal(true);
   }
 
-  function openEditModal(article) {
-    setEditingArticle(article);
-    setFormData({
-      id: article.id,
-      title: article.title || '',
-      subtitle: article.subtitle || '',
-      author: article.author || '',
-      authorImage: article.authorImage || '',
-      coverImage: article.coverImage || '',
-      date: article.date || '',
-      abstract: article.abstract || '',
-      keywords: article.keywords || [],
-      sections: article.sections?.length 
-        ? article.sections.map(s => ({
-            ...s,
-            contentBlocks: s.contentBlocks || convertContentToBlocks(s.content)
-          }))
-        : [{ title: '', contentBlocks: [] }],
-      bibliography: article.bibliography?.length ? article.bibliography : ['']
-    });
-    setShowModal(true);
+  async function openEditModal(article) {
+    try {
+      const res = await fetch(`/api/cms/velum/${article.id}?lang=${lang}`, {
+        headers: getAuthHeaders()
+      });
+      
+      let fullArticle = article;
+      if (res.ok) {
+        fullArticle = await res.json();
+      }
+      
+      setEditingArticle(fullArticle);
+      setFormData({
+        id: fullArticle.id,
+        title: fullArticle.title || '',
+        subtitle: fullArticle.subtitle || '',
+        author: fullArticle.author || '',
+        authorImage: fullArticle.authorImage || '',
+        coverImage: fullArticle.coverImage || '',
+        date: fullArticle.date || '',
+        abstract: fullArticle.abstract || '',
+        keywords: fullArticle.keywords || [],
+        sections: fullArticle.sections?.length 
+          ? fullArticle.sections.map(s => ({
+              ...s,
+              contentBlocks: s.contentBlocks || convertContentToBlocks(s.content)
+            }))
+          : [{ title: '', contentBlocks: [] }],
+        bibliography: fullArticle.bibliography?.length ? fullArticle.bibliography : ['']
+      });
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error loading article:', error);
+      alert('Error al cargar el artículo');
+    }
   }
 
   function convertContentToBlocks(content) {

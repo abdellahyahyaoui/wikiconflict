@@ -404,7 +404,7 @@ router.put('/countries/:countryCode/testimonies/:witnessId', authenticateToken, 
 router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
   const { countryCode, witnessId } = req.params;
   const lang = req.query.lang || 'es';
-  const { id, title, summary, date, paragraphs, media } = req.body;
+  const { id, title, summary, date, paragraphs, contentBlocks, media } = req.body;
 
   if (!id || !title) {
     return res.status(400).json({ error: 'ID y título son requeridos' });
@@ -422,7 +422,7 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
       countryCode,
       lang,
       witnessId,
-      data: { id, title, summary, date, paragraphs, media },
+      data: { id, title, summary, date, paragraphs, contentBlocks, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -443,6 +443,7 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
     id,
     title,
     paragraphs: paragraphs || [],
+    contentBlocks: contentBlocks || [],
     media: media || []
   };
   writeJSON(path.join(witnessDir, `${id}.json`), testimonyData);
@@ -450,10 +451,22 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
   res.json({ success: true, item: newTestimonyRef });
 });
 
+router.get('/countries/:countryCode/testimonies/:witnessId/testimony/:testimonyId', authenticateToken, (req, res) => {
+  const { countryCode, witnessId, testimonyId } = req.params;
+  const lang = req.query.lang || 'es';
+  const testimonyPath = path.join(dataDir, lang, countryCode, 'testimonies', witnessId, `${testimonyId}.json`);
+  
+  const data = readJSON(testimonyPath);
+  if (!data) {
+    return res.status(404).json({ error: 'Testimonio no encontrado' });
+  }
+  res.json(data);
+});
+
 router.put('/countries/:countryCode/testimonies/:witnessId/testimony/:testimonyId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
   const { countryCode, witnessId, testimonyId } = req.params;
   const lang = req.query.lang || 'es';
-  const { title, summary, date, paragraphs, media } = req.body;
+  const { title, summary, date, paragraphs, contentBlocks, media } = req.body;
 
   const testimoniesDir = path.join(dataDir, lang, countryCode, 'testimonies');
   const witnessPath = path.join(testimoniesDir, `${witnessId}.json`);
@@ -468,7 +481,7 @@ router.put('/countries/:countryCode/testimonies/:witnessId/testimony/:testimonyI
       lang,
       witnessId,
       testimonyId,
-      data: { title, summary, date, paragraphs, media },
+      data: { title, summary, date, paragraphs, contentBlocks, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -494,6 +507,7 @@ router.put('/countries/:countryCode/testimonies/:witnessId/testimony/:testimonyI
   Object.assign(testimonyData, {
     title: title || testimonyData.title,
     paragraphs: paragraphs || testimonyData.paragraphs,
+    contentBlocks: contentBlocks || testimonyData.contentBlocks || [],
     media: media || testimonyData.media || []
   });
   writeJSON(testimonyPath, testimonyData);
@@ -611,7 +625,7 @@ router.put('/countries/:countryCode/resistance/:resistorId', authenticateToken, 
 router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
   const { countryCode, resistorId } = req.params;
   const lang = req.query.lang || 'es';
-  const { id, title, summary, date, paragraphs, media } = req.body;
+  const { id, title, summary, date, paragraphs, contentBlocks, media } = req.body;
 
   if (!id || !title) {
     return res.status(400).json({ error: 'ID y título son requeridos' });
@@ -629,7 +643,7 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
       countryCode,
       lang,
       resistorId,
-      data: { id, title, summary, date, paragraphs, media },
+      data: { id, title, summary, date, paragraphs, contentBlocks, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -650,6 +664,7 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
     id,
     title,
     paragraphs: paragraphs || [],
+    contentBlocks: contentBlocks || [],
     media: media || []
   };
   writeJSON(path.join(resistorFolder, `${id}.json`), entryData);
@@ -657,10 +672,22 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
   res.json({ success: true, item: newEntryRef });
 });
 
+router.get('/countries/:countryCode/resistance/:resistorId/entry/:entryId', authenticateToken, (req, res) => {
+  const { countryCode, resistorId, entryId } = req.params;
+  const lang = req.query.lang || 'es';
+  const entryPath = path.join(dataDir, lang, countryCode, 'resistance', resistorId, `${entryId}.json`);
+  
+  const data = readJSON(entryPath);
+  if (!data) {
+    return res.status(404).json({ error: 'Entrada no encontrada' });
+  }
+  res.json(data);
+});
+
 router.put('/countries/:countryCode/resistance/:resistorId/entry/:entryId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
   const { countryCode, resistorId, entryId } = req.params;
   const lang = req.query.lang || 'es';
-  const { title, summary, date, paragraphs, media } = req.body;
+  const { title, summary, date, paragraphs, contentBlocks, media } = req.body;
 
   const resistanceDir = path.join(dataDir, lang, countryCode, 'resistance');
   const resistorPath = path.join(resistanceDir, `${resistorId}.json`);
@@ -675,7 +702,7 @@ router.put('/countries/:countryCode/resistance/:resistorId/entry/:entryId', auth
       lang,
       resistorId,
       entryId,
-      data: { title, summary, date, paragraphs, media },
+      data: { title, summary, date, paragraphs, contentBlocks, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -701,6 +728,7 @@ router.put('/countries/:countryCode/resistance/:resistorId/entry/:entryId', auth
   Object.assign(entryData, {
     title: title || entryData.title,
     paragraphs: paragraphs || entryData.paragraphs,
+    contentBlocks: contentBlocks || entryData.contentBlocks || [],
     media: media || entryData.media || []
   });
   writeJSON(entryPath, entryData);

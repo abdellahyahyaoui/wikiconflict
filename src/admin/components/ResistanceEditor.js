@@ -140,17 +140,41 @@ export default function ResistanceEditor({ countryCode, lang = 'es' }) {
     setShowEntryModal(true);
   }
 
-  function openEditEntryModal(entry) {
-    setEditingEntry(entry);
-    setEntryForm({
-      id: entry.id,
-      title: entry.title || '',
-      summary: entry.summary || '',
-      date: entry.date || '',
-      contentBlocks: entry.contentBlocks || convertParagraphsToBlocks(entry.paragraphs),
-      media: entry.media || []
-    });
-    setShowEntryModal(true);
+  async function openEditEntryModal(entry) {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry/${entry.id}?lang=${lang}`, {
+        headers: getAuthHeaders()
+      });
+      
+      let fullEntry = entry;
+      if (res.ok) {
+        const data = await res.json();
+        fullEntry = { ...entry, ...data };
+      }
+      
+      setEditingEntry(fullEntry);
+      setEntryForm({
+        id: fullEntry.id,
+        title: fullEntry.title || '',
+        summary: fullEntry.summary || '',
+        date: fullEntry.date || '',
+        contentBlocks: fullEntry.contentBlocks || convertParagraphsToBlocks(fullEntry.paragraphs),
+        media: fullEntry.media || []
+      });
+      setShowEntryModal(true);
+    } catch (error) {
+      console.error('Error loading entry:', error);
+      setEditingEntry(entry);
+      setEntryForm({
+        id: entry.id,
+        title: entry.title || '',
+        summary: entry.summary || '',
+        date: entry.date || '',
+        contentBlocks: entry.contentBlocks || convertParagraphsToBlocks(entry.paragraphs),
+        media: entry.media || []
+      });
+      setShowEntryModal(true);
+    }
   }
 
   function convertParagraphsToBlocks(paragraphs) {
