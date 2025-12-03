@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import DescriptionEditor from './components/DescriptionEditor';
 import TimelineEditor from './components/TimelineEditor';
 import TestimoniesEditor from './components/TestimoniesEditor';
 import AnalystsEditor from './components/AnalystsEditor';
@@ -14,7 +15,7 @@ export default function AdminCountry() {
   const { user, getAuthHeaders } = useAuth();
   const navigate = useNavigate();
   const [country, setCountry] = useState(null);
-  const [activeSection, setActiveSection] = useState('velum');
+  const [activeSection, setActiveSection] = useState('description');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ export default function AdminCountry() {
   }
 
   const sections = [
+    { id: 'description', label: 'Descripción', icon: '📖' },
     { id: 'velum', label: 'VELUM', icon: '📜' },
     { id: 'timeline', label: 'Timeline', icon: '📅' },
     { id: 'testimonies', label: 'Testimonios', icon: '👤' },
@@ -86,6 +88,9 @@ export default function AdminCountry() {
         </aside>
 
         <main className="admin-content">
+          {activeSection === 'description' && (
+            <DescriptionEditor countryCode={countryCode} />
+          )}
           {activeSection === 'velum' && (
             <VelumEditor countryCode={countryCode} />
           )}

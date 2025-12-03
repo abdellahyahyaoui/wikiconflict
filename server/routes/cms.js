@@ -114,6 +114,44 @@ router.post('/countries', authenticateToken, checkPermission('create'), (req, re
   res.json({ success: true, country: { code, name } });
 });
 
+router.get('/countries/:countryCode/description', authenticateToken, (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const descPath = path.join(dataDir, lang, countryCode, 'description.json');
+  
+  const data = readJSON(descPath) || { title: 'Descripción del Conflicto', chapters: [] };
+  res.json(data);
+});
+
+router.put('/countries/:countryCode/description', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
+  const { countryCode } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, chapters } = req.body;
+
+  const descPath = path.join(dataDir, lang, countryCode, 'description.json');
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'description',
+      countryCode,
+      lang,
+      data: { title, chapters },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const descData = {
+    title: title || 'Descripción del Conflicto',
+    chapters: chapters || []
+  };
+  writeJSON(descPath, descData);
+
+  res.json({ success: true, data: descData });
+});
+
 router.get('/countries/:countryCode/timeline', authenticateToken, (req, res) => {
   const { countryCode } = req.params;
   const lang = req.query.lang || 'es';
@@ -899,6 +937,29 @@ router.delete('/countries/:countryCode/fototeca/:itemId', authenticateToken, che
   res.json({ success: true, message: 'Elemento eliminado' });
 });
 
+router.get('/countries/:countryCode/section-headers/:section', authenticateToken, (req, res) => {
+  const { countryCode, section } = req.params;
+  const lang = req.query.lang || 'es';
+  const headersPath = path.join(dataDir, lang, countryCode, 'section-headers.json');
+  
+  const data = readJSON(headersPath) || {};
+  res.json(data[section] || { title: '', description: '' });
+});
+
+router.put('/countries/:countryCode/section-headers/:section', authenticateToken, checkCountryPermission, (req, res) => {
+  const { countryCode, section } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, description } = req.body;
+
+  const headersPath = path.join(dataDir, lang, countryCode, 'section-headers.json');
+  const data = readJSON(headersPath) || {};
+  
+  data[section] = { title, description };
+  writeJSON(headersPath, data);
+
+  res.json({ success: true, data: data[section] });
+});
+
 router.get('/velum', authenticateToken, (req, res) => {
   const lang = req.query.lang || 'es';
   const indexPath = path.join(dataDir, lang, 'velum', 'velum.index.json');
@@ -909,7 +970,7 @@ router.get('/velum', authenticateToken, (req, res) => {
 
 router.post('/velum', authenticateToken, checkPermission('create'), (req, res) => {
   const lang = req.query.lang || 'es';
-  const { id, title, author, authorImage, date, abstract, keywords, sections, bibliography } = req.body;
+  const { id, title, subtitle, author, authorImage, coverImage, date, abstract, keywords, sections, bibliography } = req.body;
 
   if (!id || !title) {
     return res.status(400).json({ error: 'ID y título son requeridos' });
@@ -926,7 +987,7 @@ router.post('/velum', authenticateToken, checkPermission('create'), (req, res) =
       type: 'create',
       section: 'velum',
       lang,
-      data: { id, title, author, authorImage, date, abstract, keywords, sections, bibliography },
+      data: { id, title, subtitle, author, authorImage, coverImage, date, abstract, keywords, sections, bibliography },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -935,8 +996,10 @@ router.post('/velum', authenticateToken, checkPermission('create'), (req, res) =
 
   const newIndexItem = { 
     id, 
-    title, 
-    author: author || '', 
+    title,
+    subtitle: subtitle || '',
+    author: author || '',
+    coverImage: coverImage || '',
     date: date || '',
     abstract: abstract || '',
     keywords: keywords || []
@@ -947,8 +1010,10 @@ router.post('/velum', authenticateToken, checkPermission('create'), (req, res) =
   const articleData = {
     id,
     title,
+    subtitle: subtitle || '',
     author: author || '',
     authorImage: authorImage || '',
+    coverImage: coverImage || '',
     date: date || '',
     abstract: abstract || '',
     keywords: keywords || [],
@@ -975,7 +1040,7 @@ router.get('/velum/:articleId', authenticateToken, (req, res) => {
 router.put('/velum/:articleId', authenticateToken, checkPermission('edit'), (req, res) => {
   const { articleId } = req.params;
   const lang = req.query.lang || 'es';
-  const { title, author, authorImage, date, abstract, keywords, sections, bibliography } = req.body;
+  const { title, subtitle, author, authorImage, coverImage, date, abstract, keywords, sections, bibliography } = req.body;
 
   const velumDir = path.join(dataDir, lang, 'velum');
   const indexPath = path.join(velumDir, 'velum.index.json');
@@ -987,7 +1052,7 @@ router.put('/velum/:articleId', authenticateToken, checkPermission('edit'), (req
       section: 'velum',
       lang,
       articleId,
-      data: { title, author, authorImage, date, abstract, keywords, sections, bibliography },
+      data: { title, subtitle, author, authorImage, coverImage, date, abstract, keywords, sections, bibliography },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -1001,7 +1066,9 @@ router.put('/velum/:articleId', authenticateToken, checkPermission('edit'), (req
       indexData.items[itemIndex] = {
         ...indexData.items[itemIndex],
         title: title || indexData.items[itemIndex].title,
+        subtitle: subtitle !== undefined ? subtitle : indexData.items[itemIndex].subtitle,
         author: author !== undefined ? author : indexData.items[itemIndex].author,
+        coverImage: coverImage !== undefined ? coverImage : indexData.items[itemIndex].coverImage,
         date: date !== undefined ? date : indexData.items[itemIndex].date,
         abstract: abstract !== undefined ? abstract : indexData.items[itemIndex].abstract,
         keywords: keywords || indexData.items[itemIndex].keywords
@@ -1013,8 +1080,10 @@ router.put('/velum/:articleId', authenticateToken, checkPermission('edit'), (req
   const articleData = readJSON(articlePath) || { id: articleId };
   Object.assign(articleData, {
     title: title || articleData.title,
+    subtitle: subtitle !== undefined ? subtitle : articleData.subtitle,
     author: author !== undefined ? author : articleData.author,
     authorImage: authorImage !== undefined ? authorImage : articleData.authorImage,
+    coverImage: coverImage !== undefined ? coverImage : articleData.coverImage,
     date: date !== undefined ? date : articleData.date,
     abstract: abstract !== undefined ? abstract : articleData.abstract,
     keywords: keywords || articleData.keywords,

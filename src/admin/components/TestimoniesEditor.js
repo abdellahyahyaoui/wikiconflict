@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
-import MultiMediaUploader from './MultiMediaUploader';
+import RichContentEditor from './RichContentEditor';
 
 export default function TestimoniesEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -13,6 +13,10 @@ export default function TestimoniesEditor({ countryCode }) {
   const [showTestimonyModal, setShowTestimonyModal] = useState(false);
   const [editingWitness, setEditingWitness] = useState(null);
   const [editingTestimony, setEditingTestimony] = useState(null);
+  const [sectionHeader, setSectionHeader] = useState({
+    title: 'Testimonios',
+    description: 'Voces de quienes han vivido el conflicto en primera persona'
+  });
   
   const [witnessForm, setWitnessForm] = useState({
     id: '',
@@ -27,13 +31,45 @@ export default function TestimoniesEditor({ countryCode }) {
     title: '',
     summary: '',
     date: '',
-    paragraphs: [''],
+    contentBlocks: [],
     media: []
   });
 
   useEffect(() => {
     loadWitnesses();
+    loadSectionHeader();
   }, [countryCode]);
+
+  async function loadSectionHeader() {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=es`, {
+        headers: getAuthHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.title || data.description) {
+          setSectionHeader(data);
+        }
+      }
+    } catch (error) {
+      console.log('Using default section header');
+    }
+  }
+
+  async function saveSectionHeader() {
+    try {
+      await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=es`, {
+        method: 'PUT',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(sectionHeader)
+      });
+    } catch (error) {
+      console.error('Error saving section header:', error);
+    }
+  }
 
   async function loadWitnesses() {
     try {
@@ -98,7 +134,7 @@ export default function TestimoniesEditor({ countryCode }) {
       title: '',
       summary: '',
       date: '',
-      paragraphs: [''],
+      contentBlocks: [],
       media: []
     });
     setShowTestimonyModal(true);
@@ -111,10 +147,20 @@ export default function TestimoniesEditor({ countryCode }) {
       title: testimony.title || '',
       summary: testimony.summary || '',
       date: testimony.date || '',
-      paragraphs: testimony.paragraphs || [''],
+      contentBlocks: testimony.contentBlocks || convertParagraphsToBlocks(testimony.paragraphs),
       media: testimony.media || []
     });
     setShowTestimonyModal(true);
+  }
+
+  function convertParagraphsToBlocks(paragraphs) {
+    if (!paragraphs || paragraphs.length === 0) return [];
+    return paragraphs.map((p, i) => ({
+      id: `block-${i}`,
+      type: 'text',
+      content: p,
+      position: 'center'
+    }));
   }
 
   async function handleWitnessSubmit(e) {
@@ -165,7 +211,10 @@ export default function TestimoniesEditor({ countryCode }) {
     
     const body = {
       ...testimonyForm,
-      paragraphs: testimonyForm.paragraphs.filter(p => p.trim()),
+      contentBlocks: testimonyForm.contentBlocks || [],
+      paragraphs: testimonyForm.contentBlocks
+        .filter(b => b.type === 'text')
+        .map(b => b.content),
       media: testimonyForm.media || []
     };
 
@@ -200,23 +249,6 @@ export default function TestimoniesEditor({ countryCode }) {
     }
   }
 
-  function addParagraph() {
-    setTestimonyForm({ ...testimonyForm, paragraphs: [...testimonyForm.paragraphs, ''] });
-  }
-
-  function updateParagraph(index, value) {
-    const newParagraphs = [...testimonyForm.paragraphs];
-    newParagraphs[index] = value;
-    setTestimonyForm({ ...testimonyForm, paragraphs: newParagraphs });
-  }
-
-  function removeParagraph(index) {
-    setTestimonyForm({ 
-      ...testimonyForm, 
-      paragraphs: testimonyForm.paragraphs.filter((_, i) => i !== index) 
-    });
-  }
-
   const canCreate = user.role === 'admin' || user.permissions?.canCreate;
   const canEdit = user.role === 'admin' || user.permissions?.canEdit;
 
@@ -233,6 +265,32 @@ export default function TestimoniesEditor({ countryCode }) {
             + Nuevo Testigo
           </button>
         )}
+      </div>
+
+      <div className="admin-section-header-config">
+        <h4>Encabezado de la sección (visible en la web)</h4>
+        <div className="admin-form-row">
+          <div className="admin-form-group">
+            <label>Título de la sección</label>
+            <input
+              type="text"
+              value={sectionHeader.title}
+              onChange={(e) => setSectionHeader({ ...sectionHeader, title: e.target.value })}
+              onBlur={saveSectionHeader}
+              placeholder="Testimonios"
+            />
+          </div>
+          <div className="admin-form-group" style={{ flex: 2 }}>
+            <label>Descripción</label>
+            <input
+              type="text"
+              value={sectionHeader.description}
+              onChange={(e) => setSectionHeader({ ...sectionHeader, description: e.target.value })}
+              onBlur={saveSectionHeader}
+              placeholder="Descripción breve de la sección..."
+            />
+          </div>
+        </div>
       </div>
 
       <div className="admin-testimonies-layout">
@@ -291,9 +349,9 @@ export default function TestimoniesEditor({ countryCode }) {
                       <h5>{t.title}</h5>
                       <p>{t.summary}</p>
                       <span className="admin-testimony-date">{t.date}</span>
-                      {t.media && t.media.length > 0 && (
+                      {((t.media && t.media.length > 0) || (t.contentBlocks && t.contentBlocks.length > 0)) && (
                         <span className="admin-testimony-media-count">
-                          {t.media.length} archivo(s) multimedia
+                          Contenido multimedia incluido
                         </span>
                       )}
                     </div>
@@ -313,9 +371,12 @@ export default function TestimoniesEditor({ countryCode }) {
       </div>
 
       {showWitnessModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal large">
-            <h3>{editingWitness ? 'Editar Testigo' : 'Nuevo Testigo'}</h3>
+        <div className="admin-modal-overlay" onClick={() => setShowWitnessModal(false)}>
+          <div className="admin-modal large" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingWitness ? 'Editar Testigo' : 'Nuevo Testigo'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowWitnessModal(false)}>×</button>
+            </div>
             <form onSubmit={handleWitnessSubmit}>
               <div className="admin-form-group">
                 <label>Nombre</label>
@@ -391,9 +452,12 @@ export default function TestimoniesEditor({ countryCode }) {
       )}
 
       {showTestimonyModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal large">
-            <h3>{editingTestimony ? 'Editar Testimonio' : 'Nuevo Testimonio'}</h3>
+        <div className="admin-modal-overlay" onClick={() => setShowTestimonyModal(false)}>
+          <div className="admin-modal extra-large" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingTestimony ? 'Editar Testimonio' : 'Nuevo Testimonio'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowTestimonyModal(false)}>×</button>
+            </div>
             <form onSubmit={handleTestimonySubmit}>
               <div className="admin-form-group">
                 <label>Título</label>
@@ -425,32 +489,13 @@ export default function TestimoniesEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
-                <label>Archivos Multimedia (fotos, videos, audio)</label>
-                <MultiMediaUploader
-                  value={testimonyForm.media}
-                  onChange={(media) => setTestimonyForm({ ...testimonyForm, media })}
-                  allowedTypes={['image', 'video', 'audio']}
+                <label>Contenido del Testimonio</label>
+                <p className="admin-form-help">Añade texto, imágenes, vídeos o audios. Puedes mezclar diferentes tipos y elegir la posición.</p>
+                <RichContentEditor
+                  blocks={testimonyForm.contentBlocks}
+                  onChange={(blocks) => setTestimonyForm({ ...testimonyForm, contentBlocks: blocks })}
+                  allowAudio={true}
                 />
-              </div>
-
-              <div className="admin-form-group">
-                <label>Contenido (párrafos)</label>
-                {testimonyForm.paragraphs.map((p, i) => (
-                  <div key={i} className="admin-array-item">
-                    <textarea
-                      value={p}
-                      onChange={(e) => updateParagraph(i, e.target.value)}
-                      rows={3}
-                      placeholder={`Párrafo ${i + 1}`}
-                    />
-                    <button type="button" onClick={() => removeParagraph(i)} className="admin-btn-remove">
-                      ×
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={addParagraph} className="admin-btn-add">
-                  + Añadir párrafo
-                </button>
               </div>
 
               <div className="admin-modal-actions">

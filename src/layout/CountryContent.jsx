@@ -740,6 +740,52 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
       )
     }
 
+    const renderContentBlocks = (blocks) => {
+      if (!blocks || blocks.length === 0) return null
+      return (
+        <div className="rich-content-display">
+          {blocks.map((block, idx) => {
+            if (block.type === 'text') {
+              return (
+                <div key={idx} className={`content-block content-block-text ${idx === 0 ? 'drop-cap-paragraph' : ''}`}>
+                  {block.content.split('\n').filter(p => p.trim()).map((para, pIdx) => (
+                    <p key={pIdx}>{para}</p>
+                  ))}
+                </div>
+              )
+            }
+            if (block.type === 'image') {
+              return (
+                <figure key={idx} className={`content-block content-figure content-figure-${block.position || 'center'}`}>
+                  <img src={block.url} alt={block.caption || ''} />
+                  {block.caption && <figcaption>{block.caption}</figcaption>}
+                </figure>
+              )
+            }
+            if (block.type === 'video') {
+              return (
+                <figure key={idx} className={`content-block content-figure content-figure-${block.position || 'center'}`}>
+                  <video src={block.url} controls />
+                  {block.caption && <figcaption>{block.caption}</figcaption>}
+                </figure>
+              )
+            }
+            if (block.type === 'audio') {
+              return (
+                <div key={idx} className="content-block content-audio">
+                  <audio src={block.url} controls />
+                  {block.caption && <span className="audio-caption">{block.caption}</span>}
+                </div>
+              )
+            }
+            return null
+          })}
+        </div>
+      )
+    }
+
+    const hasContentBlocks = selectedItem.contentBlocks && selectedItem.contentBlocks.length > 0
+
     return (
       <div className="content-inner" dir={isArabic ? 'rtl' : 'ltr'} lang={isArabic ? 'ar' : lang}>
         <button
@@ -757,7 +803,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         <article className="article-content">
           <h1 className={titleClasses}>{selectedItem.title || selectedItem.name}</h1>
           <div className="article-body">
-            {selectedItem.image && (
+            {!hasContentBlocks && selectedItem.image && (
               <div className="article-media">
                 <img
                   src={selectedItem.image || "/placeholder.svg"}
@@ -766,16 +812,20 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
                 />
               </div>
             )}
-            {selectedItem.video && (
+            {!hasContentBlocks && selectedItem.video && (
               <div className="article-media">
                 <video src={selectedItem.video} controls className="article-video" />
               </div>
             )}
-            {selectedItem.media && renderMediaGallery(selectedItem.media)}
-            <div className={textClasses}>
-              {selectedItem.content && <p>{selectedItem.content}</p>}
-              {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-            </div>
+            {!hasContentBlocks && selectedItem.media && renderMediaGallery(selectedItem.media)}
+            {hasContentBlocks ? (
+              renderContentBlocks(selectedItem.contentBlocks)
+            ) : (
+              <div className={textClasses}>
+                {selectedItem.content && <p>{selectedItem.content}</p>}
+                {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            )}
           </div>
         </article>
       </div>
@@ -986,19 +1036,20 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
 
   if (view === "velum-grid") {
     return (
-      <div className="content-inner velum-section">
+      <div className="content-inner velum-section velum-magazine">
         <div className="velum-header">
+          <div className="velum-masthead">VELUM</div>
           <h2>{t("velum-title")}</h2>
           <p className="velum-subtitle">{t("velum-subtitle") || "Investigaciones y micro-tesis academicas"}</p>
         </div>
         {items.length === 0 ? (
           <div className="velum-empty">{t("velum-no-articles")}</div>
         ) : (
-          <div className="velum-articles-grid">
-            {items.map((article) => (
+          <div className="velum-magazine-grid">
+            {items.map((article, idx) => (
               <div
                 key={article.id}
-                className="velum-article-card"
+                className={`velum-magazine-card ${idx === 0 ? 'velum-featured' : ''}`}
                 onClick={() => loadVelumArticle(article)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -1009,21 +1060,31 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
                 role="button"
                 tabIndex={0}
               >
-                <div className="velum-card-meta">
-                  <span className="velum-card-date">{article.date}</span>
-                  {article.author && <span className="velum-card-author">{article.author}</span>}
-                </div>
-                <h3 className="velum-card-title">{article.title}</h3>
-                {article.abstract && (
-                  <p className="velum-card-abstract">{article.abstract.substring(0, 180)}...</p>
-                )}
-                {article.keywords && article.keywords.length > 0 && (
-                  <div className="velum-card-keywords">
-                    {article.keywords.slice(0, 3).map((kw, i) => (
-                      <span key={i} className="velum-keyword-tag">{kw}</span>
-                    ))}
+                {article.coverImage && (
+                  <div className="velum-card-cover">
+                    <img src={article.coverImage} alt={article.title} />
                   </div>
                 )}
+                <div className="velum-card-body">
+                  <div className="velum-card-meta">
+                    <span className="velum-card-date">{article.date}</span>
+                    {article.author && <span className="velum-card-author">{article.author}</span>}
+                  </div>
+                  <h3 className="velum-card-title">{article.title}</h3>
+                  {article.subtitle && (
+                    <p className="velum-card-subtitle">{article.subtitle}</p>
+                  )}
+                  {article.abstract && (
+                    <p className="velum-card-abstract">{article.abstract.substring(0, 150)}...</p>
+                  )}
+                  {article.keywords && article.keywords.length > 0 && (
+                    <div className="velum-card-keywords">
+                      {article.keywords.slice(0, 3).map((kw, i) => (
+                        <span key={i} className="velum-keyword-tag">{kw}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -1035,14 +1096,59 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   if (view === "velum-article" && selectedItem) {
     const isArabic = lang === "ar"
 
+    const renderRichContentBlock = (block, isFirst = false) => {
+      if (block.type === 'text') {
+        const paragraphs = block.content.split('\n').filter(p => p.trim())
+        return paragraphs.map((para, j) => (
+          <p key={j} className={`velum-paragraph ${isFirst && j === 0 ? 'velum-drop-cap' : ''}`}>
+            {para}
+          </p>
+        ))
+      }
+      if (block.type === 'image') {
+        return (
+          <figure className={`velum-figure velum-figure-${block.position || 'center'}`}>
+            <img src={block.url} alt={block.caption || ''} />
+            {block.caption && <figcaption>{block.caption}</figcaption>}
+          </figure>
+        )
+      }
+      if (block.type === 'video') {
+        return (
+          <figure className={`velum-figure velum-figure-${block.position || 'center'}`}>
+            <video src={block.url} controls />
+            {block.caption && <figcaption>{block.caption}</figcaption>}
+          </figure>
+        )
+      }
+      if (block.type === 'audio') {
+        return (
+          <div className="velum-audio-block">
+            <audio src={block.url} controls />
+            {block.caption && <span className="velum-audio-caption">{block.caption}</span>}
+          </div>
+        )
+      }
+      return null
+    }
+
     return (
-      <div className="content-inner velum-article-view" dir={isArabic ? 'rtl' : 'ltr'} lang={isArabic ? 'ar' : lang}>
+      <div className="content-inner velum-article-view velum-magazine-article" dir={isArabic ? 'rtl' : 'ltr'} lang={isArabic ? 'ar' : lang}>
         <button className="back-button" onClick={() => loadSection()}>
           {t("back-button")}
         </button>
         <article className="velum-full-article">
+          {selectedItem.coverImage && (
+            <div className="velum-cover-hero">
+              <img src={selectedItem.coverImage} alt={selectedItem.title} />
+              <div className="velum-cover-overlay" />
+            </div>
+          )}
           <header className="velum-article-header">
             <h1 className={`velum-article-title ${isArabic ? 'amiri-font' : ''}`}>{selectedItem.title}</h1>
+            {selectedItem.subtitle && (
+              <p className="velum-article-subtitle">{selectedItem.subtitle}</p>
+            )}
             <div className="velum-article-meta">
               {selectedItem.authorImage && (
                 <img src={selectedItem.authorImage} alt={selectedItem.author} className="velum-author-image" />
@@ -1064,8 +1170,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
 
           {selectedItem.abstract && (
             <div className="velum-abstract-section">
-              <h2>{t("velum-abstract")}</h2>
-              <p className={`velum-abstract-text ${isArabic ? 'amiri-font' : ''}`}>{selectedItem.abstract}</p>
+              <p className={`velum-abstract-text velum-drop-cap ${isArabic ? 'amiri-font' : ''}`}>{selectedItem.abstract}</p>
             </div>
           )}
 
@@ -1075,9 +1180,17 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
                 <section key={i} className="velum-section-block">
                   {section.title && <h2 className="velum-section-title">{section.title}</h2>}
                   <div className={`velum-section-content ${isArabic ? 'amiri-font' : ''}`}>
-                    {section.content.split('\n').map((para, j) => (
-                      <p key={j}>{para}</p>
-                    ))}
+                    {section.contentBlocks && section.contentBlocks.length > 0 ? (
+                      section.contentBlocks.map((block, j) => (
+                        <div key={j} className="velum-content-block">
+                          {renderRichContentBlock(block, i === 0 && j === 0)}
+                        </div>
+                      ))
+                    ) : section.content ? (
+                      section.content.split('\n').map((para, j) => (
+                        <p key={j} className={i === 0 && j === 0 ? 'velum-drop-cap' : ''}>{para}</p>
+                      ))
+                    ) : null}
                   </div>
                 </section>
               ))}

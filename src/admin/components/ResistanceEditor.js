@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
-import MultiMediaUploader from './MultiMediaUploader';
+import RichContentEditor from './RichContentEditor';
 
 export default function ResistanceEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -13,6 +13,10 @@ export default function ResistanceEditor({ countryCode }) {
   const [showEntryModal, setShowEntryModal] = useState(false);
   const [editingResistor, setEditingResistor] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
+  const [sectionHeader, setSectionHeader] = useState({
+    title: 'Resistencia',
+    description: 'Personas y grupos que luchan por la justicia y los derechos humanos'
+  });
   
   const [resistorForm, setResistorForm] = useState({
     id: '',
@@ -27,13 +31,45 @@ export default function ResistanceEditor({ countryCode }) {
     title: '',
     summary: '',
     date: '',
-    paragraphs: [''],
+    contentBlocks: [],
     media: []
   });
 
   useEffect(() => {
     loadResistors();
+    loadSectionHeader();
   }, [countryCode]);
+
+  async function loadSectionHeader() {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=es`, {
+        headers: getAuthHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.title || data.description) {
+          setSectionHeader(data);
+        }
+      }
+    } catch (error) {
+      console.log('Using default section header');
+    }
+  }
+
+  async function saveSectionHeader() {
+    try {
+      await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=es`, {
+        method: 'PUT',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(sectionHeader)
+      });
+    } catch (error) {
+      console.error('Error saving section header:', error);
+    }
+  }
 
   async function loadResistors() {
     try {
@@ -98,7 +134,7 @@ export default function ResistanceEditor({ countryCode }) {
       title: '',
       summary: '',
       date: '',
-      paragraphs: [''],
+      contentBlocks: [],
       media: []
     });
     setShowEntryModal(true);
@@ -111,10 +147,20 @@ export default function ResistanceEditor({ countryCode }) {
       title: entry.title || '',
       summary: entry.summary || '',
       date: entry.date || '',
-      paragraphs: entry.paragraphs || [''],
+      contentBlocks: entry.contentBlocks || convertParagraphsToBlocks(entry.paragraphs),
       media: entry.media || []
     });
     setShowEntryModal(true);
+  }
+
+  function convertParagraphsToBlocks(paragraphs) {
+    if (!paragraphs || paragraphs.length === 0) return [];
+    return paragraphs.map((p, i) => ({
+      id: `block-${i}`,
+      type: 'text',
+      content: p,
+      position: 'center'
+    }));
   }
 
   async function handleResistorSubmit(e) {
@@ -165,7 +211,10 @@ export default function ResistanceEditor({ countryCode }) {
     
     const body = {
       ...entryForm,
-      paragraphs: entryForm.paragraphs.filter(p => p.trim()),
+      contentBlocks: entryForm.contentBlocks || [],
+      paragraphs: entryForm.contentBlocks
+        .filter(b => b.type === 'text')
+        .map(b => b.content),
       media: entryForm.media || []
     };
 
@@ -200,23 +249,6 @@ export default function ResistanceEditor({ countryCode }) {
     }
   }
 
-  function addParagraph() {
-    setEntryForm({ ...entryForm, paragraphs: [...entryForm.paragraphs, ''] });
-  }
-
-  function updateParagraph(index, value) {
-    const newParagraphs = [...entryForm.paragraphs];
-    newParagraphs[index] = value;
-    setEntryForm({ ...entryForm, paragraphs: newParagraphs });
-  }
-
-  function removeParagraph(index) {
-    setEntryForm({ 
-      ...entryForm, 
-      paragraphs: entryForm.paragraphs.filter((_, i) => i !== index) 
-    });
-  }
-
   const canCreate = user.role === 'admin' || user.permissions?.canCreate;
   const canEdit = user.role === 'admin' || user.permissions?.canEdit;
 
@@ -233,6 +265,32 @@ export default function ResistanceEditor({ countryCode }) {
             + Nueva Persona/Grupo
           </button>
         )}
+      </div>
+
+      <div className="admin-section-header-config">
+        <h4>Encabezado de la sección (visible en la web)</h4>
+        <div className="admin-form-row">
+          <div className="admin-form-group">
+            <label>Título de la sección</label>
+            <input
+              type="text"
+              value={sectionHeader.title}
+              onChange={(e) => setSectionHeader({ ...sectionHeader, title: e.target.value })}
+              onBlur={saveSectionHeader}
+              placeholder="Resistencia"
+            />
+          </div>
+          <div className="admin-form-group" style={{ flex: 2 }}>
+            <label>Descripción</label>
+            <input
+              type="text"
+              value={sectionHeader.description}
+              onChange={(e) => setSectionHeader({ ...sectionHeader, description: e.target.value })}
+              onBlur={saveSectionHeader}
+              placeholder="Descripción breve de la sección..."
+            />
+          </div>
+        </div>
       </div>
 
       <div className="admin-testimonies-layout">
@@ -291,9 +349,9 @@ export default function ResistanceEditor({ countryCode }) {
                       <h5>{entry.title}</h5>
                       <p>{entry.summary}</p>
                       <span className="admin-testimony-date">{entry.date}</span>
-                      {entry.media && entry.media.length > 0 && (
+                      {((entry.media && entry.media.length > 0) || (entry.contentBlocks && entry.contentBlocks.length > 0)) && (
                         <span className="admin-testimony-media-count">
-                          {entry.media.length} archivo(s) multimedia
+                          Contenido multimedia incluido
                         </span>
                       )}
                     </div>
@@ -313,9 +371,12 @@ export default function ResistanceEditor({ countryCode }) {
       </div>
 
       {showResistorModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal large">
-            <h3>{editingResistor ? 'Editar Persona/Grupo' : 'Nueva Persona/Grupo'}</h3>
+        <div className="admin-modal-overlay" onClick={() => setShowResistorModal(false)}>
+          <div className="admin-modal large" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingResistor ? 'Editar Persona/Grupo' : 'Nueva Persona/Grupo'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowResistorModal(false)}>×</button>
+            </div>
             <form onSubmit={handleResistorSubmit}>
               <div className="admin-form-group">
                 <label>Nombre</label>
@@ -391,9 +452,12 @@ export default function ResistanceEditor({ countryCode }) {
       )}
 
       {showEntryModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal large">
-            <h3>{editingEntry ? 'Editar Entrada' : 'Nueva Entrada de Resistencia'}</h3>
+        <div className="admin-modal-overlay" onClick={() => setShowEntryModal(false)}>
+          <div className="admin-modal extra-large" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingEntry ? 'Editar Entrada' : 'Nueva Entrada de Resistencia'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowEntryModal(false)}>×</button>
+            </div>
             <form onSubmit={handleEntrySubmit}>
               <div className="admin-form-group">
                 <label>Título</label>
@@ -425,32 +489,13 @@ export default function ResistanceEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
-                <label>Archivos Multimedia (fotos, videos, audio)</label>
-                <MultiMediaUploader
-                  value={entryForm.media}
-                  onChange={(media) => setEntryForm({ ...entryForm, media })}
-                  allowedTypes={['image', 'video', 'audio']}
+                <label>Contenido de la Entrada</label>
+                <p className="admin-form-help">Añade texto, imágenes, vídeos o audios. Puedes mezclar diferentes tipos y elegir la posición.</p>
+                <RichContentEditor
+                  blocks={entryForm.contentBlocks}
+                  onChange={(blocks) => setEntryForm({ ...entryForm, contentBlocks: blocks })}
+                  allowAudio={true}
                 />
-              </div>
-
-              <div className="admin-form-group">
-                <label>Contenido (párrafos)</label>
-                {entryForm.paragraphs.map((p, i) => (
-                  <div key={i} className="admin-array-item">
-                    <textarea
-                      value={p}
-                      onChange={(e) => updateParagraph(i, e.target.value)}
-                      rows={3}
-                      placeholder={`Párrafo ${i + 1}`}
-                    />
-                    <button type="button" onClick={() => removeParagraph(i)} className="admin-btn-remove">
-                      ×
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={addParagraph} className="admin-btn-add">
-                  + Añadir párrafo
-                </button>
               </div>
 
               <div className="admin-modal-actions">

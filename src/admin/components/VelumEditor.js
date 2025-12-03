@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
+import RichContentEditor from './RichContentEditor';
 
 export default function VelumEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -13,8 +14,10 @@ export default function VelumEditor({ countryCode }) {
   const [formData, setFormData] = useState({
     id: '',
     title: '',
+    subtitle: '',
     author: '',
     authorImage: '',
+    coverImage: '',
     date: '',
     abstract: '',
     keywords: [],
@@ -48,12 +51,14 @@ export default function VelumEditor({ countryCode }) {
     setFormData({
       id: '',
       title: '',
+      subtitle: '',
       author: '',
       authorImage: '',
+      coverImage: '',
       date: new Date().toISOString().split('T')[0],
       abstract: '',
       keywords: [],
-      sections: [{ title: '', content: '' }],
+      sections: [{ title: '', contentBlocks: [] }],
       bibliography: ['']
     });
     setShowModal(true);
@@ -64,15 +69,32 @@ export default function VelumEditor({ countryCode }) {
     setFormData({
       id: article.id,
       title: article.title || '',
+      subtitle: article.subtitle || '',
       author: article.author || '',
       authorImage: article.authorImage || '',
+      coverImage: article.coverImage || '',
       date: article.date || '',
       abstract: article.abstract || '',
       keywords: article.keywords || [],
-      sections: article.sections?.length ? article.sections : [{ title: '', content: '' }],
+      sections: article.sections?.length 
+        ? article.sections.map(s => ({
+            ...s,
+            contentBlocks: s.contentBlocks || convertContentToBlocks(s.content)
+          }))
+        : [{ title: '', contentBlocks: [] }],
       bibliography: article.bibliography?.length ? article.bibliography : ['']
     });
     setShowModal(true);
+  }
+
+  function convertContentToBlocks(content) {
+    if (!content) return [];
+    return [{
+      id: 'block-0',
+      type: 'text',
+      content: content,
+      position: 'center'
+    }];
   }
 
   async function handleSubmit(e) {
@@ -81,7 +103,15 @@ export default function VelumEditor({ countryCode }) {
     const body = {
       ...formData,
       id: formData.id || formData.title.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 30),
-      sections: formData.sections.filter(s => s.title.trim() || s.content.trim()),
+      sections: formData.sections
+        .filter(s => s.title.trim() || (s.contentBlocks && s.contentBlocks.length > 0))
+        .map(s => ({
+          ...s,
+          content: s.contentBlocks
+            ?.filter(b => b.type === 'text')
+            .map(b => b.content)
+            .join('\n\n') || ''
+        })),
       bibliography: formData.bibliography.filter(b => b.trim())
     };
 
@@ -146,12 +176,18 @@ export default function VelumEditor({ countryCode }) {
   }
 
   function addSection() {
-    setFormData({ ...formData, sections: [...formData.sections, { title: '', content: '' }] });
+    setFormData({ ...formData, sections: [...formData.sections, { title: '', contentBlocks: [] }] });
   }
 
-  function updateSection(index, field, value) {
+  function updateSectionTitle(index, title) {
     const newSections = [...formData.sections];
-    newSections[index][field] = value;
+    newSections[index].title = title;
+    setFormData({ ...formData, sections: newSections });
+  }
+
+  function updateSectionBlocks(index, blocks) {
+    const newSections = [...formData.sections];
+    newSections[index].contentBlocks = blocks;
     setFormData({ ...formData, sections: newSections });
   }
 
@@ -191,28 +227,36 @@ export default function VelumEditor({ countryCode }) {
         )}
       </div>
 
-      <div className="admin-velum-list">
+      <div className="admin-velum-grid">
         {articles.map(article => (
-          <div key={article.id} className="admin-velum-card">
-            <div className="admin-velum-card-content">
+          <div key={article.id} className="admin-velum-magazine-card">
+            {article.coverImage && (
+              <div className="admin-velum-cover">
+                <img src={article.coverImage} alt={article.title} />
+              </div>
+            )}
+            <div className="admin-velum-card-body">
               <div className="admin-velum-meta">
                 <span className="admin-velum-date">{article.date}</span>
                 <span className="admin-velum-author">{article.author}</span>
               </div>
               <h3 className="admin-velum-title">{article.title}</h3>
+              {article.subtitle && (
+                <p className="admin-velum-subtitle">{article.subtitle}</p>
+              )}
               {article.abstract && (
-                <p className="admin-velum-abstract">{article.abstract.substring(0, 200)}...</p>
+                <p className="admin-velum-abstract">{article.abstract.substring(0, 120)}...</p>
               )}
               {article.keywords && article.keywords.length > 0 && (
                 <div className="admin-velum-keywords">
-                  {article.keywords.slice(0, 4).map((kw, i) => (
+                  {article.keywords.slice(0, 3).map((kw, i) => (
                     <span key={i} className="admin-velum-keyword">{kw}</span>
                   ))}
                 </div>
               )}
             </div>
             {canEdit && (
-              <div className="admin-velum-actions">
+              <div className="admin-velum-card-actions">
                 <button onClick={() => openEditModal(article)} className="admin-btn-secondary small">
                   Editar
                 </button>
@@ -236,29 +280,23 @@ export default function VelumEditor({ countryCode }) {
       </div>
 
       {showModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal large">
-            <h3>{editingArticle ? 'Editar Artículo' : 'Nuevo Artículo VELUM'}</h3>
-            <form onSubmit={handleSubmit}>
-              <div className="admin-form-group">
-                <label>Título *</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                  placeholder="Título del artículo"
-                />
-              </div>
-
+        <div className="admin-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="admin-modal extra-large" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>{editingArticle ? 'Editar Artículo' : 'Nuevo Artículo VELUM'}</h3>
+              <button className="admin-modal-close" onClick={() => setShowModal(false)}>×</button>
+            </div>
+            <form onSubmit={handleSubmit} className="admin-velum-form">
               <div className="admin-form-row">
-                <div className="admin-form-group">
-                  <label>Autor</label>
+                <div className="admin-form-group" style={{ flex: 2 }}>
+                  <label>Título *</label>
                   <input
                     type="text"
-                    value={formData.author}
-                    onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                    placeholder="Nombre del autor"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    required
+                    placeholder="Título del artículo"
+                    className="velum-title-input"
                   />
                 </div>
                 <div className="admin-form-group">
@@ -272,20 +310,47 @@ export default function VelumEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
-                <label>Imagen del autor</label>
-                <ImageUploader
-                  value={formData.authorImage}
-                  onChange={(url) => setFormData({ ...formData, authorImage: url })}
+                <label>Subtítulo</label>
+                <input
+                  type="text"
+                  value={formData.subtitle}
+                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                  placeholder="Subtítulo o descripción breve"
                 />
               </div>
 
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Imagen de Portada</label>
+                  <p className="admin-form-help">Esta imagen aparecerá en la tarjeta del artículo</p>
+                  <ImageUploader
+                    value={formData.coverImage}
+                    onChange={(url) => setFormData({ ...formData, coverImage: url })}
+                  />
+                </div>
+                <div className="admin-form-group">
+                  <label>Autor</label>
+                  <input
+                    type="text"
+                    value={formData.author}
+                    onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                    placeholder="Nombre del autor"
+                  />
+                  <label style={{ marginTop: '1rem' }}>Imagen del autor</label>
+                  <ImageUploader
+                    value={formData.authorImage}
+                    onChange={(url) => setFormData({ ...formData, authorImage: url })}
+                  />
+                </div>
+              </div>
+
               <div className="admin-form-group">
-                <label>Resumen (Abstract)</label>
+                <label>Resumen / Introducción</label>
                 <textarea
                   value={formData.abstract}
                   onChange={(e) => setFormData({ ...formData, abstract: e.target.value })}
                   rows={4}
-                  placeholder="Resumen del artículo..."
+                  placeholder="Introducción breve del artículo (3-5 líneas)..."
                 />
               </div>
 
@@ -313,22 +378,23 @@ export default function VelumEditor({ countryCode }) {
 
               <div className="admin-form-group">
                 <label>Secciones del artículo</label>
+                <p className="admin-form-help">Cada sección puede contener texto, imágenes, vídeos o audios mezclados.</p>
                 {formData.sections.map((section, i) => (
-                  <div key={i} className="admin-section-item">
+                  <div key={i} className="admin-velum-section-item">
                     <div className="admin-section-header">
                       <input
                         type="text"
                         value={section.title}
-                        onChange={(e) => updateSection(i, 'title', e.target.value)}
-                        placeholder={`Título de la sección ${i + 1}`}
+                        onChange={(e) => updateSectionTitle(i, e.target.value)}
+                        placeholder={`Título de la sección ${i + 1} (ej: Lo que parece, El mecanismo real...)`}
+                        className="section-title-input"
                       />
                       <button type="button" onClick={() => removeSection(i)} className="admin-btn-remove">×</button>
                     </div>
-                    <textarea
-                      value={section.content}
-                      onChange={(e) => updateSection(i, 'content', e.target.value)}
-                      rows={4}
-                      placeholder="Contenido de la sección..."
+                    <RichContentEditor
+                      blocks={section.contentBlocks || []}
+                      onChange={(blocks) => updateSectionBlocks(i, blocks)}
+                      allowAudio={true}
                     />
                   </div>
                 ))}
@@ -338,20 +404,20 @@ export default function VelumEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
-                <label>Bibliografía</label>
+                <label>Fuentes / Bibliografía</label>
                 {formData.bibliography.map((bib, i) => (
                   <div key={i} className="admin-array-item">
                     <input
                       type="text"
                       value={bib}
                       onChange={(e) => updateBibliography(i, e.target.value)}
-                      placeholder="Referencia bibliográfica..."
+                      placeholder="Referencia bibliográfica o fuente..."
                     />
                     <button type="button" onClick={() => removeBibliography(i)} className="admin-btn-remove">×</button>
                   </div>
                 ))}
                 <button type="button" onClick={addBibliography} className="admin-btn-add">
-                  + Añadir referencia
+                  + Añadir fuente
                 </button>
               </div>
 

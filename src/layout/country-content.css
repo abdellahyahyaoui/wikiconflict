@@ -1468,3 +1468,361 @@ font-family: Georgia, "Times New Roman", serif;
     font-size: 2rem;
   }
 }
+
+/* Magazine-style Velum */
+.velum-magazine .velum-masthead {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  color: #1a6483;
+  margin-bottom: 0.5rem;
+  border-bottom: 3px double #1a6483;
+  padding-bottom: 0.5rem;
+}
+
+.velum-magazine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.velum-magazine-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.velum-magazine-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+.velum-featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.velum-featured .velum-card-cover {
+  height: 100%;
+  min-height: 300px;
+}
+
+.velum-featured .velum-card-body {
+  padding: 2rem;
+}
+
+.velum-featured .velum-card-title {
+  font-size: 2rem;
+}
+
+.velum-card-cover {
+  height: 200px;
+  overflow: hidden;
+}
+
+.velum-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.velum-magazine-card:hover .velum-card-cover img {
+  transform: scale(1.05);
+}
+
+.velum-card-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.velum-card-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Magazine Article View */
+.velum-magazine-article .velum-cover-hero {
+  position: relative;
+  height: 400px;
+  margin: -10px -56px 2rem;
+  overflow: hidden;
+}
+
+.velum-magazine-article .velum-cover-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.velum-magazine-article .velum-cover-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(transparent, white);
+}
+
+.velum-magazine-article .velum-article-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Drop Cap Style */
+.velum-drop-cap::first-letter {
+  float: left;
+  font-size: 4.5em;
+  line-height: 0.8;
+  margin-right: 12px;
+  margin-top: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #1a6483;
+}
+
+.velum-paragraph {
+  margin-bottom: 1rem;
+  text-align: justify;
+  line-height: 1.8;
+}
+
+/* Rich Content Figures - L-shaped text flow */
+.velum-figure {
+  margin: 1.5rem 0;
+}
+
+.velum-figure img,
+.velum-figure video {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.velum-figure figcaption {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.75rem;
+  padding: 0 1rem;
+}
+
+.velum-figure-left {
+  float: left;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+  max-width: 45%;
+  shape-outside: margin-box;
+}
+
+.velum-figure-right {
+  float: right;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  max-width: 45%;
+  shape-outside: margin-box;
+}
+
+.velum-figure-center {
+  display: block;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.velum-figure-center img,
+.velum-figure-center video {
+  max-width: 90%;
+}
+
+.velum-audio-block {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 4px solid #1a6483;
+}
+
+.velum-audio-block audio {
+  flex: 1;
+}
+
+.velum-audio-caption {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.velum-content-block {
+  overflow: hidden;
+}
+
+/* Clear floats after sections */
+.velum-section-content::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+@media (max-width: 768px) {
+  .velum-magazine-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .velum-featured {
+    grid-template-columns: 1fr;
+  }
+  
+  .velum-featured .velum-card-cover {
+    min-height: 200px;
+  }
+  
+  .velum-magazine-article .velum-cover-hero {
+    height: 250px;
+    margin: -10px -16px 1.5rem;
+  }
+  
+  .velum-figure-left,
+  .velum-figure-right {
+    float: none;
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+  
+  .velum-drop-cap::first-letter {
+    font-size: 3.5em;
+  }
+}
+
+/* Rich Content Display for Articles */
+.rich-content-display {
+  line-height: 1.8;
+  color: #333;
+}
+
+.rich-content-display::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.content-block {
+  margin-bottom: 1.5rem;
+}
+
+.content-block-text p {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.drop-cap-paragraph p:first-of-type::first-letter {
+  float: left;
+  font-size: 4em;
+  line-height: 0.8;
+  margin-right: 12px;
+  margin-top: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #1a6483;
+}
+
+.content-figure {
+  margin: 1.5rem 0;
+}
+
+.content-figure img,
+.content-figure video {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.content-figure figcaption {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.75rem;
+  padding: 0 1rem;
+}
+
+.content-figure-left {
+  float: left;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+  max-width: 45%;
+  shape-outside: margin-box;
+}
+
+.content-figure-right {
+  float: right;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  max-width: 45%;
+  shape-outside: margin-box;
+}
+
+.content-figure-center {
+  display: block;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.content-figure-center img,
+.content-figure-center video {
+  max-width: 90%;
+}
+
+.content-audio {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 4px solid #1a6483;
+}
+
+.content-audio audio {
+  flex: 1;
+}
+
+.audio-caption {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .content-figure-left,
+  .content-figure-right {
+    float: none;
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+  
+  .drop-cap-paragraph p:first-of-type::first-letter {
+    font-size: 3em;
+  }
+}

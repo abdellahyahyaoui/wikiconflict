@@ -4,8 +4,36 @@
     {
       "id": "origenes",
       "title": "Orígenes del Conflicto",
-      "content": "El conflicto comenzó a finales del siglo XIX, cuando la inmigración judía a Palestina aumentó debido al sionismo y la persecución en Europa. La población árabe local se mostró preocupada por la pérdida de sus tierras y derechos, lo que marcó el inicio de tensiones que se prolongan hasta hoy.",
+      "contentBlocks": [
+        {
+          "id": "img-1764758569606",
+          "type": "image",
+          "url": "/images/origenes.jpg",
+          "position": "center",
+          "caption": ""
+        },
+        {
+          "id": "text-1764758569606",
+          "type": "text",
+          "content": "El conflicto comenzó a finales del siglo XIX, cuando la inmigración judía a Palestina aumentó debido al sionismo y la persecución en Europa. La población árabe local se mostró preocupada por la pérdida de sus tierras y derechos, lo que marcó el inicio de tensiones que se prolongan hasta hoy.",
+          "position": "center"
+        },
+        {
+          "id": "para-1764758569606-0",
+          "type": "text",
+          "content": "La región de Palestina estaba bajo dominio otomano y la coexistencia entre comunidades árabes y judías era tensa pero relativamente estable.",
+          "position": "center"
+        },
+        {
+          "id": "para-1764758569606-1",
+          "type": "text",
+          "content": "El auge del nacionalismo judío y árabe a principios del siglo XX exacerbó los conflictos locales y sentó las bases para futuros enfrentamientos.",
+          "position": "center"
+        }
+      ],
+      "content": "El conflicto comenzó a finales del siglo XIX, cuando la inmigración judía a Palestina aumentó debido al sionismo y la persecución en Europa. La población árabe local se mostró preocupada por la pérdida de sus tierras y derechos, lo que marcó el inicio de tensiones que se prolongan hasta hoy.\n\nLa región de Palestina estaba bajo dominio otomano y la coexistencia entre comunidades árabes y judías era tensa pero relativamente estable.\n\nEl auge del nacionalismo judío y árabe a principios del siglo XX",
       "paragraphs": [
+        "El conflicto comenzó a finales del siglo XIX, cuando la inmigración judía a Palestina aumentó debido al sionismo y la persecución en Europa. La población árabe local se mostró preocupada por la pérdida de sus tierras y derechos, lo que marcó el inicio de tensiones que se prolongan hasta hoy.",
         "La región de Palestina estaba bajo dominio otomano y la coexistencia entre comunidades árabes y judías era tensa pero relativamente estable.",
         "El auge del nacionalismo judío y árabe a principios del siglo XX exacerbó los conflictos locales y sentó las bases para futuros enfrentamientos."
       ],
@@ -54,7 +82,7 @@
     },
     {
       "id": "situacion-actual",
-      "title": "Situación Actual",
+      "title": "Situación Actualmmm",
       "content": "Hoy, Gaza enfrenta un bloqueo total desde 2007, mientras que Cisjordania está fragmentada por barreras y asentamientos. La vida diaria se ve afectada por restricciones de movimiento y tensiones constantes.",
       "paragraphs": [
         "Existen negociaciones periódicas de paz, pero los avances son limitados.",

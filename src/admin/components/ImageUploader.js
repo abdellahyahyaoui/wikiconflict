@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
-export default function ImageUploader({ value, onChange }) {
+export default function ImageUploader({ value, onChange, currentImage, onImageChange }) {
   const { getAuthHeaders } = useAuth();
+  
+  const imageValue = value || currentImage || '';
+  const handleChange = onChange || onImageChange;
   const [uploading, setUploading] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [gallery, setGallery] = useState([]);
@@ -10,6 +13,10 @@ export default function ImageUploader({ value, onChange }) {
   async function handleUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
+    if (typeof handleChange !== 'function') {
+      console.error('ImageUploader: onChange/onImageChange is required');
+      return;
+    }
 
     setUploading(true);
     const formData = new FormData();
@@ -24,7 +31,7 @@ export default function ImageUploader({ value, onChange }) {
 
       if (res.ok) {
         const data = await res.json();
-        onChange(data.url);
+        handleChange(data.url);
       } else {
         alert('Error al subir imagen');
       }
@@ -49,16 +56,18 @@ export default function ImageUploader({ value, onChange }) {
   }
 
   function selectFromGallery(url) {
-    onChange(url);
+    if (typeof handleChange === 'function') {
+      handleChange(url);
+    }
     setShowGallery(false);
   }
 
   return (
     <div className="admin-image-uploader">
-      {value && (
+      {imageValue && (
         <div className="admin-image-preview">
-          <img src={value} alt="Preview" />
-          <button type="button" onClick={() => onChange('')} className="admin-btn-remove-image">
+          <img src={imageValue} alt="Preview" />
+          <button type="button" onClick={() => handleChange && handleChange('')} className="admin-btn-remove-image">
             ×
           </button>
         </div>
@@ -80,8 +89,8 @@ export default function ImageUploader({ value, onChange }) {
         </button>
         <input
           type="text"
-          value={value || ''}
-          onChange={(e) => onChange(e.target.value)}
+          value={imageValue}
+          onChange={(e) => handleChange && handleChange(e.target.value)}
           placeholder="O pegar URL de imagen"
           className="admin-image-url-input"
         />
