@@ -1,6 +1,23 @@
 {
   "items": [
     {
+      "id": "demo-layout",
+      "title": "Documentando la Resistencia: Un Viaje Visual",
+      "author": "Equipo WikiConflicts",
+      "date": "2025-12-03",
+      "coverImage": "/imagenes/chohada.png",
+      "excerpt": "Articulo de demostracion que ilustra el diseno L/U con imagenes posicionadas a izquierda y derecha.",
+      "category": "Documentacion",
+      "featured": true,
+      "subtitle": "Historias de resiliencia a traves de imagenes y testimonios",
+      "abstract": "Este articulo de demostracion ilustra como el contenido multimedia se integra con el texto en un diseno L/U.",
+      "keywords": [
+        "demo",
+        "layout",
+        "multimedia"
+      ]
+    },
+    {
       "id": "nakba-memoria-viva",
       "title": "La Nakba: Memoria Viva de un Pueblo",
       "author": "Dr. Rashid Khalidi",

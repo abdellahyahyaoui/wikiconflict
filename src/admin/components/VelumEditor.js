@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
 import RichContentEditor from './RichContentEditor';
 
-export default function VelumEditor({ countryCode }) {
+export default function VelumEditor({ countryCode, lang = 'es' }) {
   const { user, getAuthHeaders } = useAuth();
   const [articles, setArticles] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
@@ -29,11 +29,11 @@ export default function VelumEditor({ countryCode }) {
 
   useEffect(() => {
     loadArticles();
-  }, [countryCode]);
+  }, [countryCode, lang]);
 
   async function loadArticles() {
     try {
-      const res = await fetch(`/api/cms/velum?lang=es`, {
+      const res = await fetch(`/api/cms/velum?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -116,8 +116,8 @@ export default function VelumEditor({ countryCode }) {
     };
 
     const url = editingArticle
-      ? `/api/cms/velum/${editingArticle.id}?lang=es`
-      : `/api/cms/velum?lang=es`;
+      ? `/api/cms/velum/${editingArticle.id}?lang=${lang}`
+      : `/api/cms/velum?lang=${lang}`;
 
     const method = editingArticle ? 'PUT' : 'POST';
 
@@ -151,7 +151,7 @@ export default function VelumEditor({ countryCode }) {
     if (!window.confirm(`¿Eliminar "${article.title}"?`)) return;
 
     try {
-      const res = await fetch(`/api/cms/velum/${article.id}?lang=es`, {
+      const res = await fetch(`/api/cms/velum/${article.id}?lang=${lang}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });

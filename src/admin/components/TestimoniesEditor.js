@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
 import RichContentEditor from './RichContentEditor';
 
-export default function TestimoniesEditor({ countryCode }) {
+export default function TestimoniesEditor({ countryCode, lang = 'es' }) {
   const { user, getAuthHeaders } = useAuth();
   const [witnesses, setWitnesses] = useState([]);
   const [selectedWitness, setSelectedWitness] = useState(null);
@@ -38,11 +38,11 @@ export default function TestimoniesEditor({ countryCode }) {
   useEffect(() => {
     loadWitnesses();
     loadSectionHeader();
-  }, [countryCode]);
+  }, [countryCode, lang]);
 
   async function loadSectionHeader() {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -58,7 +58,7 @@ export default function TestimoniesEditor({ countryCode }) {
 
   async function saveSectionHeader() {
     try {
-      await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=es`, {
+      await fetch(`/api/cms/countries/${countryCode}/section-headers/testimonies?lang=${lang}`, {
         method: 'PUT',
         headers: {
           ...getAuthHeaders(),
@@ -73,7 +73,7 @@ export default function TestimoniesEditor({ countryCode }) {
 
   async function loadWitnesses() {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/testimonies?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/testimonies?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -88,7 +88,7 @@ export default function TestimoniesEditor({ countryCode }) {
 
   async function loadWitnessDetail(witnessId) {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/testimonies/${witnessId}?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/testimonies/${witnessId}?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -167,8 +167,8 @@ export default function TestimoniesEditor({ countryCode }) {
     e.preventDefault();
     
     const url = editingWitness
-      ? `/api/cms/countries/${countryCode}/testimonies/${editingWitness.id}?lang=es`
-      : `/api/cms/countries/${countryCode}/testimonies?lang=es`;
+      ? `/api/cms/countries/${countryCode}/testimonies/${editingWitness.id}?lang=${lang}`
+      : `/api/cms/countries/${countryCode}/testimonies?lang=${lang}`;
     
     const method = editingWitness ? 'PUT' : 'POST';
 
@@ -220,8 +220,8 @@ export default function TestimoniesEditor({ countryCode }) {
 
     const isEdit = editingTestimony && editingTestimony.id;
     const url = isEdit
-      ? `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony/${editingTestimony.id}?lang=es`
-      : `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony?lang=es`;
+      ? `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony/${editingTestimony.id}?lang=${lang}`
+      : `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony?lang=${lang}`;
 
     try {
       const res = await fetch(url, {

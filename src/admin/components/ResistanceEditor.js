@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
 import RichContentEditor from './RichContentEditor';
 
-export default function ResistanceEditor({ countryCode }) {
+export default function ResistanceEditor({ countryCode, lang = 'es' }) {
   const { user, getAuthHeaders } = useAuth();
   const [resistors, setResistors] = useState([]);
   const [selectedResistor, setSelectedResistor] = useState(null);
@@ -38,11 +38,11 @@ export default function ResistanceEditor({ countryCode }) {
   useEffect(() => {
     loadResistors();
     loadSectionHeader();
-  }, [countryCode]);
+  }, [countryCode, lang]);
 
   async function loadSectionHeader() {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -58,7 +58,7 @@ export default function ResistanceEditor({ countryCode }) {
 
   async function saveSectionHeader() {
     try {
-      await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=es`, {
+      await fetch(`/api/cms/countries/${countryCode}/section-headers/resistance?lang=${lang}`, {
         method: 'PUT',
         headers: {
           ...getAuthHeaders(),
@@ -73,7 +73,7 @@ export default function ResistanceEditor({ countryCode }) {
 
   async function loadResistors() {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/resistance?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/resistance?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -88,7 +88,7 @@ export default function ResistanceEditor({ countryCode }) {
 
   async function loadResistorDetail(resistorId) {
     try {
-      const res = await fetch(`/api/cms/countries/${countryCode}/resistance/${resistorId}?lang=es`, {
+      const res = await fetch(`/api/cms/countries/${countryCode}/resistance/${resistorId}?lang=${lang}`, {
         headers: getAuthHeaders()
       });
       if (res.ok) {
@@ -167,8 +167,8 @@ export default function ResistanceEditor({ countryCode }) {
     e.preventDefault();
     
     const url = editingResistor
-      ? `/api/cms/countries/${countryCode}/resistance/${editingResistor.id}?lang=es`
-      : `/api/cms/countries/${countryCode}/resistance?lang=es`;
+      ? `/api/cms/countries/${countryCode}/resistance/${editingResistor.id}?lang=${lang}`
+      : `/api/cms/countries/${countryCode}/resistance?lang=${lang}`;
     
     const method = editingResistor ? 'PUT' : 'POST';
 
@@ -220,8 +220,8 @@ export default function ResistanceEditor({ countryCode }) {
 
     const isEdit = editingEntry && editingEntry.id;
     const url = isEdit
-      ? `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry/${editingEntry.id}?lang=es`
-      : `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry?lang=es`;
+      ? `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry/${editingEntry.id}?lang=${lang}`
+      : `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry?lang=${lang}`;
 
     try {
       const res = await fetch(url, {
