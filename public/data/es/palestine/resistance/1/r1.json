@@ -4,5 +4,20 @@
   "paragraphs": [
     "zfgfhgjhkgmnfbdvcz<"
   ],
-  "media": []
+  "media": [],
+  "contentBlocks": [
+    {
+      "id": "block-0",
+      "type": "text",
+      "content": "zfgfhgjhkgmnfbdvcz<",
+      "position": "center"
+    },
+    {
+      "id": "1764777762950",
+      "type": "image",
+      "url": "/imagenes/3.png",
+      "position": "center",
+      "caption": ""
+    }
+  ]
 }

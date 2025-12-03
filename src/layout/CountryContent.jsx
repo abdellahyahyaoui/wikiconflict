@@ -272,6 +272,10 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   // Caso TESTIMONIES (múltiples testimonios por persona)
   setAnalysesIndex({ ...json, type: "testimony" })
   setView("analyses-index")
+} else if (json.entries && Array.isArray(json.entries)) {
+  // Caso RESISTANCE (múltiples entradas por autor)
+  setAnalysesIndex({ ...json, type: "resistance" })
+  setView("analyses-index")
 } else {
   // Caso normal (artículo único)
   setSelectedItem(json)
@@ -288,7 +292,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   async function loadSpecificAnalysis(analysisId) {
     try {
       const isTestimony = analysesIndex?.type === "testimony"
-      const isResistance = section === "resistance"
+      const isResistance = analysesIndex?.type === "resistance" || section === "resistance"
       let baseFolder = "analysts"
       if (isTestimony) baseFolder = "testimonies"
       if (isResistance) baseFolder = "resistance"
@@ -515,9 +519,14 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "analyses-index" && analysesIndex) {
-    const itemsList = analysesIndex.type === "testimony" 
-      ? analysesIndex.testimonies 
-      : (analysesIndex.entries || analysesIndex.analyses)
+    let itemsList
+    if (analysesIndex.type === "testimony") {
+      itemsList = analysesIndex.testimonies
+    } else if (analysesIndex.type === "resistance") {
+      itemsList = analysesIndex.entries
+    } else {
+      itemsList = analysesIndex.analyses
+    }
     const hasMultipleItems = itemsList && itemsList.length > 1
 
     return (
@@ -537,7 +546,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         <h2 className="analyses-list-title">
           {analysesIndex.type === "testimony"
             ? t("available-testimonies")
-            : section === "resistance" 
+            : analysesIndex.type === "resistance" 
               ? (t("resistance-entries") || "Entradas de resistencia")
               : t("available-analyses")}
         </h2>
@@ -767,39 +776,137 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
 
     const renderContentBlocks = (blocks) => {
       if (!blocks || blocks.length === 0) return null
+      
+      // Improved algorithm: look ahead for media+text pairs, handle all orderings
+      const groupedContent = []
+      let i = 0
+      let isFirstText = true
+      
+      while (i < blocks.length) {
+        const block = blocks[i]
+        
+        if (block.type === 'image' || block.type === 'video') {
+          const mediaBlock = block
+          const position = block.position || 'right'
+          let adjacentText = null
+          let fullWidthText = []
+          
+          // Look for text immediately after media
+          if (i + 1 < blocks.length && blocks[i + 1].type === 'text') {
+            const textContent = blocks[i + 1].content || ''
+            const paragraphs = textContent.split('\n').filter(p => p.trim())
+            
+            if (paragraphs.length > 0) {
+              // First 2-3 paragraphs go beside media, rest goes full width
+              const splitPoint = Math.min(3, Math.ceil(paragraphs.length / 2))
+              adjacentText = paragraphs.slice(0, splitPoint).join('\n')
+              fullWidthText = paragraphs.slice(splitPoint)
+              i++ // Skip the text block since we processed it
+            }
+          }
+          
+          groupedContent.push({
+            type: 'l-shape',
+            media: mediaBlock,
+            position: position,
+            adjacentText: adjacentText,
+            fullWidthText: fullWidthText,
+            isFirst: isFirstText && adjacentText
+          })
+          
+          if (adjacentText) isFirstText = false
+          
+        } else if (block.type === 'text') {
+          const textContent = block.content || ''
+          const paragraphs = textContent.split('\n').filter(p => p.trim())
+          
+          // Check if next block is media - if so, create L-shape with text first
+          if (i + 1 < blocks.length && (blocks[i + 1].type === 'image' || blocks[i + 1].type === 'video')) {
+            const mediaBlock = blocks[i + 1]
+            const position = mediaBlock.position || 'left' // Text first = media on left
+            
+            const splitPoint = Math.min(3, Math.ceil(paragraphs.length / 2))
+            const adjacentText = paragraphs.slice(0, splitPoint).join('\n')
+            const fullWidthText = paragraphs.slice(splitPoint)
+            
+            groupedContent.push({
+              type: 'l-shape',
+              media: mediaBlock,
+              position: position,
+              adjacentText: adjacentText,
+              fullWidthText: fullWidthText,
+              isFirst: isFirstText
+            })
+            
+            isFirstText = false
+            i++ // Skip the media block since we processed it
+          } else {
+            // Standalone text block
+            groupedContent.push({
+              type: 'text-only',
+              content: block.content,
+              isFirst: isFirstText
+            })
+            isFirstText = false
+          }
+          
+        } else if (block.type === 'audio') {
+          groupedContent.push({
+            type: 'audio',
+            url: block.url,
+            caption: block.caption
+          })
+        }
+        i++
+      }
+      
       return (
         <div className="rich-content-display">
-          {blocks.map((block, idx) => {
-            if (block.type === 'text') {
+          {groupedContent.map((group, idx) => {
+            if (group.type === 'l-shape') {
               return (
-                <div key={idx} className={`content-block content-block-text ${idx === 0 ? 'drop-cap-paragraph' : ''}`}>
-                  {block.content.split('\n').filter(p => p.trim()).map((para, pIdx) => (
+                <div key={idx} className={`content-l-shape content-l-shape-${group.position}`}>
+                  <div className="l-shape-top">
+                    <figure className={`l-shape-media l-shape-media-${group.position}`}>
+                      {group.media.type === 'image' ? (
+                        <img src={group.media.url} alt={group.media.caption || ''} />
+                      ) : (
+                        <video src={group.media.url} controls />
+                      )}
+                      {group.media.caption && <figcaption>{group.media.caption}</figcaption>}
+                    </figure>
+                    {group.adjacentText && (
+                      <div className={`l-shape-adjacent-text ${group.isFirst ? 'drop-cap-paragraph' : ''}`}>
+                        {group.adjacentText.split('\n').filter(p => p.trim()).map((para, pIdx) => (
+                          <p key={pIdx}>{para}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {group.fullWidthText && group.fullWidthText.length > 0 && (
+                    <div className="l-shape-full-width">
+                      {group.fullWidthText.map((para, pIdx) => (
+                        <p key={pIdx}>{para}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            if (group.type === 'text-only') {
+              return (
+                <div key={idx} className={`content-block content-block-text ${group.isFirst ? 'drop-cap-paragraph' : ''}`}>
+                  {(group.content || '').split('\n').filter(p => p.trim()).map((para, pIdx) => (
                     <p key={pIdx}>{para}</p>
                   ))}
                 </div>
               )
             }
-            if (block.type === 'image') {
-              return (
-                <figure key={idx} className={`content-block content-figure content-figure-${block.position || 'center'}`}>
-                  <img src={block.url} alt={block.caption || ''} />
-                  {block.caption && <figcaption>{block.caption}</figcaption>}
-                </figure>
-              )
-            }
-            if (block.type === 'video') {
-              return (
-                <figure key={idx} className={`content-block content-figure content-figure-${block.position || 'center'}`}>
-                  <video src={block.url} controls />
-                  {block.caption && <figcaption>{block.caption}</figcaption>}
-                </figure>
-              )
-            }
-            if (block.type === 'audio') {
+            if (group.type === 'audio') {
               return (
                 <div key={idx} className="content-block content-audio">
-                  <audio src={block.url} controls />
-                  {block.caption && <span className="audio-caption">{block.caption}</span>}
+                  <audio src={group.url} controls />
+                  {group.caption && <span className="audio-caption">{group.caption}</span>}
                 </div>
               )
             }
@@ -942,29 +1049,175 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "timeline-article" && selectedItem) {
+    const hasContentBlocks = selectedItem.contentBlocks && selectedItem.contentBlocks.length > 0
+    
+    const renderTimelineContentBlocks = (blocks) => {
+      if (!blocks || blocks.length === 0) return null
+      
+      const groupedContent = []
+      let i = 0
+      let isFirstText = true
+      
+      while (i < blocks.length) {
+        const block = blocks[i]
+        
+        if (block.type === 'image' || block.type === 'video') {
+          const mediaBlock = block
+          const position = block.position || 'right'
+          let adjacentText = null
+          let fullWidthText = []
+          
+          if (i + 1 < blocks.length && blocks[i + 1].type === 'text') {
+            const textContent = blocks[i + 1].content || ''
+            const paragraphs = textContent.split('\n').filter(p => p.trim())
+            
+            if (paragraphs.length > 0) {
+              const splitPoint = Math.min(3, Math.ceil(paragraphs.length / 2))
+              adjacentText = paragraphs.slice(0, splitPoint).join('\n')
+              fullWidthText = paragraphs.slice(splitPoint)
+              i++
+            }
+          }
+          
+          groupedContent.push({
+            type: 'l-shape',
+            media: mediaBlock,
+            position: position,
+            adjacentText: adjacentText,
+            fullWidthText: fullWidthText,
+            isFirst: isFirstText && adjacentText
+          })
+          
+          if (adjacentText) isFirstText = false
+          
+        } else if (block.type === 'text') {
+          const textContent = block.content || ''
+          const paragraphs = textContent.split('\n').filter(p => p.trim())
+          
+          if (i + 1 < blocks.length && (blocks[i + 1].type === 'image' || blocks[i + 1].type === 'video')) {
+            const mediaBlock = blocks[i + 1]
+            const position = mediaBlock.position || 'left'
+            
+            const splitPoint = Math.min(3, Math.ceil(paragraphs.length / 2))
+            const adjacentText = paragraphs.slice(0, splitPoint).join('\n')
+            const fullWidthText = paragraphs.slice(splitPoint)
+            
+            groupedContent.push({
+              type: 'l-shape',
+              media: mediaBlock,
+              position: position,
+              adjacentText: adjacentText,
+              fullWidthText: fullWidthText,
+              isFirst: isFirstText
+            })
+            
+            isFirstText = false
+            i++
+          } else {
+            groupedContent.push({
+              type: 'text-only',
+              content: block.content,
+              isFirst: isFirstText
+            })
+            isFirstText = false
+          }
+        } else if (block.type === 'audio') {
+          groupedContent.push({
+            type: 'audio',
+            url: block.url,
+            caption: block.caption
+          })
+        }
+        i++
+      }
+      
+      return (
+        <div className="rich-content-display">
+          {groupedContent.map((group, idx) => {
+            if (group.type === 'l-shape') {
+              return (
+                <div key={idx} className={`content-l-shape content-l-shape-${group.position}`}>
+                  <div className="l-shape-top">
+                    <figure className={`l-shape-media l-shape-media-${group.position}`}>
+                      {group.media.type === 'image' ? (
+                        <img src={group.media.url} alt={group.media.caption || ''} />
+                      ) : (
+                        <video src={group.media.url} controls />
+                      )}
+                      {group.media.caption && <figcaption>{group.media.caption}</figcaption>}
+                    </figure>
+                    {group.adjacentText && (
+                      <div className={`l-shape-adjacent-text ${group.isFirst ? 'drop-cap-paragraph' : ''}`}>
+                        {group.adjacentText.split('\n').filter(p => p.trim()).map((para, pIdx) => (
+                          <p key={pIdx}>{para}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {group.fullWidthText && group.fullWidthText.length > 0 && (
+                    <div className="l-shape-full-width">
+                      {group.fullWidthText.map((para, pIdx) => (
+                        <p key={pIdx}>{para}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            if (group.type === 'text-only') {
+              return (
+                <div key={idx} className={`content-block content-block-text ${group.isFirst ? 'drop-cap-paragraph' : ''}`}>
+                  {(group.content || '').split('\n').filter(p => p.trim()).map((para, pIdx) => (
+                    <p key={pIdx}>{para}</p>
+                  ))}
+                </div>
+              )
+            }
+            if (group.type === 'audio') {
+              return (
+                <div key={idx} className="content-block content-audio">
+                  <audio src={group.url} controls />
+                  {group.caption && <span className="audio-caption">{group.caption}</span>}
+                </div>
+              )
+            }
+            return null
+          })}
+        </div>
+      )
+    }
+    
     return (
       <div className="content-inner">
         <button className="back-button" onClick={() => loadSection()}>
           {t("back-button")}
         </button>
         <div className="timeline-article">
-          <div className="timeline-article-media">
-            {selectedItem.image && (
-              <img src={selectedItem.image} alt={selectedItem.title} />
-            )}
-            {selectedItem.video && (
-              <video src={selectedItem.video} controls />
-            )}
-          </div>
           <div className="timeline-article-content">
             <div className="timeline-article-date">{selectedItem.date}</div>
             <h1 className="timeline-article-title">{selectedItem.title}</h1>
-            <div className="timeline-article-text">
-              {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            {selectedItem.sources && (
+            
+            {hasContentBlocks ? (
+              renderTimelineContentBlocks(selectedItem.contentBlocks)
+            ) : (
+              <>
+                <div className="timeline-article-media">
+                  {selectedItem.image && (
+                    <img src={selectedItem.image} alt={selectedItem.title} />
+                  )}
+                  {selectedItem.video && (
+                    <video src={selectedItem.video} controls />
+                  )}
+                </div>
+                <div className="timeline-article-text">
+                  {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              </>
+            )}
+            
+            {selectedItem.sources && selectedItem.sources.length > 0 && (
               <div className="timeline-sources">
                 <h4>{t("sources")}</h4>
                 <ul>

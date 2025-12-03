@@ -161,10 +161,22 @@ router.get('/countries/:countryCode/timeline', authenticateToken, (req, res) => 
   res.json(data);
 });
 
+router.get('/countries/:countryCode/timeline/:itemId', authenticateToken, (req, res) => {
+  const { countryCode, itemId } = req.params;
+  const lang = req.query.lang || 'es';
+  const detailPath = path.join(dataDir, lang, countryCode, 'timeline', `${itemId}.json`);
+  
+  const data = readJSON(detailPath);
+  if (!data) {
+    return res.status(404).json({ error: 'Evento no encontrado' });
+  }
+  res.json(data);
+});
+
 router.post('/countries/:countryCode/timeline', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
   const { countryCode } = req.params;
   const lang = req.query.lang || 'es';
-  const { id, date, year, month, title, summary, image, video } = req.body;
+  const { id, date, year, month, title, summary, image, video, paragraphs, contentBlocks, sources } = req.body;
 
   if (!id || !title || !date) {
     return res.status(400).json({ error: 'ID, título y fecha son requeridos' });
@@ -184,7 +196,7 @@ router.post('/countries/:countryCode/timeline', authenticateToken, checkCountryP
       section: 'timeline',
       countryCode,
       lang,
-      data: newItem,
+      data: { ...newItem, video, paragraphs, contentBlocks, sources },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -202,8 +214,9 @@ router.post('/countries/:countryCode/timeline', authenticateToken, checkCountryP
     title,
     image: image || null,
     video: video || null,
-    paragraphs: [],
-    sources: []
+    paragraphs: paragraphs || [],
+    contentBlocks: contentBlocks || [],
+    sources: sources || []
   };
   writeJSON(path.join(timelineDir, `${id}.json`), detailData);
 

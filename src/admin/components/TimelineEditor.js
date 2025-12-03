@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import ImageUploader from './ImageUploader';
+import RichContentEditor from './RichContentEditor';
 
 export default function TimelineEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -15,9 +15,7 @@ export default function TimelineEditor({ countryCode }) {
     month: '',
     title: '',
     summary: '',
-    image: '',
-    video: '',
-    paragraphs: [],
+    contentBlocks: [],
     sources: []
   });
   const [filterYear, setFilterYear] = useState('');
@@ -42,6 +40,23 @@ export default function TimelineEditor({ countryCode }) {
     setLoading(false);
   }
 
+  function convertParagraphsToBlocks(paragraphs, image, video) {
+    const blocks = [];
+    
+    if (image) {
+      blocks.push({ type: 'image', url: image, caption: '', position: 'right' });
+    }
+    if (video) {
+      blocks.push({ type: 'video', url: video, caption: '', position: 'center' });
+    }
+    
+    if (paragraphs && paragraphs.length > 0) {
+      blocks.push({ type: 'text', content: paragraphs.join('\n\n') });
+    }
+    
+    return blocks;
+  }
+
   function openCreateModal() {
     setEditingItem(null);
     setFormData({
@@ -51,29 +66,57 @@ export default function TimelineEditor({ countryCode }) {
       month: new Date().getMonth() + 1,
       title: '',
       summary: '',
-      image: '',
-      video: '',
-      paragraphs: [''],
+      contentBlocks: [],
       sources: ['']
     });
     setShowModal(true);
   }
 
-  function openEditModal(item) {
-    setEditingItem(item);
-    setFormData({
-      id: item.id,
-      date: item.date || '',
-      year: item.year || '',
-      month: item.month || '',
-      title: item.title || '',
-      summary: item.summary || '',
-      image: item.image || '',
-      video: item.video || '',
-      paragraphs: item.paragraphs || [''],
-      sources: item.sources || ['']
-    });
-    setShowModal(true);
+  async function openEditModal(item) {
+    try {
+      const res = await fetch(`/api/cms/countries/${countryCode}/timeline/${item.id}?lang=es`, {
+        headers: getAuthHeaders()
+      });
+      
+      let fullItem = item;
+      if (res.ok) {
+        const data = await res.json();
+        fullItem = { ...item, ...data };
+      }
+      
+      setEditingItem(fullItem);
+      
+      let contentBlocks = fullItem.contentBlocks || [];
+      if (contentBlocks.length === 0 && (fullItem.paragraphs || fullItem.image || fullItem.video)) {
+        contentBlocks = convertParagraphsToBlocks(fullItem.paragraphs, fullItem.image, fullItem.video);
+      }
+      
+      setFormData({
+        id: fullItem.id,
+        date: fullItem.date || '',
+        year: fullItem.year || '',
+        month: fullItem.month || '',
+        title: fullItem.title || '',
+        summary: fullItem.summary || '',
+        contentBlocks: contentBlocks,
+        sources: fullItem.sources?.length > 0 ? fullItem.sources : ['']
+      });
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error loading timeline item:', error);
+      setEditingItem(item);
+      setFormData({
+        id: item.id,
+        date: item.date || '',
+        year: item.year || '',
+        month: item.month || '',
+        title: item.title || '',
+        summary: item.summary || '',
+        contentBlocks: [],
+        sources: item.sources?.length > 0 ? item.sources : ['']
+      });
+      setShowModal(true);
+    }
   }
 
   async function handleSubmit(e) {
@@ -85,12 +128,22 @@ export default function TimelineEditor({ countryCode }) {
     
     const method = editingItem ? 'PUT' : 'POST';
 
+    const textBlocks = formData.contentBlocks.filter(b => b.type === 'text');
+    const paragraphs = textBlocks.flatMap(b => 
+      b.content.split('\n').filter(p => p.trim())
+    );
+    
+    const imageBlock = formData.contentBlocks.find(b => b.type === 'image');
+    const videoBlock = formData.contentBlocks.find(b => b.type === 'video');
+
     const body = {
       ...formData,
       id: formData.id || formData.title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
       year: parseInt(formData.year) || null,
       month: parseInt(formData.month) || null,
-      paragraphs: formData.paragraphs.filter(p => p.trim()),
+      paragraphs: paragraphs,
+      image: imageBlock?.url || '',
+      video: videoBlock?.url || '',
       sources: formData.sources.filter(s => s.trim())
     };
 
@@ -140,23 +193,6 @@ export default function TimelineEditor({ countryCode }) {
     } catch (error) {
       console.error('Error deleting:', error);
     }
-  }
-
-  function addParagraph() {
-    setFormData({ ...formData, paragraphs: [...formData.paragraphs, ''] });
-  }
-
-  function updateParagraph(index, value) {
-    const newParagraphs = [...formData.paragraphs];
-    newParagraphs[index] = value;
-    setFormData({ ...formData, paragraphs: newParagraphs });
-  }
-
-  function removeParagraph(index) {
-    setFormData({ 
-      ...formData, 
-      paragraphs: formData.paragraphs.filter((_, i) => i !== index) 
-    });
   }
 
   function addSource() {
@@ -325,41 +361,11 @@ export default function TimelineEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
-                <label>Imagen</label>
-                <ImageUploader
-                  value={formData.image}
-                  onChange={(url) => setFormData({ ...formData, image: url })}
+                <label>Contenido (texto, imágenes, videos, audio)</label>
+                <RichContentEditor
+                  blocks={formData.contentBlocks}
+                  onChange={(blocks) => setFormData({ ...formData, contentBlocks: blocks })}
                 />
-              </div>
-
-              <div className="admin-form-group">
-                <label>Video (URL)</label>
-                <input
-                  type="text"
-                  value={formData.video}
-                  onChange={(e) => setFormData({ ...formData, video: e.target.value })}
-                  placeholder="/imagenes/video.mp4 o URL externa"
-                />
-              </div>
-
-              <div className="admin-form-group">
-                <label>Contenido (párrafos)</label>
-                {formData.paragraphs.map((p, i) => (
-                  <div key={i} className="admin-array-item">
-                    <textarea
-                      value={p}
-                      onChange={(e) => updateParagraph(i, e.target.value)}
-                      rows={3}
-                      placeholder={`Párrafo ${i + 1}`}
-                    />
-                    <button type="button" onClick={() => removeParagraph(i)} className="admin-btn-remove">
-                      ×
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={addParagraph} className="admin-btn-add">
-                  + Añadir párrafo
-                </button>
               </div>
 
               <div className="admin-form-group">

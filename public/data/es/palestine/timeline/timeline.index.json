@@ -6,7 +6,8 @@
       "year": 1948,
       "title": "La Nakba - El Comienzo del Éxodo",
       "image": "/imagenes/chohada.png",
-      "summary": "Más de 700.000 palestinos fueron expulsados de sus hogares durante la creación del Estado de Israel."
+      "summary": "Más de 700.000 palestinos fueron expulsados de sus hogares durante la creación del Estado de Israel.",
+      "month": null
     },
     {
       "id": "guerra-1967",

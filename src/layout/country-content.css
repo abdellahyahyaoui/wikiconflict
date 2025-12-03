@@ -1827,6 +1827,132 @@ font-family: Georgia, "Times New Roman", serif;
   }
 }
 
+/* =====================================
+   L-SHAPED LAYOUT FOR CONTENT WITH MEDIA
+   ===================================== */
+.content-l-shape {
+  margin-bottom: 2.5rem;
+  clear: both;
+}
+
+.l-shape-top {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.content-l-shape-right .l-shape-top {
+  flex-direction: row;
+}
+
+.content-l-shape-left .l-shape-top {
+  flex-direction: row-reverse;
+}
+
+.l-shape-media {
+  flex: 0 0 380px;
+  max-width: 45%;
+  margin: 0;
+}
+
+.l-shape-media img,
+.l-shape-media video {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  display: block;
+}
+
+.l-shape-media figcaption {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.75rem;
+  padding: 0 0.5rem;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.l-shape-adjacent-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.l-shape-adjacent-text p {
+  margin-bottom: 1rem;
+  text-align: justify;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: #07202bff;
+  line-height: 1.9;
+  font-size: 18px;
+}
+
+.l-shape-adjacent-text.drop-cap-paragraph p:first-of-type::first-letter {
+  float: left;
+  font-size: 4em;
+  line-height: 0.8;
+  margin-right: 12px;
+  margin-top: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #1a6483;
+  font-style: normal;
+}
+
+.l-shape-full-width {
+  clear: both;
+}
+
+.l-shape-full-width p {
+  margin-bottom: 1rem;
+  text-align: justify;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: #07202bff;
+  line-height: 1.9;
+  font-size: 18px;
+}
+
+/* RTL Support for L-shape */
+[dir="rtl"] .content-l-shape-right .l-shape-top {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .content-l-shape-left .l-shape-top {
+  flex-direction: row;
+}
+
+[dir="rtl"] .l-shape-adjacent-text.drop-cap-paragraph p:first-of-type::first-letter {
+  float: right;
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+/* Responsive L-shape */
+@media (max-width: 768px) {
+  .l-shape-top {
+    flex-direction: column !important;
+    gap: 1.5rem;
+  }
+  
+  .l-shape-media {
+    flex: none;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .l-shape-adjacent-text p,
+  .l-shape-full-width p {
+    font-size: 16px;
+  }
+  
+  .l-shape-adjacent-text.drop-cap-paragraph p:first-of-type::first-letter {
+    font-size: 3em;
+  }
+}
+
 /* Section Header Block */
 .section-header-block {
   text-align: center;
