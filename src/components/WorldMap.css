@@ -4,7 +4,7 @@
   height: 70vh;
   min-height: 500px;
   position: fixed;
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+ 
 }
 
 /* Removed tooltip-card styles as it's no longer used */
