@@ -116,6 +116,15 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-03**: L-Shaped Layout and Timeline Multimedia
+  - Implemented L-shaped text layout for content with multimedia - text flows beside media (left/right) then continues full-width below
+  - Improved renderContentBlocks algorithm to handle all content orderings (text-before-media, media-before-text, consecutive blocks)
+  - Timeline editor now supports full multimedia (images, videos, audio) via RichContentEditor
+  - Added individual GET route for timeline events (/countries/:countryCode/timeline/:itemId)
+  - Timeline routes save contentBlocks array for rich multimedia content
+  - Resistance section now displays article listings per author (like Testimonies section)
+  - CSS classes: content-l-shape, l-shape-top, l-shape-media, l-shape-adjacent-text, l-shape-full-width
+
 - **2024-12-03**: CMS Multi-language and Gallery Selection Improvements
   - Added gallery modal to RichContentEditor for selecting media from existing gallery (not just PC uploads)
   - Gallery modal includes filter bar (All/Images/Videos) for easy media selection
