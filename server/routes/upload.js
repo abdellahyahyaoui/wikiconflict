@@ -27,7 +27,11 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm'];
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'video/mp4', 'video/webm', 'video/ogg',
+    'audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/mp3', 'audio/m4a'
+  ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -85,6 +89,21 @@ router.post('/video', authenticateToken, upload.single('video'), (req, res) => {
     filename: req.file.filename,
     url,
     size: req.file.size
+  });
+});
+
+router.post('/media', authenticateToken, upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No se subió ningún archivo' });
+  }
+
+  const url = `/imagenes/${req.file.filename}`;
+  res.json({
+    success: true,
+    filename: req.file.filename,
+    url,
+    size: req.file.size,
+    mimetype: req.file.mimetype
   });
 });
 

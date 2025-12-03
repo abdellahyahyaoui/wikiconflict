@@ -6,6 +6,7 @@ import TestimoniesEditor from './components/TestimoniesEditor';
 import AnalystsEditor from './components/AnalystsEditor';
 import FototecaEditor from './components/FototecaEditor';
 import ResistanceEditor from './components/ResistanceEditor';
+import VelumEditor from './components/VelumEditor';
 import './admin.css';
 
 export default function AdminCountry() {
@@ -13,7 +14,7 @@ export default function AdminCountry() {
   const { user, getAuthHeaders } = useAuth();
   const navigate = useNavigate();
   const [country, setCountry] = useState(null);
-  const [activeSection, setActiveSection] = useState('timeline');
+  const [activeSection, setActiveSection] = useState('velum');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,11 +48,13 @@ export default function AdminCountry() {
   }
 
   const sections = [
+    { id: 'velum', label: 'VELUM', icon: '📜' },
     { id: 'timeline', label: 'Timeline', icon: '📅' },
     { id: 'testimonies', label: 'Testimonios', icon: '👤' },
     { id: 'resistance', label: 'Resistencia', icon: '✊' },
     { id: 'analysts', label: 'Analistas', icon: '📊' },
-    { id: 'fototeca', label: 'Fototeca', icon: '🖼️' }
+    { id: 'photos', label: 'Fotos', icon: '📷' },
+    { id: 'videos', label: 'Videos', icon: '🎬' }
   ];
 
   return (
@@ -83,6 +86,9 @@ export default function AdminCountry() {
         </aside>
 
         <main className="admin-content">
+          {activeSection === 'velum' && (
+            <VelumEditor countryCode={countryCode} />
+          )}
           {activeSection === 'timeline' && (
             <TimelineEditor countryCode={countryCode} />
           )}
@@ -95,8 +101,11 @@ export default function AdminCountry() {
           {activeSection === 'analysts' && (
             <AnalystsEditor countryCode={countryCode} />
           )}
-          {activeSection === 'fototeca' && (
-            <FototecaEditor countryCode={countryCode} />
+          {activeSection === 'photos' && (
+            <FototecaEditor countryCode={countryCode} mediaType="image" />
+          )}
+          {activeSection === 'videos' && (
+            <FototecaEditor countryCode={countryCode} mediaType="video" />
           )}
         </main>
       </div>

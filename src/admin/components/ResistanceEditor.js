@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
+import MultiMediaUploader from './MultiMediaUploader';
 
 export default function ResistanceEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -11,6 +12,7 @@ export default function ResistanceEditor({ countryCode }) {
   const [showResistorModal, setShowResistorModal] = useState(false);
   const [showEntryModal, setShowEntryModal] = useState(false);
   const [editingResistor, setEditingResistor] = useState(null);
+  const [editingEntry, setEditingEntry] = useState(null);
   
   const [resistorForm, setResistorForm] = useState({
     id: '',
@@ -25,7 +27,8 @@ export default function ResistanceEditor({ countryCode }) {
     title: '',
     summary: '',
     date: '',
-    paragraphs: ['']
+    paragraphs: [''],
+    media: []
   });
 
   useEffect(() => {
@@ -88,13 +91,28 @@ export default function ResistanceEditor({ countryCode }) {
   }
 
   function openCreateEntryModal() {
+    setEditingEntry(null);
     const nextId = `r${(resistorDetail?.entries?.length || 0) + 1}`;
     setEntryForm({
       id: nextId,
       title: '',
       summary: '',
       date: '',
-      paragraphs: ['']
+      paragraphs: [''],
+      media: []
+    });
+    setShowEntryModal(true);
+  }
+
+  function openEditEntryModal(entry) {
+    setEditingEntry(entry);
+    setEntryForm({
+      id: entry.id,
+      title: entry.title || '',
+      summary: entry.summary || '',
+      date: entry.date || '',
+      paragraphs: entry.paragraphs || [''],
+      media: entry.media || []
     });
     setShowEntryModal(true);
   }
@@ -147,21 +165,24 @@ export default function ResistanceEditor({ countryCode }) {
     
     const body = {
       ...entryForm,
-      paragraphs: entryForm.paragraphs.filter(p => p.trim())
+      paragraphs: entryForm.paragraphs.filter(p => p.trim()),
+      media: entryForm.media || []
     };
 
+    const isEdit = editingEntry && editingEntry.id;
+    const url = isEdit
+      ? `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry/${editingEntry.id}?lang=es`
+      : `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry?lang=es`;
+
     try {
-      const res = await fetch(
-        `/api/cms/countries/${countryCode}/resistance/${selectedResistor}/entry?lang=es`,
-        {
-          method: 'POST',
-          headers: {
-            ...getAuthHeaders(),
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        }
-      );
+      const res = await fetch(url, {
+        method: isEdit ? 'PUT' : 'POST',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
 
       const data = await res.json();
       
@@ -266,10 +287,15 @@ export default function ResistanceEditor({ countryCode }) {
 
                 <div className="admin-testimonies-list">
                   {resistorDetail.entries?.map(entry => (
-                    <div key={entry.id} className="admin-testimony-card">
+                    <div key={entry.id} className="admin-testimony-card" onClick={() => canEdit && openEditEntryModal(entry)}>
                       <h5>{entry.title}</h5>
                       <p>{entry.summary}</p>
                       <span className="admin-testimony-date">{entry.date}</span>
+                      {entry.media && entry.media.length > 0 && (
+                        <span className="admin-testimony-media-count">
+                          {entry.media.length} archivo(s) multimedia
+                        </span>
+                      )}
                     </div>
                   ))}
                   {(!resistorDetail.entries || resistorDetail.entries.length === 0) && (
@@ -367,7 +393,7 @@ export default function ResistanceEditor({ countryCode }) {
       {showEntryModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal large">
-            <h3>Nueva Entrada de Resistencia</h3>
+            <h3>{editingEntry ? 'Editar Entrada' : 'Nueva Entrada de Resistencia'}</h3>
             <form onSubmit={handleEntrySubmit}>
               <div className="admin-form-group">
                 <label>Título</label>
@@ -399,6 +425,15 @@ export default function ResistanceEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
+                <label>Archivos Multimedia (fotos, videos, audio)</label>
+                <MultiMediaUploader
+                  value={entryForm.media}
+                  onChange={(media) => setEntryForm({ ...entryForm, media })}
+                  allowedTypes={['image', 'video', 'audio']}
+                />
+              </div>
+
+              <div className="admin-form-group">
                 <label>Contenido (párrafos)</label>
                 {entryForm.paragraphs.map((p, i) => (
                   <div key={i} className="admin-array-item">
@@ -423,7 +458,7 @@ export default function ResistanceEditor({ countryCode }) {
                   Cancelar
                 </button>
                 <button type="submit" className="admin-btn-primary">
-                  Crear Entrada
+                  {editingEntry ? 'Guardar Cambios' : 'Crear Entrada'}
                 </button>
               </div>
             </form>

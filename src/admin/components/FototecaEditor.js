@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
-export default function FototecaEditor({ countryCode }) {
+export default function FototecaEditor({ countryCode, mediaType = null }) {
   const { user, getAuthHeaders } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -9,11 +9,13 @@ export default function FototecaEditor({ countryCode }) {
   const [editingItem, setEditingItem] = useState(null);
   const [uploading, setUploading] = useState(false);
 
+  const sectionTitle = mediaType === 'image' ? 'Fotos' : mediaType === 'video' ? 'Videos' : 'Fototeca';
+
   const [formData, setFormData] = useState({
     title: '',
     date: '',
     description: '',
-    type: 'image',
+    type: mediaType || 'image',
     url: ''
   });
 
@@ -28,7 +30,11 @@ export default function FototecaEditor({ countryCode }) {
       });
       if (res.ok) {
         const data = await res.json();
-        setItems(data.items || []);
+        let allItems = data.items || [];
+        if (mediaType) {
+          allItems = allItems.filter(item => item.type === mediaType);
+        }
+        setItems(allItems);
       }
     } catch (error) {
       console.error('Error loading fototeca:', error);
@@ -42,7 +48,7 @@ export default function FototecaEditor({ countryCode }) {
       title: '',
       date: new Date().toISOString().split('T')[0],
       description: '',
-      type: 'image',
+      type: mediaType || 'image',
       url: ''
     });
     setShowModal(true);
@@ -146,9 +152,9 @@ export default function FototecaEditor({ countryCode }) {
   return (
     <div className="admin-editor">
       <div className="admin-editor-header">
-        <h2>Fototeca</h2>
+        <h2>{sectionTitle}</h2>
         <button className="admin-btn-primary" onClick={openAddModal}>
-          + Agregar elemento
+          + Agregar {mediaType === 'image' ? 'foto' : mediaType === 'video' ? 'video' : 'elemento'}
         </button>
       </div>
 
@@ -175,9 +181,9 @@ export default function FototecaEditor({ countryCode }) {
         ))}
         {items.length === 0 && (
           <div className="admin-empty">
-            <p>No hay elementos en la fototeca</p>
+            <p>No hay {mediaType === 'image' ? 'fotos' : mediaType === 'video' ? 'videos' : 'elementos'}</p>
             <button className="admin-btn-primary" onClick={openAddModal}>
-              Agregar primer elemento
+              Agregar {mediaType === 'image' ? 'primera foto' : mediaType === 'video' ? 'primer video' : 'primer elemento'}
             </button>
           </div>
         )}
@@ -191,16 +197,18 @@ export default function FototecaEditor({ countryCode }) {
               <button className="admin-modal-close" onClick={() => setShowModal(false)}>×</button>
             </div>
             <div className="admin-modal-body">
-              <div className="admin-form-group">
-                <label>Tipo</label>
-                <select
-                  value={formData.type}
-                  onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
-                >
-                  <option value="image">Imagen</option>
-                  <option value="video">Video</option>
-                </select>
-              </div>
+              {!mediaType && (
+                <div className="admin-form-group">
+                  <label>Tipo</label>
+                  <select
+                    value={formData.type}
+                    onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
+                  >
+                    <option value="image">Imagen</option>
+                    <option value="video">Video</option>
+                  </select>
+                </div>
+              )}
 
               <div className="admin-form-group">
                 <label>Título *</label>

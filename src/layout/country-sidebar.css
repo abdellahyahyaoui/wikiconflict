@@ -1,3 +1,48 @@
+/* VELUM Sidebar Styles */
+.velum-block {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-left: 3px solid #1a6483;
+}
+
+.velum-title {
+  color: #1a6483 !important;
+  font-size: 18px !important;
+}
+
+.velum-submenu {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: slideDown 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.velum-item {
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #07202bff;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin-left: 0;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.velum-item:hover {
+  background: rgba(26, 100, 131, 0.1);
+  color: #1a6483;
+}
+
+.velum-item.active {
+  background: rgba(26, 100, 131, 0.15);
+  color: #1a6483;
+  font-weight: 600;
+}
+
 /* Complete redesign with minimalista aesthetic and improved responsiveness */
 .country-sidebar {
   width: 220px; /* Reduced from 280px */

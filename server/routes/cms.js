@@ -366,7 +366,7 @@ router.put('/countries/:countryCode/testimonies/:witnessId', authenticateToken, 
 router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
   const { countryCode, witnessId } = req.params;
   const lang = req.query.lang || 'es';
-  const { id, title, summary, date, paragraphs } = req.body;
+  const { id, title, summary, date, paragraphs, media } = req.body;
 
   if (!id || !title) {
     return res.status(400).json({ error: 'ID y título son requeridos' });
@@ -384,7 +384,7 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
       countryCode,
       lang,
       witnessId,
-      data: { id, title, summary, date, paragraphs },
+      data: { id, title, summary, date, paragraphs, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -396,7 +396,7 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
     return res.status(404).json({ error: 'Testigo no encontrado' });
   }
 
-  const newTestimonyRef = { id, title, summary: summary || '', date: date || '' };
+  const newTestimonyRef = { id, title, summary: summary || '', date: date || '', media: media || [] };
   witnessData.testimonies = witnessData.testimonies || [];
   witnessData.testimonies.push(newTestimonyRef);
   writeJSON(witnessPath, witnessData);
@@ -404,11 +404,63 @@ router.post('/countries/:countryCode/testimonies/:witnessId/testimony', authenti
   const testimonyData = {
     id,
     title,
-    paragraphs: paragraphs || []
+    paragraphs: paragraphs || [],
+    media: media || []
   };
   writeJSON(path.join(witnessDir, `${id}.json`), testimonyData);
 
   res.json({ success: true, item: newTestimonyRef });
+});
+
+router.put('/countries/:countryCode/testimonies/:witnessId/testimony/:testimonyId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
+  const { countryCode, witnessId, testimonyId } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, summary, date, paragraphs, media } = req.body;
+
+  const testimoniesDir = path.join(dataDir, lang, countryCode, 'testimonies');
+  const witnessPath = path.join(testimoniesDir, `${witnessId}.json`);
+  const witnessDir = path.join(testimoniesDir, witnessId);
+  const testimonyPath = path.join(witnessDir, `${testimonyId}.json`);
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'testimony',
+      countryCode,
+      lang,
+      witnessId,
+      testimonyId,
+      data: { title, summary, date, paragraphs, media },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const witnessData = readJSON(witnessPath);
+  if (witnessData && witnessData.testimonies) {
+    const idx = witnessData.testimonies.findIndex(t => t.id === testimonyId);
+    if (idx !== -1) {
+      witnessData.testimonies[idx] = {
+        ...witnessData.testimonies[idx],
+        title: title || witnessData.testimonies[idx].title,
+        summary: summary !== undefined ? summary : witnessData.testimonies[idx].summary,
+        date: date !== undefined ? date : witnessData.testimonies[idx].date,
+        media: media || witnessData.testimonies[idx].media || []
+      };
+      writeJSON(witnessPath, witnessData);
+    }
+  }
+
+  const testimonyData = readJSON(testimonyPath) || { id: testimonyId };
+  Object.assign(testimonyData, {
+    title: title || testimonyData.title,
+    paragraphs: paragraphs || testimonyData.paragraphs,
+    media: media || testimonyData.media || []
+  });
+  writeJSON(testimonyPath, testimonyData);
+
+  res.json({ success: true, item: testimonyData });
 });
 
 router.get('/countries/:countryCode/resistance', authenticateToken, (req, res) => {
@@ -521,7 +573,7 @@ router.put('/countries/:countryCode/resistance/:resistorId', authenticateToken, 
 router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticateToken, checkCountryPermission, checkPermission('create'), (req, res) => {
   const { countryCode, resistorId } = req.params;
   const lang = req.query.lang || 'es';
-  const { id, title, summary, date, paragraphs } = req.body;
+  const { id, title, summary, date, paragraphs, media } = req.body;
 
   if (!id || !title) {
     return res.status(400).json({ error: 'ID y título son requeridos' });
@@ -539,7 +591,7 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
       countryCode,
       lang,
       resistorId,
-      data: { id, title, summary, date, paragraphs },
+      data: { id, title, summary, date, paragraphs, media },
       userId: req.user.id,
       userName: req.user.name
     });
@@ -551,7 +603,7 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
     return res.status(404).json({ error: 'Entrada de resistencia no encontrada' });
   }
 
-  const newEntryRef = { id, title, summary: summary || '', date: date || '' };
+  const newEntryRef = { id, title, summary: summary || '', date: date || '', media: media || [] };
   resistorData.entries = resistorData.entries || [];
   resistorData.entries.push(newEntryRef);
   writeJSON(resistorPath, resistorData);
@@ -559,11 +611,63 @@ router.post('/countries/:countryCode/resistance/:resistorId/entry', authenticate
   const entryData = {
     id,
     title,
-    paragraphs: paragraphs || []
+    paragraphs: paragraphs || [],
+    media: media || []
   };
   writeJSON(path.join(resistorFolder, `${id}.json`), entryData);
 
   res.json({ success: true, item: newEntryRef });
+});
+
+router.put('/countries/:countryCode/resistance/:resistorId/entry/:entryId', authenticateToken, checkCountryPermission, checkPermission('edit'), (req, res) => {
+  const { countryCode, resistorId, entryId } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, summary, date, paragraphs, media } = req.body;
+
+  const resistanceDir = path.join(dataDir, lang, countryCode, 'resistance');
+  const resistorPath = path.join(resistanceDir, `${resistorId}.json`);
+  const resistorFolder = path.join(resistanceDir, resistorId);
+  const entryPath = path.join(resistorFolder, `${entryId}.json`);
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'resistance-entry',
+      countryCode,
+      lang,
+      resistorId,
+      entryId,
+      data: { title, summary, date, paragraphs, media },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const resistorData = readJSON(resistorPath);
+  if (resistorData && resistorData.entries) {
+    const idx = resistorData.entries.findIndex(e => e.id === entryId);
+    if (idx !== -1) {
+      resistorData.entries[idx] = {
+        ...resistorData.entries[idx],
+        title: title || resistorData.entries[idx].title,
+        summary: summary !== undefined ? summary : resistorData.entries[idx].summary,
+        date: date !== undefined ? date : resistorData.entries[idx].date,
+        media: media || resistorData.entries[idx].media || []
+      };
+      writeJSON(resistorPath, resistorData);
+    }
+  }
+
+  const entryData = readJSON(entryPath) || { id: entryId };
+  Object.assign(entryData, {
+    title: title || entryData.title,
+    paragraphs: paragraphs || entryData.paragraphs,
+    media: media || entryData.media || []
+  });
+  writeJSON(entryPath, entryData);
+
+  res.json({ success: true, item: entryData });
 });
 
 router.get('/countries/:countryCode/analysts', authenticateToken, (req, res) => {
@@ -793,6 +897,174 @@ router.delete('/countries/:countryCode/fototeca/:itemId', authenticateToken, che
   writeJSON(indexPath, indexData);
 
   res.json({ success: true, message: 'Elemento eliminado' });
+});
+
+router.get('/velum', authenticateToken, (req, res) => {
+  const lang = req.query.lang || 'es';
+  const indexPath = path.join(dataDir, lang, 'velum', 'velum.index.json');
+  
+  const data = readJSON(indexPath) || { items: [] };
+  res.json(data);
+});
+
+router.post('/velum', authenticateToken, checkPermission('create'), (req, res) => {
+  const lang = req.query.lang || 'es';
+  const { id, title, author, authorImage, date, abstract, keywords, sections, bibliography } = req.body;
+
+  if (!id || !title) {
+    return res.status(400).json({ error: 'ID y título son requeridos' });
+  }
+
+  const velumDir = path.join(dataDir, lang, 'velum');
+  ensureDir(velumDir);
+
+  const indexPath = path.join(velumDir, 'velum.index.json');
+  const indexData = readJSON(indexPath) || { items: [] };
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'create',
+      section: 'velum',
+      lang,
+      data: { id, title, author, authorImage, date, abstract, keywords, sections, bibliography },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const newIndexItem = { 
+    id, 
+    title, 
+    author: author || '', 
+    date: date || '',
+    abstract: abstract || '',
+    keywords: keywords || []
+  };
+  indexData.items.push(newIndexItem);
+  writeJSON(indexPath, indexData);
+
+  const articleData = {
+    id,
+    title,
+    author: author || '',
+    authorImage: authorImage || '',
+    date: date || '',
+    abstract: abstract || '',
+    keywords: keywords || [],
+    sections: sections || [],
+    bibliography: bibliography || []
+  };
+  writeJSON(path.join(velumDir, `${id}.json`), articleData);
+
+  res.json({ success: true, item: newIndexItem });
+});
+
+router.get('/velum/:articleId', authenticateToken, (req, res) => {
+  const { articleId } = req.params;
+  const lang = req.query.lang || 'es';
+  const articlePath = path.join(dataDir, lang, 'velum', `${articleId}.json`);
+  
+  const data = readJSON(articlePath);
+  if (!data) {
+    return res.status(404).json({ error: 'Artículo no encontrado' });
+  }
+  res.json(data);
+});
+
+router.put('/velum/:articleId', authenticateToken, checkPermission('edit'), (req, res) => {
+  const { articleId } = req.params;
+  const lang = req.query.lang || 'es';
+  const { title, author, authorImage, date, abstract, keywords, sections, bibliography } = req.body;
+
+  const velumDir = path.join(dataDir, lang, 'velum');
+  const indexPath = path.join(velumDir, 'velum.index.json');
+  const articlePath = path.join(velumDir, `${articleId}.json`);
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'edit',
+      section: 'velum',
+      lang,
+      articleId,
+      data: { title, author, authorImage, date, abstract, keywords, sections, bibliography },
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  const indexData = readJSON(indexPath);
+  if (indexData) {
+    const itemIndex = indexData.items.findIndex(i => i.id === articleId);
+    if (itemIndex !== -1) {
+      indexData.items[itemIndex] = {
+        ...indexData.items[itemIndex],
+        title: title || indexData.items[itemIndex].title,
+        author: author !== undefined ? author : indexData.items[itemIndex].author,
+        date: date !== undefined ? date : indexData.items[itemIndex].date,
+        abstract: abstract !== undefined ? abstract : indexData.items[itemIndex].abstract,
+        keywords: keywords || indexData.items[itemIndex].keywords
+      };
+      writeJSON(indexPath, indexData);
+    }
+  }
+
+  const articleData = readJSON(articlePath) || { id: articleId };
+  Object.assign(articleData, {
+    title: title || articleData.title,
+    author: author !== undefined ? author : articleData.author,
+    authorImage: authorImage !== undefined ? authorImage : articleData.authorImage,
+    date: date !== undefined ? date : articleData.date,
+    abstract: abstract !== undefined ? abstract : articleData.abstract,
+    keywords: keywords || articleData.keywords,
+    sections: sections || articleData.sections,
+    bibliography: bibliography || articleData.bibliography
+  });
+  writeJSON(articlePath, articleData);
+
+  res.json({ success: true, item: articleData });
+});
+
+router.delete('/velum/:articleId', authenticateToken, checkPermission('delete'), (req, res) => {
+  const { articleId } = req.params;
+  const lang = req.query.lang || 'es';
+
+  const velumDir = path.join(dataDir, lang, 'velum');
+  const indexPath = path.join(velumDir, 'velum.index.json');
+  const articlePath = path.join(velumDir, `${articleId}.json`);
+
+  const indexData = readJSON(indexPath);
+  if (!indexData) {
+    return res.status(404).json({ error: 'VELUM no encontrado' });
+  }
+
+  const itemIndex = indexData.items.findIndex(i => i.id === articleId);
+  if (itemIndex === -1) {
+    return res.status(404).json({ error: 'Artículo no encontrado' });
+  }
+
+  if (req.requiresApproval) {
+    savePendingChange({
+      type: 'delete',
+      section: 'velum',
+      lang,
+      articleId,
+      data: indexData.items[itemIndex],
+      userId: req.user.id,
+      userName: req.user.name
+    });
+    return res.json({ success: true, pending: true, message: 'Cambio enviado para aprobación' });
+  }
+
+  indexData.items.splice(itemIndex, 1);
+  writeJSON(indexPath, indexData);
+
+  if (fs.existsSync(articlePath)) {
+    fs.unlinkSync(articlePath);
+  }
+
+  res.json({ success: true, message: 'Artículo eliminado' });
 });
 
 module.exports = router;

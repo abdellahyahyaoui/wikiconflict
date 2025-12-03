@@ -124,11 +124,19 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
         setView(json.items?.length ? "timeline" : "empty")
-      } else if (section === "fototeca") {
+      } else if (section === "fototeca" || section === "fototeca-photos" || section === "fototeca-videos") {
         const res = await fetch(`/data/${lang}/${countryCode}/fototeca/fototeca.index.json`)
         const json = res.ok ? await res.json() : { items: [] }
-        setItems(json.items || [])
-        setView(json.items?.length ? "fototeca" : "empty")
+        let mediaItems = json.items || []
+        
+        if (section === "fototeca-photos") {
+          mediaItems = mediaItems.filter(item => item.type === 'image')
+        } else if (section === "fototeca-videos") {
+          mediaItems = mediaItems.filter(item => item.type === 'video')
+        }
+        
+        setItems(mediaItems)
+        setView(mediaItems.length ? "fototeca" : "empty")
       } else if (["media-gallery-images", "media-gallery-videos"].includes(section)) {
         let mediaItems = []
 
@@ -171,6 +179,11 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
             setView("article")
           }
         }
+      } else if (section === "velum") {
+        const res = await fetch(`/data/${lang}/velum/velum.index.json`)
+        const json = res.ok ? await res.json() : { items: [] }
+        setItems(json.items || [])
+        setView(json.items?.length ? "velum-grid" : "empty")
       }
     } catch (err) {
       console.error("[v0] Error loading section:", err)
@@ -285,6 +298,20 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
       }
     } catch (err) {
       console.error("[v0] Error loading timeline item:", err)
+    }
+  }
+
+  async function loadVelumArticle(article) {
+    try {
+      const path = `/data/${lang}/velum/${article.id}.json`
+      const res = await fetch(path)
+      if (res.ok) {
+        const json = await res.json()
+        setSelectedItem(json)
+        setView("velum-article")
+      }
+    } catch (err) {
+      console.error("[v0] Error loading VELUM article:", err)
     }
   }
 
@@ -673,8 +700,48 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "article" && selectedItem) {
+    const isArabic = lang === "ar"
+    const textClasses = `article-text ${isArabic ? 'article-text-arabic' : ''}`
+    const titleClasses = `article-title ${isArabic ? 'amiri-font' : ''}`
+
+    const renderMediaGallery = (media) => {
+      if (!media || media.length === 0) return null
+      return (
+        <div className="entry-media-gallery">
+          {media.map((item, idx) => {
+            const mediaType = item.type || (item.url?.match(/\.(mp4|webm|ogg)/i) ? 'video' : item.url?.match(/\.(mp3|wav|ogg)/i) ? 'audio' : 'image')
+            return (
+              <div key={idx} className="entry-media-item">
+                {mediaType === 'video' && (
+                  <>
+                    <video src={item.url} controls />
+                    <span className="entry-media-type">📹</span>
+                  </>
+                )}
+                {mediaType === 'audio' && (
+                  <div className="audio-player-container">
+                    <audio src={item.url} controls />
+                    <span className="audio-player-label">{item.caption || 'Audio'}</span>
+                  </div>
+                )}
+                {mediaType === 'image' && (
+                  <>
+                    <img src={item.url} alt={item.caption || 'Media'} />
+                    <span className="entry-media-type">📷</span>
+                  </>
+                )}
+                {item.caption && mediaType !== 'audio' && (
+                  <div className="entry-media-caption">{item.caption}</div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+
     return (
-      <div className="content-inner">
+      <div className="content-inner" dir={isArabic ? 'rtl' : 'ltr'} lang={isArabic ? 'ar' : lang}>
         <button
           className="back-button"
           onClick={() => {
@@ -688,7 +755,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
           {t("back-button")}
         </button>
         <article className="article-content">
-          <h1 className="article-title">{selectedItem.title || selectedItem.name}</h1>
+          <h1 className={titleClasses}>{selectedItem.title || selectedItem.name}</h1>
           <div className="article-body">
             {selectedItem.image && (
               <div className="article-media">
@@ -704,7 +771,8 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
                 <video src={selectedItem.video} controls className="article-video" />
               </div>
             )}
-            <div className="article-text">
+            {selectedItem.media && renderMediaGallery(selectedItem.media)}
+            <div className={textClasses}>
               {selectedItem.content && <p>{selectedItem.content}</p>}
               {selectedItem.paragraphs && selectedItem.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
             </div>
@@ -838,11 +906,17 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   }
 
   if (view === "fototeca") {
+    const fototecaTitle = section === "fototeca-photos" ? (t("photos") || "Fotos") 
+                        : section === "fototeca-videos" ? (t("videos") || "Videos") 
+                        : (t("fototeca") || "Fototeca")
+    const fototecaSubtitle = section === "fototeca-photos" ? (t("photos-subtitle") || "Galería fotográfica del conflicto") 
+                           : section === "fototeca-videos" ? (t("videos-subtitle") || "Archivo audiovisual del conflicto") 
+                           : (t("fototeca-subtitle") || "Archivo visual del conflicto")
     return (
       <div className="fototeca-container">
         <div className="fototeca-header">
-          <h2>{t("fototeca") || "Fototeca"}</h2>
-          <p>{t("fototeca-subtitle") || "Archivo visual del conflicto"}</p>
+          <h2>{fototecaTitle}</h2>
+          <p>{fototecaSubtitle}</p>
         </div>
         <div className="fototeca-grid">
           {items.map((item) => (
@@ -906,6 +980,121 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
             )}
           </div>
         </div>
+      </div>
+    )
+  }
+
+  if (view === "velum-grid") {
+    return (
+      <div className="content-inner velum-section">
+        <div className="velum-header">
+          <h2>{t("velum-title")}</h2>
+          <p className="velum-subtitle">{t("velum-subtitle") || "Investigaciones y micro-tesis academicas"}</p>
+        </div>
+        {items.length === 0 ? (
+          <div className="velum-empty">{t("velum-no-articles")}</div>
+        ) : (
+          <div className="velum-articles-grid">
+            {items.map((article) => (
+              <div
+                key={article.id}
+                className="velum-article-card"
+                onClick={() => loadVelumArticle(article)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    loadVelumArticle(article)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="velum-card-meta">
+                  <span className="velum-card-date">{article.date}</span>
+                  {article.author && <span className="velum-card-author">{article.author}</span>}
+                </div>
+                <h3 className="velum-card-title">{article.title}</h3>
+                {article.abstract && (
+                  <p className="velum-card-abstract">{article.abstract.substring(0, 180)}...</p>
+                )}
+                {article.keywords && article.keywords.length > 0 && (
+                  <div className="velum-card-keywords">
+                    {article.keywords.slice(0, 3).map((kw, i) => (
+                      <span key={i} className="velum-keyword-tag">{kw}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (view === "velum-article" && selectedItem) {
+    const isArabic = lang === "ar"
+
+    return (
+      <div className="content-inner velum-article-view" dir={isArabic ? 'rtl' : 'ltr'} lang={isArabic ? 'ar' : lang}>
+        <button className="back-button" onClick={() => loadSection()}>
+          {t("back-button")}
+        </button>
+        <article className="velum-full-article">
+          <header className="velum-article-header">
+            <h1 className={`velum-article-title ${isArabic ? 'amiri-font' : ''}`}>{selectedItem.title}</h1>
+            <div className="velum-article-meta">
+              {selectedItem.authorImage && (
+                <img src={selectedItem.authorImage} alt={selectedItem.author} className="velum-author-image" />
+              )}
+              <div className="velum-meta-text">
+                {selectedItem.author && <span className="velum-author-name">{selectedItem.author}</span>}
+                {selectedItem.date && <span className="velum-article-date">{selectedItem.date}</span>}
+              </div>
+            </div>
+            {selectedItem.keywords && selectedItem.keywords.length > 0 && (
+              <div className="velum-article-keywords">
+                <span className="velum-keywords-label">{t("velum-keywords")}:</span>
+                {selectedItem.keywords.map((kw, i) => (
+                  <span key={i} className="velum-keyword-pill">{kw}</span>
+                ))}
+              </div>
+            )}
+          </header>
+
+          {selectedItem.abstract && (
+            <div className="velum-abstract-section">
+              <h2>{t("velum-abstract")}</h2>
+              <p className={`velum-abstract-text ${isArabic ? 'amiri-font' : ''}`}>{selectedItem.abstract}</p>
+            </div>
+          )}
+
+          {selectedItem.sections && selectedItem.sections.length > 0 && (
+            <div className="velum-content-sections">
+              {selectedItem.sections.map((section, i) => (
+                <section key={i} className="velum-section-block">
+                  {section.title && <h2 className="velum-section-title">{section.title}</h2>}
+                  <div className={`velum-section-content ${isArabic ? 'amiri-font' : ''}`}>
+                    {section.content.split('\n').map((para, j) => (
+                      <p key={j}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+
+          {selectedItem.bibliography && selectedItem.bibliography.length > 0 && (
+            <div className="velum-bibliography">
+              <h2>{t("velum-bibliography")}</h2>
+              <ul className="velum-bibliography-list">
+                {selectedItem.bibliography.map((ref, i) => (
+                  <li key={i}>{ref}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </article>
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ImageUploader from './ImageUploader';
+import MultiMediaUploader from './MultiMediaUploader';
 
 export default function TestimoniesEditor({ countryCode }) {
   const { user, getAuthHeaders } = useAuth();
@@ -26,7 +27,8 @@ export default function TestimoniesEditor({ countryCode }) {
     title: '',
     summary: '',
     date: '',
-    paragraphs: ['']
+    paragraphs: [''],
+    media: []
   });
 
   useEffect(() => {
@@ -96,7 +98,21 @@ export default function TestimoniesEditor({ countryCode }) {
       title: '',
       summary: '',
       date: '',
-      paragraphs: ['']
+      paragraphs: [''],
+      media: []
+    });
+    setShowTestimonyModal(true);
+  }
+
+  function openEditTestimonyModal(testimony) {
+    setEditingTestimony(testimony);
+    setTestimonyForm({
+      id: testimony.id,
+      title: testimony.title || '',
+      summary: testimony.summary || '',
+      date: testimony.date || '',
+      paragraphs: testimony.paragraphs || [''],
+      media: testimony.media || []
     });
     setShowTestimonyModal(true);
   }
@@ -149,21 +165,24 @@ export default function TestimoniesEditor({ countryCode }) {
     
     const body = {
       ...testimonyForm,
-      paragraphs: testimonyForm.paragraphs.filter(p => p.trim())
+      paragraphs: testimonyForm.paragraphs.filter(p => p.trim()),
+      media: testimonyForm.media || []
     };
 
+    const isEdit = editingTestimony && editingTestimony.id;
+    const url = isEdit
+      ? `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony/${editingTestimony.id}?lang=es`
+      : `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony?lang=es`;
+
     try {
-      const res = await fetch(
-        `/api/cms/countries/${countryCode}/testimonies/${selectedWitness}/testimony?lang=es`,
-        {
-          method: 'POST',
-          headers: {
-            ...getAuthHeaders(),
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        }
-      );
+      const res = await fetch(url, {
+        method: isEdit ? 'PUT' : 'POST',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
 
       const data = await res.json();
       
@@ -268,10 +287,15 @@ export default function TestimoniesEditor({ countryCode }) {
 
                 <div className="admin-testimonies-list">
                   {witnessDetail.testimonies?.map(t => (
-                    <div key={t.id} className="admin-testimony-card">
+                    <div key={t.id} className="admin-testimony-card" onClick={() => canEdit && openEditTestimonyModal(t)}>
                       <h5>{t.title}</h5>
                       <p>{t.summary}</p>
                       <span className="admin-testimony-date">{t.date}</span>
+                      {t.media && t.media.length > 0 && (
+                        <span className="admin-testimony-media-count">
+                          {t.media.length} archivo(s) multimedia
+                        </span>
+                      )}
                     </div>
                   ))}
                   {(!witnessDetail.testimonies || witnessDetail.testimonies.length === 0) && (
@@ -369,7 +393,7 @@ export default function TestimoniesEditor({ countryCode }) {
       {showTestimonyModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal large">
-            <h3>Nuevo Testimonio</h3>
+            <h3>{editingTestimony ? 'Editar Testimonio' : 'Nuevo Testimonio'}</h3>
             <form onSubmit={handleTestimonySubmit}>
               <div className="admin-form-group">
                 <label>Título</label>
@@ -401,6 +425,15 @@ export default function TestimoniesEditor({ countryCode }) {
               </div>
 
               <div className="admin-form-group">
+                <label>Archivos Multimedia (fotos, videos, audio)</label>
+                <MultiMediaUploader
+                  value={testimonyForm.media}
+                  onChange={(media) => setTestimonyForm({ ...testimonyForm, media })}
+                  allowedTypes={['image', 'video', 'audio']}
+                />
+              </div>
+
+              <div className="admin-form-group">
                 <label>Contenido (párrafos)</label>
                 {testimonyForm.paragraphs.map((p, i) => (
                   <div key={i} className="admin-array-item">
@@ -425,7 +458,7 @@ export default function TestimoniesEditor({ countryCode }) {
                   Cancelar
                 </button>
                 <button type="submit" className="admin-btn-primary">
-                  Crear Testimonio
+                  {editingTestimony ? 'Guardar Cambios' : 'Crear Testimonio'}
                 </button>
               </div>
             </form>

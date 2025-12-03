@@ -922,3 +922,549 @@ font-family: Georgia, "Times New Roman", serif;
     font-size: 1rem;
   }
 }
+
+/* =====================================
+   ARABIC RTL SUPPORT & AMIRI FONT
+   ===================================== */
+
+/* RTL Container */
+[dir="rtl"] .content-inner,
+.content-rtl,
+.article-text-rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Arabic-specific font family */
+.text-arabic,
+.arabic-text,
+[lang="ar"],
+[dir="rtl"] .article-text,
+[dir="rtl"] .article-title,
+[dir="rtl"] .section-header {
+  font-family: 'Amiri', Georgia, serif;
+}
+
+/* RTL adjustments for article layout */
+[dir="rtl"] .article-media {
+  float: left;
+  margin: 0 32px 24px 0;
+}
+
+[dir="rtl"] .article-text {
+  text-align: justify;
+}
+
+/* RTL drop cap - float to the right */
+[dir="rtl"] .article-text p:first-of-type::first-letter {
+  float: right;
+  margin: 0.1em 0 0 0.15em;
+}
+
+/* RTL adjustments for lists and navigation */
+[dir="rtl"] .analyses-list.timeline-style {
+  padding-left: 0;
+  padding-right: 2.5rem;
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .analyses-list.timeline-style::before {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .analysis-card.timeline-card .timeline-dot {
+  left: auto;
+  right: -2.5rem;
+  transform: translateX(50%);
+}
+
+/* RTL back button */
+[dir="rtl"] .back-button {
+  flex-direction: row-reverse;
+}
+
+/* Arabic Typography with Amiri */
+.amiri-font {
+  font-family: 'Amiri', Georgia, serif;
+  line-height: 1.9;
+}
+
+.amiri-font.italic {
+  font-style: italic;
+}
+
+/* Arabic specific article text styling */
+.article-text-arabic {
+  font-family: 'Amiri', Georgia, serif;
+  direction: rtl;
+  text-align: justify;
+  line-height: 2;
+  font-size: 1.1em;
+}
+
+.article-text-arabic p:first-of-type::first-letter {
+  font-size: 4em;
+  font-weight: 700;
+  line-height: 0.8;
+  float: right;
+  margin: 0.1em 0 0 0.15em;
+  color: rgb(8, 74, 103);
+}
+
+/* Arabic section headers */
+.section-header-arabic {
+  font-family: 'Amiri', Georgia, serif;
+  direction: rtl;
+  text-align: center;
+}
+
+/* =====================================
+   DROP CAP STYLING ENHANCEMENT
+   ===================================== */
+
+/* Default drop cap styling - applied to first paragraph */
+.drop-cap-text p:first-of-type::first-letter,
+.article-text p:first-of-type::first-letter {
+  font-size: 4em;
+  font-weight: 700;
+  line-height: 0.8;
+  float: left;
+  margin: 0.1em 0.15em 0 0;
+  color: rgb(8, 74, 103);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* For Arabic/RTL text, drop cap floats right */
+.drop-cap-text[dir="rtl"] p:first-of-type::first-letter,
+.article-text-arabic p:first-of-type::first-letter {
+  float: right;
+  margin: 0.1em 0 0 0.15em;
+}
+
+/* =====================================
+   MEDIA GALLERY FOR TESTIMONIES/RESISTANCE
+   ===================================== */
+
+.entry-media-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.entry-media-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.entry-media-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.entry-media-item img,
+.entry-media-item video {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  display: block;
+}
+
+.entry-media-item audio {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0c3344 0%, #1d546b 100%);
+}
+
+.entry-media-caption {
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.85rem;
+  font-family: 'Cormorant Garamond', serif;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.entry-media-type {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Audio player specific styling */
+.audio-player-container {
+  background: linear-gradient(135deg, #0c3344 0%, #1d546b 100%);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.audio-player-container audio {
+  width: 100%;
+  height: 40px;
+}
+
+.audio-player-label {
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Lightbox for media viewing */
+.media-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.media-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.media-lightbox-content {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.media-lightbox-content img,
+.media-lightbox-content video {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .entry-media-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  [dir="rtl"] .article-media {
+    float: none;
+    margin: 0 0 24px 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* VELUM Section Styles */
+.velum-section {
+  background: linear-gradient(135deg, #fafbfc 0%, #f0f2f5 100%);
+  min-height: 100vh;
+}
+
+.velum-header {
+  text-align: center;
+  padding: 40px 0 30px;
+  border-bottom: 2px solid #1a6483;
+  margin-bottom: 40px;
+}
+
+.velum-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a6483;
+  margin-bottom: 10px;
+  letter-spacing: 3px;
+}
+
+.velum-subtitle {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.velum-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+  font-style: italic;
+}
+
+.velum-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+  padding: 0 10px;
+}
+
+.velum-article-card {
+  background: white;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid #1a6483;
+}
+
+.velum-article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.velum-card-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.velum-card-date {
+  color: #1a6483;
+  font-weight: 600;
+}
+
+.velum-card-author {
+  color: #666;
+}
+
+.velum-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.velum-card-abstract {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.velum-card-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.velum-keyword-tag {
+  background: #e8f4f8;
+  color: #1a6483;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* VELUM Article Detail View */
+.velum-article-view {
+  background: white;
+}
+
+.velum-full-article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.velum-article-header {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.velum-article-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.velum-article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.velum-author-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1a6483;
+}
+
+.velum-meta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.velum-author-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+}
+
+.velum-article-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.velum-article-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.velum-keywords-label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.velum-keyword-pill {
+  background: #1a6483;
+  color: white;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.velum-abstract-section {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  border-left: 4px solid #1a6483;
+}
+
+.velum-abstract-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: #1a6483;
+  margin-bottom: 12px;
+}
+
+.velum-abstract-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #333;
+  font-style: italic;
+}
+
+.velum-content-sections {
+  margin-bottom: 40px;
+}
+
+.velum-section-block {
+  margin-bottom: 32px;
+}
+
+.velum-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a6483;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.velum-section-content {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.velum-section-content p {
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.velum-section-content p:first-of-type::first-letter {
+  font-size: 3em;
+  float: left;
+  line-height: 1;
+  margin-right: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: bold;
+  color: #1a6483;
+}
+
+.velum-bibliography {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  border-top: 2px solid #1a6483;
+}
+
+.velum-bibliography h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: #1a6483;
+  margin-bottom: 16px;
+}
+
+.velum-bibliography-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.velum-bibliography-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.velum-bibliography-list li:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .velum-articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .velum-article-title {
+    font-size: 1.8rem;
+  }
+
+  .velum-header h2 {
+    font-size: 2rem;
+  }
+}

@@ -6,13 +6,54 @@ import "./country-sidebar.css"
 
 export default function CountrySidebar({ countryName, sections, currentSection, onSelectSection }) {
   const [openTermino, setOpenTermino] = useState(true)
+  const [openVelum, setOpenVelum] = useState(true)
   const { t } = useLanguage()
 
   const toggleTerminologia = () => setOpenTermino((v) => !v)
+  const toggleVelum = () => setOpenVelum((v) => !v)
 
   return (
     <aside className="country-sidebar">
       <div className="sidebar-inner">
+        {/* VELUM */}
+        <div className="sidebar-block velum-block">
+          <div
+            className="sidebar-title velum-title"
+            onClick={toggleVelum}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                toggleVelum()
+              }
+            }}
+            aria-expanded={openVelum}
+            role="button"
+            tabIndex={0}
+          >
+            <span>VELUM</span>
+            <span className={`arrow ${openVelum ? "open" : ""}`}>▼</span>
+          </div>
+
+          {openVelum && (
+            <div className="velum-submenu">
+              <div
+                className={`velum-item ${currentSection === "velum" ? "active" : ""}`}
+                onClick={() => onSelectSection("velum")}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    onSelectSection("velum")
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                {t("velum-articles")}
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* TERMINOLOGÍA */}
         <div className="sidebar-block">
           <div
@@ -110,15 +151,15 @@ export default function CountrySidebar({ countryName, sections, currentSection, 
             <div className="sidebar-block" key={sec.id}>
               <div className="sidebar-section-title">{sec.label}</div>
               <div className="sidebar-section-list">
-                {sec.id === "media-gallery" ? (
+                {sec.id === "media-gallery" || sec.id === "fototeca" ? (
                   <>
                     <div
-                      className={`sidebar-section-item ${currentSection === "media-gallery-images" ? "active" : ""}`}
-                      onClick={() => onSelectSection("media-gallery-images")}
+                      className={`sidebar-section-item ${currentSection === "fototeca-photos" || currentSection === "media-gallery-images" ? "active" : ""}`}
+                      onClick={() => onSelectSection(sec.id === "fototeca" ? "fototeca-photos" : "media-gallery-images")}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault()
-                          onSelectSection("media-gallery-images")
+                          onSelectSection(sec.id === "fototeca" ? "fototeca-photos" : "media-gallery-images")
                         }
                       }}
                       role="button"
@@ -127,12 +168,12 @@ export default function CountrySidebar({ countryName, sections, currentSection, 
                       {t("photos")}
                     </div>
                     <div
-                      className={`sidebar-section-item ${currentSection === "media-gallery-videos" ? "active" : ""}`}
-                      onClick={() => onSelectSection("media-gallery-videos")}
+                      className={`sidebar-section-item ${currentSection === "fototeca-videos" || currentSection === "media-gallery-videos" ? "active" : ""}`}
+                      onClick={() => onSelectSection(sec.id === "fototeca" ? "fototeca-videos" : "media-gallery-videos")}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault()
-                          onSelectSection("media-gallery-videos")
+                          onSelectSection(sec.id === "fototeca" ? "fototeca-videos" : "media-gallery-videos")
                         }
                       }}
                       role="button"
