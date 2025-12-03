@@ -8,6 +8,7 @@ import AnalystsEditor from './components/AnalystsEditor';
 import FototecaEditor from './components/FototecaEditor';
 import ResistanceEditor from './components/ResistanceEditor';
 import VelumEditor from './components/VelumEditor';
+import GalleryManager from './components/GalleryManager';
 import './admin.css';
 
 export default function AdminCountry() {
@@ -55,6 +56,7 @@ export default function AdminCountry() {
     { id: 'testimonies', label: 'Testimonios', icon: '👤' },
     { id: 'resistance', label: 'Resistencia', icon: '✊' },
     { id: 'analysts', label: 'Analistas', icon: '📊' },
+    { id: 'gallery', label: 'Galería', icon: '🖼️' },
     { id: 'photos', label: 'Fotos', icon: '📷' },
     { id: 'videos', label: 'Videos', icon: '🎬' }
   ];
@@ -105,6 +107,9 @@ export default function AdminCountry() {
           )}
           {activeSection === 'analysts' && (
             <AnalystsEditor countryCode={countryCode} />
+          )}
+          {activeSection === 'gallery' && (
+            <GalleryManager />
           )}
           {activeSection === 'photos' && (
             <FototecaEditor countryCode={countryCode} mediaType="image" />

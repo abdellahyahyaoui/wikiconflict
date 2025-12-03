@@ -40,10 +40,20 @@ export default function RichContentEditor({ blocks = [], onChange, allowAudio = 
   async function handleFileUpload(index, file, type) {
     setUploading(true);
     const formData = new FormData();
-    formData.append('media', file);
+    
+    if (type === 'video') {
+      formData.append('video', file);
+    } else if (type === 'audio') {
+      formData.append('file', file);
+    } else {
+      formData.append('image', file);
+    }
 
     try {
-      const endpoint = type === 'video' ? '/api/upload/video' : '/api/upload/images';
+      let endpoint = '/api/upload/image';
+      if (type === 'video') endpoint = '/api/upload/video';
+      else if (type === 'audio') endpoint = '/api/upload/media';
+      
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: getAuthHeaders(),
@@ -52,7 +62,7 @@ export default function RichContentEditor({ blocks = [], onChange, allowAudio = 
 
       if (res.ok) {
         const data = await res.json();
-        const url = type === 'video' ? data.url : (data.files?.[0]?.url || data.url);
+        const url = data.url || data.files?.[0]?.url;
         if (url) {
           updateBlock(index, { url: url });
         }

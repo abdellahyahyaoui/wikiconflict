@@ -25,7 +25,11 @@ export default function GalleryManager({ onSelect, selectMode = false, mediaFilt
       });
       if (res.ok) {
         const data = await res.json();
-        setItems(data.files || []);
+        const allItems = [
+          ...(data.images || []),
+          ...(data.videos || [])
+        ];
+        setItems(allItems);
       }
     } catch (error) {
       console.error('Error loading gallery:', error);

@@ -21,6 +21,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   const [isChaptersMenuOpen, setIsChaptersMenuOpen] = useState(false)
   const [filterYear, setFilterYear] = useState("")
   const [filterMonth, setFilterMonth] = useState("")
+  const [sectionHeader, setSectionHeader] = useState({ title: "", description: "" })
 
   const months = [
     { value: 1, label: "Enero" },
@@ -88,6 +89,21 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
     loadSection()
   }, [section, countryCode, lang])
 
+  async function loadSectionHeader(sectionName) {
+    try {
+      const res = await fetch(`/data/${lang}/${countryCode}/section-headers.json`)
+      if (res.ok) {
+        const data = await res.json()
+        if (data[sectionName]) {
+          setSectionHeader(data[sectionName])
+          return
+        }
+      }
+    } catch {
+    }
+    setSectionHeader({ title: "", description: "" })
+  }
+
   async function loadSection() {
     setLoading(true)
     setView("index")
@@ -99,6 +115,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
     setIsGlobalSearching(false)
     setFilterYear("")
     setFilterMonth("")
+    setSectionHeader({ title: "", description: "" })
 
     try {
       if (section.startsWith("terminology-")) {
@@ -110,11 +127,13 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         if (categoryData) setAvailableLetters(categoryData.letters.map((l) => l.toUpperCase()))
         setView("letters")
       } else if (["testimonies", "analysts", "genocides"].includes(section)) {
+        loadSectionHeader(section)
         const res = await fetch(`/data/${lang}/${countryCode}/${section}.index.json`)
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
         setView(json.items?.length ? "grid" : "empty")
       } else if (section === "resistance") {
+        loadSectionHeader("resistance")
         const res = await fetch(`/data/${lang}/${countryCode}/resistance/resistance.index.json`)
         const json = res.ok ? await res.json() : { items: [] }
         setItems(json.items || [])
@@ -662,6 +681,12 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   if (view === "grid") {
     return (
       <div className="content-inner">
+        {(sectionHeader.title || sectionHeader.description) && (
+          <div className="section-header-block">
+            {sectionHeader.title && <h2 className="section-title">{sectionHeader.title}</h2>}
+            {sectionHeader.description && <p className="section-description">{sectionHeader.description}</p>}
+          </div>
+        )}
         {searchTerm && (
           <div className="search-results-info">
             {t("showing-results")} {filteredItems.length} {t("of")} {items.length} {t("for-search-term")} "{searchTerm}"
