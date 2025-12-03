@@ -116,6 +116,19 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-03**: CMS Multi-language and Gallery Selection Improvements
+  - Added gallery modal to RichContentEditor for selecting media from existing gallery (not just PC uploads)
+  - Gallery modal includes filter bar (All/Images/Videos) for easy media selection
+  - Added comprehensive country selector in CMS with 40+ countries grouped by region:
+    - Middle East (Palestine, Syria, Lebanon, Yemen, Iraq, Iran)
+    - Arab Countries (Morocco, Algeria, Tunisia, Libya, Egypt, etc.)
+    - European Countries (Ukraine, Greece, Spain, France, etc.)
+    - Latin America (Mexico, Colombia, Venezuela, Argentina, etc.)
+  - Added language selector (Spanish, English, French, Arabic)
+  - Fixed lang parameter propagation in all CMS editors (Testimonies, Resistance)
+  - All API calls now use the selected language instead of hardcoded Spanish
+  - Created demo layout article (demo-layout.json) demonstrating L/U image positioning
+
 - **2024-12-03**: Rich Content and Gallery Improvements
   - Fixed GalleryManager component to properly load images/videos from API
   - Added Gallery section to CMS for centralized media management
