@@ -116,6 +116,16 @@ Each country has its own folder under `/public/data/es/` with:
 3. Update the map components to include the new country
 
 ## Recent Changes
+- **2024-12-03**: Rich Content and Gallery Improvements
+  - Fixed GalleryManager component to properly load images/videos from API
+  - Added Gallery section to CMS for centralized media management
+  - Implemented L-shaped and U-shaped text wrapping around images
+  - Images support four positions: left (L-wrap), right (L-wrap), center, and full-width
+  - Added section headers loading for Testimonies and Resistance sections
+  - Created comprehensive test data for Velum articles with rich content
+  - Added section-headers.json for customizable section titles and descriptions
+  - CSS styles using float and shape-outside for elegant text flow
+
 - **2024-12-02**: Fototeca API Routes Fixed
   - Corrected API routes to follow `/countries/:countryCode/fototeca` convention
   - Updated FototecaEditor.js to use the correct API endpoints
