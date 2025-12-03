@@ -1,86 +1,89 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+"use client"
+
+import { useState } from "react"
+import { useAuth } from "../../context/AuthContext"
 
 export default function ImageUploader({ value, onChange, currentImage, onImageChange }) {
-  const { getAuthHeaders } = useAuth();
-  
-  const imageValue = value || currentImage || '';
-  const handleChange = onChange || onImageChange;
-  const [uploading, setUploading] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
-  const [gallery, setGallery] = useState([]);
+  const { getAuthHeaders } = useAuth()
+
+  const imageValue = value !== undefined ? value : currentImage || ""
+  const handleChange = onChange || onImageChange
+
+  const [uploading, setUploading] = useState(false)
+  const [showGallery, setShowGallery] = useState(false)
+  const [gallery, setGallery] = useState([])
 
   async function handleUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (typeof handleChange !== 'function') {
-      console.error('ImageUploader: onChange/onImageChange is required');
-      return;
+    const file = e.target.files[0]
+    if (!file) return
+    if (typeof handleChange !== "function") {
+      console.error("ImageUploader: onChange/onImageChange is required")
+      return
     }
 
-    setUploading(true);
-    const formData = new FormData();
-    formData.append('image', file);
+    setUploading(true)
+    const formData = new FormData()
+    formData.append("image", file)
 
     try {
-      const res = await fetch('/api/upload/image', {
-        method: 'POST',
+      const res = await fetch("/api/upload/image", {
+        method: "POST",
         headers: getAuthHeaders(),
-        body: formData
-      });
+        body: formData,
+      })
 
       if (res.ok) {
-        const data = await res.json();
-        handleChange(data.url);
+        const data = await res.json()
+        handleChange(data.url)
       } else {
-        alert('Error al subir imagen');
+        alert("Error al subir imagen")
       }
     } catch (error) {
-      console.error('Error uploading:', error);
+      console.error("Error uploading:", error)
     }
-    setUploading(false);
-    e.target.value = '';
+    setUploading(false)
+    e.target.value = ""
   }
 
   async function openGallery() {
     try {
-      const res = await fetch('/api/upload/list', { headers: getAuthHeaders() });
+      const res = await fetch("/api/upload/list", { headers: getAuthHeaders() })
       if (res.ok) {
-        const data = await res.json();
-        setGallery(data.images || []);
-        setShowGallery(true);
+        const data = await res.json()
+        setGallery(data.images || [])
+        setShowGallery(true)
       }
     } catch (error) {
-      console.error('Error loading gallery:', error);
+      console.error("Error loading gallery:", error)
     }
   }
 
   function selectFromGallery(url) {
-    if (typeof handleChange === 'function') {
-      handleChange(url);
+    if (typeof handleChange === "function") {
+      handleChange(url)
     }
-    setShowGallery(false);
+    setShowGallery(false)
   }
 
   return (
     <div className="admin-image-uploader">
       {imageValue && (
         <div className="admin-image-preview">
-          <img src={imageValue} alt="Preview" />
-          <button type="button" onClick={() => handleChange && handleChange('')} className="admin-btn-remove-image">
+          <img src={imageValue || "/placeholder.svg"} alt="Preview" />
+          <button type="button" onClick={() => handleChange && handleChange("")} className="admin-btn-remove-image">
             ×
           </button>
         </div>
       )}
-      
+
       <div className="admin-image-actions">
         <label className="admin-btn-upload">
-          {uploading ? 'Subiendo...' : 'Subir imagen'}
+          {uploading ? "Subiendo..." : "Subir imagen"}
           <input
             type="file"
             accept="image/*"
             onChange={handleUpload}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             disabled={uploading}
           />
         </label>
@@ -98,21 +101,15 @@ export default function ImageUploader({ value, onChange, currentImage, onImageCh
 
       {showGallery && (
         <div className="admin-modal-overlay" onClick={() => setShowGallery(false)}>
-          <div className="admin-modal gallery" onClick={e => e.stopPropagation()}>
+          <div className="admin-modal gallery" onClick={(e) => e.stopPropagation()}>
             <h3>Seleccionar Imagen</h3>
             <div className="admin-gallery-grid">
-              {gallery.map(img => (
-                <div 
-                  key={img.filename} 
-                  className="admin-gallery-item"
-                  onClick={() => selectFromGallery(img.url)}
-                >
-                  <img src={img.url} alt={img.filename} />
+              {gallery.map((img) => (
+                <div key={img.filename} className="admin-gallery-item" onClick={() => selectFromGallery(img.url)}>
+                  <img src={img.url || "/placeholder.svg"} alt={img.filename} />
                 </div>
               ))}
-              {gallery.length === 0 && (
-                <div className="admin-empty">No hay imágenes en la galería</div>
-              )}
+              {gallery.length === 0 && <div className="admin-empty">No hay imágenes en la galería</div>}
             </div>
             <button type="button" onClick={() => setShowGallery(false)} className="admin-btn-secondary">
               Cancelar
@@ -121,5 +118,5 @@ export default function ImageUploader({ value, onChange, currentImage, onImageCh
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -49,21 +49,86 @@
       "title": "",
       "contentBlocks": [
         {
-          "id": "1764767102506",
-          "type": "text",
-          "content": "",
-          "position": "center",
+          "id": "1764767416487",
+          "type": "image",
+          "url": "/imagenes/captura_de_pantalla_2025-07-19_000700_1a2b8f63.png",
+          "position": "right",
           "caption": ""
         },
         {
-          "id": "1764767103247",
+          "id": "1764767430846",
+          "type": "text",
+          "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi",
+          "position": "center",
+          "caption": ""
+        }
+      ],
+      "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi"
+    },
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764767437942",
           "type": "image",
-          "url": "/imagenes/ammar_abdelaziz.jpg",
+          "url": "/imagenes/Khaled_Abu_Huwaishel.jpg",
+          "position": "left",
+          "caption": ""
+        }
+      ],
+      "content": ""
+    },
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764767455151",
+          "type": "text",
+          "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi",
+          "position": "center",
+          "caption": ""
+        }
+      ],
+      "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi"
+    },
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764767460310",
+          "type": "image",
+          "url": "/imagenes/Mahmoud-familia.png",
           "position": "center",
           "caption": ""
         }
       ],
       "content": ""
+    },
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764767467479",
+          "type": "text",
+          "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi",
+          "position": "center",
+          "caption": ""
+        }
+      ],
+      "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi"
+    },
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764767473038",
+          "type": "text",
+          "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi",
+          "position": "center",
+          "caption": ""
+        }
+      ],
+      "content": "Contraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear otros usuarios desde el panel o vía la API /api/users.\n\nNo necesitas tocar los hashes directamente: el backend genera el hash automáticamente a partir de la contraseña que pongas.\n\nSi quieres, te puedo dar un mini plan paso a paso para reiniciar usuarios, cambi"
     }
   ],
   "bibliography": []
