@@ -1,0 +1,43 @@
+{
+  "id": "nakba-memoria-viva",
+  "title": "La Nakba: Memoria Viva de un Pueblo",
+  "author": "Dr. Rashid Khalidi",
+  "date": "2024-05-15",
+  "coverImage": "/uploads/velum-nakba-cover.jpg",
+  "category": "Historia",
+  "content": [
+    {
+      "type": "text",
+      "content": "El 15 de mayo de 1948 marca una fecha que quedo grabada en la memoria colectiva del pueblo palestino. Ese dia, conocido como la Nakba o 'la catastrofe', representa el momento en que mas de 700,000 palestinos fueron expulsados de sus hogares, creando una de las crisis de refugiados mas prolongadas de la historia moderna.",
+      "dropCap": true
+    },
+    {
+      "type": "image",
+      "url": "/uploads/nakba-exodo.jpg",
+      "caption": "Familias palestinas abandonan sus hogares en 1948",
+      "position": "left"
+    },
+    {
+      "type": "text",
+      "content": "Las aldeas que habian existido durante siglos fueron destruidas sistematicamente. Segun documentos historicos, mas de 400 pueblos palestinos fueron arrasados, sus habitantes dispersados a los cuatro vientos. Los testimonios de los sobrevivientes hablan de huidas nocturnas, de niños separados de sus familias, de ancianos que nunca volvieron a ver las tierras donde nacieron sus abuelos."
+    },
+    {
+      "type": "text",
+      "content": "La memoria de estos eventos no ha desaparecido con el paso de las generaciones. Por el contrario, se ha convertido en un elemento central de la identidad palestina. Los refugiados y sus descendientes mantienen vivas las historias de sus pueblos de origen, conservan las llaves de casas que ya no existen y transmiten a sus hijos y nietos el nombre de calles y plazas que fueron borradas de los mapas."
+    },
+    {
+      "type": "image",
+      "url": "/uploads/llaves-retorno.jpg",
+      "caption": "Las llaves simbolizan el derecho al retorno",
+      "position": "right"
+    },
+    {
+      "type": "text",
+      "content": "Hoy, los descendientes de aquellos refugiados suman mas de cinco millones de personas registradas ante las Naciones Unidas. Viven en campos de refugiados en Libano, Siria, Jordania, Cisjordania y Gaza, asi como en la diaspora global. A pesar de las decadas transcurridas, el derecho al retorno sigue siendo una demanda fundamental del pueblo palestino."
+    },
+    {
+      "type": "text",
+      "content": "La preservacion de esta memoria no es solo un ejercicio nostalgico. Es un acto de resistencia ante los intentos de borrar la historia palestina. Archivos comunitarios, testimonios orales, fotografias familiares y documentos de propiedad son cuidadosamente conservados como evidencia de un pasado que muchos quisieran olvidar."
+    }
+  ]
+}
