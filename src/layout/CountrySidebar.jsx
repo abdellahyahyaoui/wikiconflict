@@ -30,7 +30,7 @@ export default function CountrySidebar({ countryName, sections, currentSection, 
             role="button"
             tabIndex={0}
           >
-            <span>VELUM</span>
+            <span>Velum</span>
             <span className={`arrow ${openVelum ? "open" : ""}`}>▼</span>
           </div>
 

@@ -5,127 +5,116 @@ import React, { useState } from "react"
 import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps"
 import { geoCentroid } from "d3-geo"
 import "./WorldMap.css"
+
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
-// Lista completa de países europeos (nombres tal como aparecen en world-atlas)
+// Países europeos principales
 const europeCountries = [
-  "Andorra","Belarus","Belgium",
- "France",
-  "Germany","Greece","Ireland","Italy",
- 
-  "Netherlands","Poland","Portugal","Spain",
-  "Switzerland","Ukraine","United Kingdom","Vatican"
+  "Albania","Andorra","Austria","Belarus","Belgium","Bosnia and Herzegovina",
+  "Bulgaria","Croatia","Czech Republic","Denmark","Estonia",
+  "France","Germany","Greece","Hungary","Iceland","Ireland","Italy",
+  "Kosovo","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta",
+  "Moldova","Monaco","Montenegro","Netherlands","North Macedonia",
+  "Poland","Portugal","Romania","San Marino","Serbia","Slovakia",
+  "Slovenia","Spain","Switzerland","Ukraine","United Kingdom","Vatican"
 ]
 
-// Países que mostrarán el marcador de conflicto (normalizados, sin espacios, sin acentos)
-// Puedes añadir más aquí (ej: "venezuela", "democraticrepublicofthecongo")
+// Países en conflicto
 const CONFLICTS_NORMALIZED = new Set(["ukraine"])
 
+// Normalizar nombres → archivo .png
 function normalizeForFilename(name) {
   if (!name) return ""
-  // 1) quitar diacríticos
-  const noDiacritics = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-  // 2) conservar sólo letras y números, eliminar espacios y símbolos
-  const alnum = noDiacritics.replace(/[^0-9a-zA-Z]/g, "")
-  // 3) minúsculas
-  return alnum.toLowerCase()
+  return name
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^0-9a-zA-Z]/g, "")
+    .toLowerCase()
 }
 
-function getCountryIdFromGeo(geo) {
-  const name = (geo.properties.name || "").toLowerCase()
-  if (geo.id === "732" || name === "morocco" || name === "western sahara") return "morocco"
-  const israelIds = ["376", "275"]
-  const israelNames = ["israel", "palestine", "west bank", "gaza"]
-  if (israelIds.includes(geo.id) || israelNames.includes(name)) return "palestine"
-  if (name === "saudi arabia") return "saudi"
-  if (name === "united arab emirates") return "uae"
-  return name.replace(/\s+/g, "-")
+// Normalizar ID para rutas
+function getCountryId(geo) {
+  return geo.properties.name.toLowerCase().replace(/\s+/g, "-")
 }
 
 export default function MapEurope() {
-  const [hoveredCountry, setHoveredCountry] = useState(null) // id normalizado con guiones (country-id)
-  const [hoveredPlainName, setHoveredPlainName] = useState(null) // nombre tal cual del geo.properties.name
+  const [hoveredCountry, setHoveredCountry] = useState(null)
+  const [hoveredPlainName, setHoveredPlainName] = useState(null)
 
-  const handleCountryClick = (countryId) => {
-    const routeId = countryId === "israel" ? "palestine" : countryId
-    window.location.href = `/country/${routeId}`
-  }
-
-  const imagePathFromPlainName = (plainName) => {
-    const filename = normalizeForFilename(plainName) + ".png"
-    const rawPath = `/Imágenes de País/${filename}`
-    return encodeURI(rawPath)
+  const clickCountry = (id) => {
+    window.location.href = `/country/${id}`
   }
 
   return (
     <div className="map-wrapper" style={{ position: "relative" }}>
       <ComposableMap
         projection="geoMercator"
-        // centro y escala que muestran bien Europa
         projectionConfig={{ scale: 800, center: [10, 50] }}
+        className="composable-map-container"
         style={{ width: "100%", height: "100%" }}
       >
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies
-              .filter((geo) => geo.properties && europeCountries.includes(geo.properties.name))
+              .filter((geo) => europeCountries.includes(geo.properties.name))
               .map((geo) => {
-                const countryId = getCountryIdFromGeo(geo)
-                const isHovered = hoveredCountry === countryId
-                const fill = isHovered ? "#6e7b4e46" : "#000000ff"
+                const plainName = geo.properties.name
+                const id = getCountryId(geo)
+                const isLifted = hoveredCountry === id
+                const normalized = normalizeForFilename(plainName)
 
                 return (
                   <React.Fragment key={geo.rsmKey}>
                     <Geography
                       geography={geo}
-                      onClick={() => handleCountryClick(countryId)}
+                      onClick={() => clickCountry(id)}
                       onMouseEnter={() => {
-                        setHoveredCountry(countryId)
-                        setHoveredPlainName(geo.properties.name)
+                        setHoveredCountry(id)
+                        setHoveredPlainName(plainName)
                       }}
                       onMouseLeave={() => {
                         setHoveredCountry(null)
                         setHoveredPlainName(null)
                       }}
-                     fill={isHovered ? "#184a5f" : "#07202b"}
-                      stroke="#ffffffff"
+                      className={`${isLifted ? "country-lifted" : ""} ${
+                        CONFLICTS_NORMALIZED.has(normalized) ? "conflict-country" : ""
+                      }`}
+                       fill={isLifted ? "#939c9fff" : "#0C1E28"}
+                      stroke="#F2F5F7"
                       strokeWidth={0.5}
                       style={{
                         default: { outline: "none", cursor: "pointer" },
-                        hover: { outline: "none", fill: "#184a5f" },
+                        hover: { outline: "none" },
                         pressed: { outline: "none" },
                       }}
                     />
 
-                    {/* Marker de conflicto: si el nombre normalizado (sin espacios ni acentos) está en CONFLICTS_NORMALIZED */}
-                    {CONFLICTS_NORMALIZED.has((geo.properties.name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^0-9a-zA-Z]/g, "").toLowerCase()) ? (
-                      (() => {
-                        const centroid = geoCentroid(geo)
-                        // centroid = [lng, lat] o [NaN, NaN] en casos muy pequeños; comprobamos
-                        if (!centroid || isNaN(centroid[0]) || isNaN(centroid[1])) return null
-                        return (
-                          <Marker key={`m-${geo.rsmKey}`} coordinates={centroid}>
-                            <g
-                              onMouseEnter={() => {
-                                setHoveredCountry(countryId)
-                                setHoveredPlainName(geo.properties.name)
-                              }}
-                              onMouseLeave={() => {
-                                setHoveredCountry(null)
-                                setHoveredPlainName(null)
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <circle r="20" className="conflict-marker-pulse" />
-                              <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: "0.5s" }} />
-                              <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: "1s" }} />
-                              <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: "1.5s" }} />
-                              <circle r="6" fill="#ef4444" stroke="white" strokeWidth="1" />
-                            </g>
-                          </Marker>
-                        )
-                      })()
-                    ) : null}
+                    {/* MARCADOR DE CONFLICTO */}
+                    {CONFLICTS_NORMALIZED.has(normalized) && (() => {
+                      const centroid = geoCentroid(geo)
+                      if (!centroid || isNaN(centroid[0])) return null
+
+                      // return (
+                      //   <Marker key={"c-" + id} coordinates={centroid}>
+                      //     <g
+                      //       onMouseEnter={() => {
+                      //         setHoveredCountry(id)
+                      //         setHoveredPlainName(plainName)
+                      //       }}
+                      //       onMouseLeave={() => {
+                      //         setHoveredCountry(null)
+                      //         setHoveredPlainName(null)
+                      //       }}
+                      //       style={{ cursor: "pointer" }}
+                      //     >
+                      //       <circle r="20" className="conflict-marker-pulse" />
+                      //       <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: ".5s" }} />
+                      //       <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: "1s" }} />
+                      //       <circle r="20" className="conflict-marker-pulse" style={{ animationDelay: "1.5s" }} />
+                       
+                      //     </g>
+                      //   </Marker>
+                      // )
+                    })()}
                   </React.Fragment>
                 )
               })
@@ -133,47 +122,12 @@ export default function MapEurope() {
         </Geographies>
       </ComposableMap>
 
-      {/* POPUP CIRCULAR - idéntico al de tu WorldMap */}
+      {/* === NOMBRE + BANDERA (EFECTO SLIDE PREMIUM) === */}
       {hoveredPlainName && (
-        (() => {
-          const displayName = hoveredPlainName
-          const imageSrc = imagePathFromPlainName(displayName)
-
-          return (
-            <div
-              className="country-popup-circle"
-              style={{
-                position: "absolute",
-                top: "-90px",
-                left: "320px",
-                width: 200,
-                height: 200,
-                borderRadius: "50%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#ffffffee",
-                boxShadow: "0 0 15px rgba(0,0,0,0.3)",
-                padding: "10px",
-                textAlign: "center",
-                pointerEvents: "none",
-              }}
-            >
-              <img
-                src={imageSrc}
-                alt={displayName}
-                style={{ width: "80px", height: "80px", borderRadius: "50%", marginBottom: "10px", objectFit: "cover" }}
-                onError={(e) => {
-                  e.currentTarget.onerror = null
-                  e.currentTarget.src = encodeURI("/Imágenes de País/placeholder.png")
-                }}
-              />
-              <h3 style={{ fontSize: "16px", margin: 0 }}>{displayName}</h3>
-              <p style={{ fontSize: "12px", margin: 0 }}>Información disponible próximamente.</p>
-            </div>
-          )
-        })()
+        <div className="country-name-float">
+         
+          <span>{hoveredPlainName}</span>
+        </div>
       )}
     </div>
   )

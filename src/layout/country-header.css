@@ -212,8 +212,8 @@
   padding: 0.6rem 1.3rem;
   background: linear-gradient(to right, #8b0000, #a02020);
   color: white;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 700;
+ font-family: 'Gambetta';
+  font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -237,8 +237,8 @@
   padding: 0.6rem 1.3rem;
   background: linear-gradient(to right, #061b23, #0d394a);
   color: white;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 700;
+ font-family: 'Gambetta';
+  font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
   cursor: pointer;

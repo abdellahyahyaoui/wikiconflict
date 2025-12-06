@@ -272,9 +272,11 @@
     font-style: italic;
     font-weight: 100;
   color: #ddf5ffd0;
-    background:  #061b23;
+    background:  #0a2c39;
     padding: 10px;
     border-radius: 50%;
+   box-shadow: 3px 3px 12px 0px #7b8b92;
+      
 
 }
 .logo-conflicts {

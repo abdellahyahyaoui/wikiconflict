@@ -10,11 +10,12 @@
       "category": "Documentacion",
       "featured": true,
       "subtitle": "Historias de resiliencia a traves de imagenes y testimonios",
-      "abstract": "Este articulo de demostracion ilustra como el contenido multimedia se integra con el texto en un diseno L/U.",
+      "abstract": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
       "keywords": [
         "demo",
         "layout",
-        "multimedia"
+        "multimedia",
+        "L/U"
       ]
     },
     {
@@ -22,12 +23,12 @@
       "title": "La Nakba: Memoria Viva de un Pueblo",
       "author": "Dr. Rashid Khalidi",
       "date": "2024-05-15",
-      "coverImage": "/imagenes/Abdul_Razzaq_Al-Majdalawi.jpg",
+      "coverImage": "/imagenes/10.png",
       "excerpt": "Un recorrido por los eventos de 1948 y su impacto duradero en la identidad palestina.",
       "category": "Historia",
       "featured": true,
       "subtitle": "",
-      "abstract": "Perfecto, ahora todo tiene sentido 😄\n\nServidor Node: Se ha ejecutado correctamente y ha generado un usuario admin automáticamente porque era la primera ejecución.\n\nUsuario: admin\n\nContraseña generada: DYBrpR+KF/F7F9X2 ✅\n\nEsa es la contraseña que debes usar una sola vez para entrar al panel y luego cambiarla.\n\nProblema con el cliente React:\n\nLa línea Something is already running on port 5000 significa que ya hay algo usando ese puerto.\n\nPor eso el cliente no se inicia.\n\nPuedes cambiar el puerto o cerrar la instancia que está usando el 5000 antes de volver a arrancar.\n\nPróximos pasos:\n\nEntra al CMS con admin y la contraseña que apareció en consola.\n\nCambia la contraseña desde el panel.\n\nUna vez dentro, podrás crear o",
+      "abstract": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
       "keywords": []
     },
     {

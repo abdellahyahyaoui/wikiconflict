@@ -1,10 +1,9 @@
 /* VELUM Sidebar Styles */
 .velum-block {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 6px;
+
   padding: 8px;
-  margin-bottom: 8px;
-  border-left: 3px solid #1a6483;
+  
+ 
 }
 
 .velum-title {
@@ -13,34 +12,49 @@
 }
 
 .velum-submenu {
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  animation: slideDown 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-size: 1rem;
+  padding: 2px 0px;
+  cursor: pointer;
+color: #1a6483;
+  transition: all 0.2s ease;
+  /* border-left: 2px solid transparent; */
+  border-radius: 0;
+  margin-left: 0;
+  background: transparent;
+  /* font-family: 'Gambetta'; */
+   font-weight: 400;
 }
 
 .velum-item {
-  font-size: 14px;
+  font-size: 1rem;
   padding: 6px 12px;
   cursor: pointer;
-  color: #07202bff;
+ color: #1a6483;
   transition: all 0.2s ease;
-  border-radius: 4px;
+  
   margin-left: 0;
   background: transparent;
-  font-family: Georgia, "Times New Roman", serif;
+   /* font-family: 'Gambetta'; */
+    font-weight: 600;
 }
 
 .velum-item:hover {
-  background: rgba(26, 100, 131, 0.1);
-  color: #1a6483;
+  
+  background: transparent;
+  border-left: 1px solid #1a6483;
+  color: #144a61  ;
+  padding-left: 12px; /* Adjusted to match new padding */
+  font-weight: bold;
 }
 
 .velum-item.active {
-  background: rgba(26, 100, 131, 0.15);
-  color: #1a6483;
+
+  
+  border-left: 1px solid #1a6483 ;
+  color: #1a6483 ;
   font-weight: 600;
+  padding-left: 12px; /* Adjusted to match new padding */
+   font-weight: bold;
 }
 
 /* Complete redesign with minimalista aesthetic and improved responsiveness */
@@ -57,7 +71,7 @@
   /* Fix height calculation to ensure sidebar doesn't get cut off by footer */
 
   z-index: 70;
-  border: 1px solid #07202bff;
+  border: 1px solid #1a6483;
    
       border-radius: 5px;
 }
@@ -70,25 +84,27 @@
 
 /* Minimalista section title styling */
 .sidebar-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 23px;
+  font-weight: 900;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
   user-select: none;
-  color: #07202bff;
+ color: #1a6483;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
   border: none;
   background: none;
-font-family: Cormorant Garamond, serif;
+/* font-family: 'Gambetta'; */
+
+
 }
 
 .sidebar-title:hover {
-  color: #1a6483  ;
+  color: #144a61  ; ;
 }
 
 /* .sidebar-title:focus {
@@ -130,31 +146,32 @@ font-family: Cormorant Garamond, serif;
 
 /* Minimalista menu items */
 .termino-item {
-  font-size: 16px;
+  font-size: 1rem;
   padding: 2px 20px;
   cursor: pointer;
-  color: #07202bff;
+color: #1a6483;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
   margin-left: 0;
   background: transparent;
- font-family: Georgia, "Times New Roman", serif;
+  /* font-family: 'Gambetta'; */
+   font-weight: 600;
   
 }
 
 .termino-item:hover {
   background: transparent;
   border-left: 1px solid #1a6483 ;
-  color: #1a6483  ;
+   color: #144a61  ;  ;
   padding-left: 12px; /* Adjusted to match new padding */
   font-weight: bold;
 }
 
 .termino-item.active {
   background: #fafafa;
-  border-left: 1px solid #0d2e3c ;
-  color: #1a6483 ;
+  border-left: 1px solid #1a6483 ;
+  color: #0c3344 ;
   font-weight: 600;
   padding-left: 12px; /* Adjusted to match new padding */
    font-weight: bold;
@@ -175,21 +192,21 @@ font-family: Cormorant Garamond, serif;
 
 /* Section headers */
 .sidebar-section-title {
-   font-size: 22px;
-  font-weight: 700;
+   font-size: 23px;
+  font-weight: 900;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
   /* padding: 10px 0; */
   user-select: none;
-  color: #0d2e3c;
+  color: #1a6483;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
   border: none;
   background: none;
-  font-family: Cormorant Garamond, serif;
+  /* font-family: Cormorant Garamond, serif; */
 }
 
 /* Section list */
@@ -201,32 +218,33 @@ font-family: Cormorant Garamond, serif;
 
 .sidebar-section-item {
    
-  font-size: 16px;
+  font-size:1rem;
   padding: 2px 20px;
   cursor: pointer;
-  color: #0d2e3c;
+color: #1a6483;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
   margin-left: 0;
   background: transparent;
-  font-family: Georgia, "Times New Roman", serif;
+   /* font-family: 'Gambetta'; */
   /* font-style: italic; */
+  font-weight: 600;
 
 }
 
 .sidebar-section-item:hover {
   background: transparent;
-  border-left: 1px solid #0d2e3c;
-  color: #1a6483 ;
+  border-left: 1px solid #1a6483;
+   color: #144a61  ; ;
   padding-left: 12px; /* Adjusted to match new padding */
    font-weight: bold;
 }
 
 .sidebar-section-item.active {
   
-  border-left: 1px solid #0d2e3c;
-  color: #1a6483;
+  border-left: 1px solid #1a6483;
+  color: #0d2e3c;
   font-weight: 600;
   padding-left: 12px; /* Adjusted to match new padding */
    font-weight: bold;

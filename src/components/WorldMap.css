@@ -1,214 +1,157 @@
-/* Fixing map container to fill available space correctly */
+/* === CONTENEDOR DEL MAPA === */
 .map-wrapper {
   width: 100%;
   height: 70vh;
   min-height: 500px;
   position: fixed;
- 
 }
 
-/* Removed tooltip-card styles as it's no longer used */
-
-/* Fixed backslash and double semicolon syntax errors */
-.tooltip-card h3 {
-  color: #16a34a;
-  font-size: 1.5rem;
-  font-family: Cormorant Garamond;
+/* Sombra general del mapa */
+.composable-map-container {
+  filter: drop-shadow(0 45px 60px rgba(0, 0, 0, 0.992));
 }
 
-/* Adding pulsating circle animation for conflict zones */
+/* ============================
+      PAÍS LEVANTADO (hover)
+   ============================ */
+.country-lifted {
+  transform: translateY(-6px);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) brightness(1.2);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+/* País conflictivo: brillo suave */
+.conflict-country {
+  animation: strongPulseShake 3.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes strongPulseShake {
+  0% {
+    transform: scale(1) translate(0, 0);
+    filter: brightness(0.8) contrast(1);
+  }
+
+  30% {
+    transform: scale(1.03) translate(1px, -1px);
+    filter: brightness(1.2) contrast(1.4);
+  }
+
+  50% {
+    transform: scale(1.06) translate(-1px, 1px);
+    filter: brightness(1.6) contrast(1.8);
+  }
+
+  70% {
+    transform: scale(1.03) translate(1px, -1px);
+    filter: brightness(1.2) contrast(1.4);
+  }
+
+  100% {
+    transform: scale(1) translate(0, 0);
+    filter: brightness(0.8) contrast(1);
+  }
+}
+
+
+/* ============================
+   ONDAS SUAVES (sin punto rojo)
+   ============================ */
+
+/* 🔥 Esta clase hace que NADA bloquee clic o hover */
+.conflict-marker-group {
+  pointer-events: none !important;
+}
+
 @keyframes pulsate {
   0% {
     transform: scale(0.2);
     opacity: 1;
+    border-color: #ffffff;     /* INICIO: blanco */
+  }
+  70% {
+    border-color: #ffffff;     /* TRANSICIÓN: rojo actual */
+    opacity: 0.7;
   }
   100% {
     transform: scale(1.5);
     opacity: 0;
+    border-color: #ef4444;     /* FIN: rojo + se desvanece */
   }
 }
 
-.conflict-marker {
-  position: absolute;
-  pointer-events: none;
-  z-index: 50;
-}
-
-.conflict-marker-pin {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #ef4444;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  pointer-events: all;
-  z-index: 52;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.6);
-}
-
-.conflict-marker-pin:hover {
-  background: #dc2626;
-  transform: translate(-50%, -50%) scale(1.2);
-}
 
 .conflict-marker-pulse {
   position: absolute;
   width: 40px;
   height: 40px;
-  border: 2px solid #ef4444;
+  border: 2px solid #ffffff;  /* empieza blanco */
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: pulsate 2.5s ease-out infinite;
   pointer-events: none;
 }
 
+
 .conflict-marker-pulse:nth-child(2) {
   animation-delay: 0.5s;
 }
-
 .conflict-marker-pulse:nth-child(3) {
   animation-delay: 1s;
 }
-
 .conflict-marker-pulse:nth-child(4) {
   animation-delay: 1.5s;
 }
 
-/* Updated styles for teardrop pin markers */
-.capital-marker-pin {
-  transition: transform 0.2s ease, fill 0.2s ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+/* ==============================
+      NOMBRE DESLIZANTE + BANDERA
+   ============================== */
+.country-name-float {
+  position: absolute;
+  top: 0px;
+  left: 40px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  /* font-family: "Cormorant Garamond", serif !important; */
+  font-size: 42px;
+  font-weight: 600;
+  color: #0c3344;
+
+  padding: 8px 20px;
+
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+
+  border-left: 4px solid #1d546b;
+  letter-spacing: 1px;
+
+  opacity: 0;
+  animation: slideInName 0.45s ease-out forwards;
+
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  pointer-events: none; /* Nunca bloquear hover del mapa */
+  z-index: 20;
 }
 
-.capital-marker-pin:hover {
-  transform: scale(1.15);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+.country-flag-small {
+  width: 38px;
+  height: 26px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
 
-/* Updated popup to show on hover without close button */
-.country-popup {
-  background: #ffffff;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
-  overflow: hidden;
-  position: fixed;
-  transform: translate(-50%, 0);
-  animation: slideUp 0.3s ease;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  pointer-events: none;
-}
-
-@keyframes slideUp {
+@keyframes slideInName {
   from {
-    transform: translate(-50%, 20px);
     opacity: 0;
+    transform: translateX(-50px);
   }
   to {
-    transform: translate(-50%, 0);
     opacity: 1;
+    transform: translateX(0);
   }
-}
-
-.country-popup-image {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-
-.country-popup-content {
-  padding: 24px;
-}
-
-.country-popup-title {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1f2937;
-  margin: 0 0 12px 0;
-  font-family: "Cormorant Garamond", serif;
-}
-
-.country-popup-description {
-  font-size: 16px;
-  color: #6b7280;
-  line-height: 1.6;
-  margin: 0;
-}
-/* --- EFECTO PAÍS SE LEVANTA SUAVEMENTE --- */
-.country-lift {
-  transition: transform 0.25s ease, filter 0.25s ease;
-}
-
-.country-lift:hover {
-  transform: translateY(4px);
-  filter: drop-shadow(0 0 6px rgba(212, 203, 203, 0.25));
-}
-
-
-/* --- EFECTO SUTIL PARA PAÍSES EN CONFLICTO --- */
-.conflict-country {
-  filter: brightness(1.1);
-  transition: filter 0.3s ease;
-}
-.country-lifted {
-  transform: translateY(-4px);
-  filter: drop-shadow(0 0 6px rgba(0,0,0,0.25));
-  transition: transform 0.25s ease, filter 0.25s ease;
-}
-/* Ondas de conflicto elegantes */
-.conflict-wave {
-  fill: none;
-  stroke: #8b0000;
-  stroke-width: 1.5;
-  opacity: 0;
-  animation: conflictPulse 3s ease-out infinite;
-  transform-origin: center;
-}
-
-.conflict-wave:nth-child(1) { animation-delay: 0s; }
-.conflict-wave:nth-child(2) { animation-delay: 1s; }
-.conflict-wave:nth-child(3) { animation-delay: 2s; }
-
-@keyframes conflictPulse {
-  0% {
-    r: 0;
-    opacity: 0.5;
-  }
-  100% {
-    r: 30px;
-    opacity: 0;
-  }
-}
-
-/* Hover: elevacion suave sin vibracion */
-.conflict-marker-group {
-  pointer-events: all;
-  transform-origin: center;
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.conflict-marker-group:hover {
-  transform: translateY(-3px) scale(1.05);
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-}
-.country-popup-circle {
-  position: absolute;
-  top: -90px;
-  left: 320px;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  text-align: center;
-  font-family: 'Cormorant Garamond', serif;
-  border: 1px solid rgba(0, 0, 0, 0.05);
 }

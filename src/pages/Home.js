@@ -163,7 +163,14 @@ function Home() {
           <span className="title-wiki">Wiki</span>
           <span className="title-conflicts">Conflicts</span>
         </h1>
-        <h2 className="title-sub">La voz de las victimas</h2>
+    <h2 className="title-sub epic-quote">
+  <span className="underline-effect">
+    ❝ Y mientras el verdugo insista en escribir la <span className="pulse-word">historia</span>, 
+    mi deber será arrancarle la pluma. ❞
+  </span>
+</h2>
+
+
       </div>
 
       {/* AQUÍ CAMBIAN LOS MAPAS, TODO IGUAL QUE ANTES */}

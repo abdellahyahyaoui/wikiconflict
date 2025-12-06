@@ -6,8 +6,13 @@
   "date": "2025-12-03",
   "coverImage": "/imagenes/chohada.png",
   "category": "Documentacion",
-  "abstract": "Este articulo de demostracion ilustra como el contenido multimedia se integra con el texto en un diseño L/U (Layout Universal), permitiendo que imagenes y videos se posicionen a la izquierda o derecha del texto para crear una experiencia visual dinamica.",
-  "keywords": ["demo", "layout", "multimedia", "L/U"],
+  "abstract": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
+  "keywords": [
+    "demo",
+    "layout",
+    "multimedia",
+    "L/U"
+  ],
   "contentBlocks": [
     {
       "id": "block1",
@@ -66,5 +71,29 @@
       "content": "Este sistema de bloques de contenido ofrece a los editores total control sobre la presentacion visual de sus articulos. Cada bloque puede contener texto, imagenes, videos o audio, y cada uno tiene su propia configuracion de posicion y estilo.",
       "position": "center"
     }
-  ]
+  ],
+  "authorImage": "",
+  "sections": [
+    {
+      "title": "",
+      "contentBlocks": [
+        {
+          "id": "1764780439080",
+          "type": "text",
+          "content": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
+          "position": "center",
+          "caption": ""
+        },
+        {
+          "id": "1764780443230",
+          "type": "image",
+          "url": "/imagenes/abdellah.png",
+          "position": "center",
+          "caption": ""
+        }
+      ],
+      "content": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo."
+    }
+  ],
+  "bibliography": []
 }
