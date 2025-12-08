@@ -20,7 +20,7 @@ const latinCountries = [
   "Brazil","Argentina","Colombia","Chile","Peru","Venezuela",
   "Bolivia","Paraguay","Uruguay","Ecuador","Trinidad and Tobago"
   ,"Costa Rica","Panama",
-  "Cuba","Dominican Republic","Haiti","Belize","Guyana","Suriname"
+  "Cuba","Guyana","Suriname"
 ];
 
 // === COUNTRY DATA (solo nombre + coordenadas + conflicto) ===
@@ -42,7 +42,7 @@ const countryData = {
 
 export default function LatinAmericaMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null);
-
+const isMobile = typeof window !== "undefined" && window.innerWidth < 860;
   const getCountryId = (geo) =>
     geo.properties.name.toLowerCase().replace(/\s+/g, "-");
 
@@ -54,7 +54,11 @@ export default function LatinAmericaMap() {
     <div className="map-wrapper" style={{ position: "relative" }}>
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 410, center: [-65, -25] }}
+         projectionConfig={{
+          scale: isMobile ? 430 : 410,   // ← ESCALA MÓVIL AQUÍ
+          center: [-65, -25]
+        }}
+       
         className="composable-map-container"
         style={{ width: "100%", height: "100%" }}
       >

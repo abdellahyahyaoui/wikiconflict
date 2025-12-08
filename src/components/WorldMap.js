@@ -60,7 +60,7 @@ const countryData = {
 // ---------------------------
 export default function WorldMap() {
   const [hoveredCountry, setHoveredCountry] = useState(null)
-
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 860;
   const getCountryId = (geo) => {
     const name = geo.properties.name.toLowerCase()
     if (geo.id === "732" || name === "morocco" || name === "western sahara") return "morocco"
@@ -84,7 +84,10 @@ export default function WorldMap() {
     <div className="map-wrapper" style={{ position: "relative" }}>
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 750, center: [25, 28] }}
+         projectionConfig={{
+          scale: isMobile ? 530 : 750,   // ← ESCALA MÓVIL AQUÍ
+          center: [25, 28],
+        }}
         className="composable-map-container"
         style={{ width: "100%", height: "100%" }}
       >

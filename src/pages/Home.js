@@ -6,219 +6,198 @@ import { Link, useNavigate } from "react-router-dom"
 
 import WorldMap from "../components/WorldMap"
 import MapLatinAmerica from "../components/MapLatinAmerica"
-import MapAfrica from "../components/MapAfrica"
 import MapEurope from "../components/MapEurope"
-import MapAsia from "../components/MapAsia"
+
+// ========================== REGIONES ==========================
 
 const regions = [
   {
     name: "Oriente Medio",
     countries: [
-      { id: "palestine", name: "Palestina", flag: "/flags/pa.png", hasConflict: true },
-      { id: "lebanon", name: "Líbano", flag: "/flags/li.png", hasConflict: true },
-      { id: "yemen", name: "Yemen", flag: "/flags/ye.png", hasConflict: true },
-      { id: "syria", name: "Siria", flag: "/flags/sy.png", hasConflict: true },
-      { id: "iran", name: "Irán", flag: "/flags/ir.png", hasConflict: true },
-      { id: "iraq", name: "Irak", flag: "/flags/ira.png", hasConflict: false },
+      { id: "palestine", name: "Palestina", hasConflict: true },
+      { id: "lebanon", name: "Líbano", hasConflict: true },
+      { id: "yemen", name: "Yemen", hasConflict: true },
+      { id: "syria", name: "Siria", hasConflict: true },
+      { id: "iran", name: "Irán", hasConflict: true },
+      { id: "egypt", name: "Egipto", hasConflict: true },
+      { id: "sudan", name: "Sudán", hasConflict: true },
+      { id: "libya", name: "Libia", hasConflict: true },
+      { id: "morocco", name: "Marruecos", hasConflict: false },
+      { id: "iraq", name: "Irak", hasConflict: false },
+      { id: "turkey", name: "Turquía", hasConflict: false },
+      { id: "uae", name: "Emiratos Árabes Unidos", hasConflict: false },
+      { id: "qatar", name: "Qatar", hasConflict: false },
+      { id: "oman", name: "Omán", hasConflict: false },
+      { id: "jordan", name: "Jordania", hasConflict: false },
+      { id: "kuwait", name: "Kuwait", hasConflict: false },
+      { id: "mauritania", name: "Mauritania", hasConflict: false },
+      { id: "algeria", name: "Argelia", hasConflict: false },
+      { id: "tunisia", name: "Túnez", hasConflict: false },
+      { id: "comoros", name: "Comoras", hasConflict: false },
+      { id: "saudi", name: "Arabia Saudita", hasConflict: false },
     ]
   },
-  {
-    name: "África",
-    countries: [
-      { id: "sudan", name: "Sudán", flag: "/flags/su.png", hasConflict: true },
-      { id: "morocco", name: "Marruecos", flag: "/flags/ma.png", hasConflict: false },
-      { id: "algeria", name: "Argelia", flag: "/flags/ar.png", hasConflict: false },
-      { id: "libya", name: "Libia", flag: "/flags/li.png", hasConflict: false },
-      { id: "egypt", name: "Egipto", flag: "/flags/eg.png", hasConflict: false },
-    ]
-  },
+
   {
     name: "Europa",
     countries: [
-      { id: "ukraine", name: "Ucrania", flag: "/flags/ukr.png", hasConflict: true },
+      { id: "albania", name: "Albania", hasConflict: false },
+      { id: "andorra", name: "Andorra", hasConflict: false },
+      { id: "austria", name: "Austria", hasConflict: false },
+      { id: "belarus", name: "Belarús", hasConflict: false },
+      { id: "belgium", name: "Bélgica", hasConflict: false },
+      { id: "bosnia", name: "Bosnia y Herzegovina", hasConflict: false },
+      { id: "bulgaria", name: "Bulgaria", hasConflict: false },
+      { id: "croatia", name: "Croacia", hasConflict: false },
+      { id: "czech", name: "República Checa", hasConflict: false },
+      { id: "denmark", name: "Dinamarca", hasConflict: false },
+      { id: "estonia", name: "Estonia", hasConflict: false },
+      { id: "france", name: "Francia", hasConflict: false },
+      { id: "germany", name: "Alemania", hasConflict: false },
+      { id: "greece", name: "Grecia", hasConflict: false },
+      { id: "hungary", name: "Hungría", hasConflict: false },
+      { id: "iceland", name: "Islandia", hasConflict: false },
+      { id: "ireland", name: "Irlanda", hasConflict: false },
+      { id: "italy", name: "Italia", hasConflict: false },
+      { id: "kosovo", name: "Kosovo", hasConflict: false },
+      { id: "latvia", name: "Letonia", hasConflict: false },
+      { id: "liechtenstein", name: "Liechtenstein", hasConflict: false },
+      { id: "lithuania", name: "Lituania", hasConflict: false },
+      { id: "luxembourg", name: "Luxemburgo", hasConflict: false },
+      { id: "malta", name: "Malta", hasConflict: false },
+      { id: "moldova", name: "Moldova", hasConflict: false },
+      { id: "monaco", name: "Mónaco", hasConflict: false },
+      { id: "montenegro", name: "Montenegro", hasConflict: false },
+      { id: "netherlands", name: "Países Bajos", hasConflict: false },
+      { id: "northmacedonia", name: "Macedonia del Norte", hasConflict: false },
+      { id: "poland", name: "Polonia", hasConflict: false },
+      { id: "portugal", name: "Portugal", hasConflict: false },
+      { id: "romania", name: "Rumanía", hasConflict: false },
+      { id: "sanmarino", name: "San Marino", hasConflict: false },
+      { id: "serbia", name: "Serbia", hasConflict: false },
+      { id: "slovakia", name: "Eslovaquia", hasConflict: false },
+      { id: "slovenia", name: "Eslovenia", hasConflict: false },
+      { id: "spain", name: "España", hasConflict: false },
+      { id: "switzerland", name: "Suiza", hasConflict: false },
+      { id: "ukraine", name: "Ucrania", hasConflict: true },
+      { id: "uk", name: "Reino Unido", hasConflict: false },
+      { id: "vatican", name: "Vaticano", hasConflict: false },
     ]
   },
+
   {
     name: "América Latina",
     countries: [
-      { id: "venezuela", name: "Venezuela", flag: "/flags/ve.png", hasConflict: true },
+      { id: "brazil", name: "Brasil", hasConflict: false },
+      { id: "argentina", name: "Argentina", hasConflict: false },
+      { id: "colombia", name: "Colombia", hasConflict: false },
+      { id: "chile", name: "Chile", hasConflict: false },
+      { id: "peru", name: "Perú", hasConflict: false },
+      { id: "venezuela", name: "Venezuela", hasConflict: true },
+      { id: "mexico", name: "México", hasConflict: false },
+      { id: "bolivia", name: "Bolivia", hasConflict: false },
+      { id: "paraguay", name: "Paraguay", hasConflict: false },
+      { id: "uruguay", name: "Uruguay", hasConflict: false },
+      { id: "ecuador", name: "Ecuador", hasConflict: false },
+      { id: "cuba", name: "Cuba", hasConflict: false },
+      { id: "haiti", name: "Haití", hasConflict: true },
     ]
   }
 ]
 
+// ========================== COMPONENTE ==========================
+
 function Home() {
   const [isMobile, setIsMobile] = useState(false)
-  const [isAnimated, setIsAnimated] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
   const [mapIndex, setMapIndex] = useState(0)
+  const [showCountries, setShowCountries] = useState(false)
   const navigate = useNavigate()
 
   const maps = [
-    <WorldMap key="arab" />, 
-    <MapLatinAmerica key="latam" />,
-    
+    <WorldMap key="arab" />,
     <MapEurope key="europe" />,
-    
+    <MapLatinAmerica key="latam" />
   ]
 
   const nextMap = () => {
-    setMapIndex((prev) => (prev + 1) % maps.length)
+    setMapIndex(prev => (prev + 1) % maps.length)
+    setShowCountries(false)
   }
 
   const prevMap = () => {
-    setMapIndex((prev) => (prev - 1 + maps.length) % maps.length)
+    setMapIndex(prev => (prev - 1 + maps.length) % maps.length)
+    setShowCountries(false)
   }
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 860)
     checkMobile()
     window.addEventListener("resize", checkMobile)
-
-    const timer = setTimeout(() => setIsAnimated(true), 800)
-
-    return () => {
-      window.removeEventListener("resize", checkMobile)
-      clearTimeout(timer)
-    }
+    return () => window.removeEventListener("resize", checkMobile)
   }, [])
-
-  const filteredRegions = regions.map(region => ({
-    ...region,
-    countries: region.countries.filter(country => 
-      country.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  })).filter(region => region.countries.length > 0)
-
-  if (isMobile) {
-    return (
-      <div className={`mobile-home ${isAnimated ? "animated" : ""}`}>
-        <Link to="/admin/login" className="admin-button-mobile">
-          Admin
-        </Link>
-        
-        <div className="mobile-home-search">
-          <input
-            type="search"
-            className="mobile-search-input"
-            placeholder="Buscar en WikiConflicts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Buscar contenido"
-          />
-        </div>
-
-        <div className="mobile-brand-center">
-          <h1 className="title-main">
-            <span className="title-wiki">Wiki</span>
-            <span className="title-conflicts">Conflicts</span>
-          </h1>
-          <p className="mobile-quote">
-            "Y mientras el verdugo insista en escribir la historia, mi deber será arrancarle la pluma."
-          </p>
-        </div>
-        
-        <div className="mobile-countries-container">
-          {filteredRegions.map((region) => (
-            <div key={region.name} className="mobile-region">
-              <h3 className="mobile-region-title">{region.name}</h3>
-              <div className="mobile-countries-grid">
-                {region.countries.map((country) => (
-                  <div
-                    key={country.id}
-                    className={`mobile-country-circle ${country.hasConflict ? 'has-conflict' : ''}`}
-                    onClick={() => navigate(`/country/${country.id}`)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        navigate(`/country/${country.id}`)
-                      }
-                    }}
-                  >
-                    <div className="country-circle-inner">
-                      <span className="country-circle-name">{country.name}</span>
-                      {country.hasConflict && (
-                        <span className="country-conflict-badge"></span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="home-container">
-      <Link to="/admin/login" className="admin-button">
-        Admin
-      </Link>
+
+      <Link to="/admin/login" className="admin-button">Admin</Link>
 
       <div className="title-block">
         <h1 className="title-main">
           <span className="title-wiki">Wiki</span>
           <span className="title-conflicts">Conflicts</span>
         </h1>
-    <h2 className="title-sub epic-quote">
-  <span className="underline-effect">
-    ❝ Y mientras el verdugo insista en escribir la <span className="pulse-word">historia</span>, 
-    mi deber será arrancarle la pluma. ❞
-  </span>
-</h2>
 
-
+        <h2 className="title-sub epic-quote">
+          <span className="underline-effect">
+            ❝ Y mientras el verdugo insista en escribir la <span className="pulse-word">historia</span>,
+            mi deber será arrancarle la pluma. ❞
+          </span>
+        </h2>
       </div>
 
-      {/* AQUÍ CAMBIAN LOS MAPAS, TODO IGUAL QUE ANTES */}
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        {maps[mapIndex]}
+      {/* =================== MÓVIL =================== */}
+      {isMobile && (
+        <div className="mobile-scroll-zone">
 
-        {/* FLECHA IZQUIERDA */}
-        <button
-          onClick={prevMap}
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "20px",
-            transform: "translateY(-50%)",
-            background: "#ffffffdd",
-            width: "60px",
-            height: "60px",
-            borderRadius: "8px",
-            border: "none",
-            fontSize: "32px",
-            cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)"
-          }}
-        >
-          ◀
-        </button>
+          <div className="mobile-region-title-container" onClick={() => setShowCountries(!showCountries)}>
+            <button className="mobile-arrow-left" onClick={prevMap}>◀</button>
+            <span className="mobile-region-title-animated">{regions[mapIndex].name}</span>
+            <button className="mobile-arrow-right" onClick={nextMap}>▶</button>
+          </div>
 
-        {/* FLECHA DERECHA */}
-        <button
-          onClick={nextMap}
-          style={{
-            position: "absolute",
-            top: "50%",
-            right: "20px",
-            transform: "translateY(-50%)",
-            background: "#ffffffdd",
-            width: "60px",
-            height: "60px",
-            borderRadius: "8px",
-            border: "none",
-            fontSize: "32px",
-            cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)"
-          }}
-        >
-          ▶
-        </button>
-      </div>
+          {showCountries && (
+            <div className="mobile-country-list-animated">
+              {regions[mapIndex].countries
+                .filter(c => c.hasConflict)
+                .map((c, index) => (
+                  <div
+                    key={c.id}
+                    className="mobile-country-item"
+                    style={{ animationDelay: `${0.06 * index}s` }}
+                    onClick={() => navigate(`/country/${c.id}`)}
+                  >
+                    <div className="mobile-country-left-line"></div>
+                    <span style={{ color: "#0c3344" }}>{c.name}</span>
+                  </div>
+                ))}
+            </div>
+          )}
+
+          <div style={{ marginTop: "20px" }}>
+            {maps[mapIndex]}
+          </div>
+        </div>
+      )}
+
+      {/* =================== DESKTOP =================== */}
+      {!isMobile && (
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          {maps[mapIndex]}
+          <button className="desktop-arrow" onClick={prevMap}>◀</button>
+          <button className="desktop-arrow" onClick={nextMap}>▶</button>
+        </div>
+      )}
+
     </div>
   )
 }

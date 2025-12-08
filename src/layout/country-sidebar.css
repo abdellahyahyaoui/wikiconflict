@@ -7,7 +7,7 @@
 }
 
 .velum-title {
-  color: #1a6483 !important;
+  color: #0e0e0f !important;
   font-size: 18px !important;
 }
 
@@ -15,7 +15,7 @@
   font-size: 1rem;
   padding: 2px 0px;
   cursor: pointer;
-color: #1a6483;
+color: #0e0e0f;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
@@ -29,7 +29,7 @@ color: #1a6483;
   font-size: 1rem;
   padding: 6px 12px;
   cursor: pointer;
- color: #1a6483;
+color: #0e0e0f;
   transition: all 0.2s ease;
   
   margin-left: 0;
@@ -71,7 +71,7 @@ color: #1a6483;
   /* Fix height calculation to ensure sidebar doesn't get cut off by footer */
 
   z-index: 70;
-  border: 1px solid #1a6483;
+  border: 1px solid #020202;
    
       border-radius: 5px;
 }
@@ -92,7 +92,7 @@ color: #1a6483;
   align-items: center;
   padding: 10px 0;
   user-select: none;
- color: #1a6483;
+ color: #0e0e0f;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
@@ -149,7 +149,7 @@ color: #1a6483;
   font-size: 1rem;
   padding: 2px 20px;
   cursor: pointer;
-color: #1a6483;
+color: #0e0e0f;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
@@ -182,11 +182,11 @@ color: #1a6483;
   font-size: 30px; /* Reduced from 26px */
   font-weight: 400; /* Lighter weight looks more elegant */
   margin: 12px 0 16px 0; /* Reduced margin */
-  color: #1a6483;
+  color: #423e3e;
   font-family: var(--wiki-font-serif);
   line-height: 1.2;
   padding-bottom: 16px;
-  border-bottom: 1px solid #1a6483;
+  border-bottom: 1px solid #0c0c0c;
   word-wrap: break-word;
 }
 
@@ -200,7 +200,7 @@ color: #1a6483;
   align-items: center;
   /* padding: 10px 0; */
   user-select: none;
-  color: #1a6483;
+color: #0e0e0f;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
@@ -218,10 +218,10 @@ color: #1a6483;
 
 .sidebar-section-item {
    
-  font-size:1rem;
+  font-size:1.2rem;
   padding: 2px 20px;
   cursor: pointer;
-color: #1a6483;
+color: #0e0e0f;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
@@ -259,16 +259,16 @@ color: #1a6483;
   }
 
   .sidebar-country-name {
-    font-size: 20px;
+    font-size: 1.5;
   }
 
   .sidebar-title {
-    font-size: 12px;
+    font-size: 1.3rem;
   }
 
   .termino-item,
   .sidebar-section-item {
-    font-size: 12px; /* Already updated globally to 12px */
+    font-size: 1.1rem; /* Already updated globally to 12px */
     padding: 7px 10px;
   }
 

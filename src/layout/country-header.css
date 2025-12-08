@@ -52,11 +52,12 @@
 }
 
 .header-quote {
-  font-size: 20px;
-  color: #1a6483;
+  font-size: 0.9rem;
+  color: #0e0e0f;
   font-weight: 500;
   letter-spacing: 0.3px;
-  font-family: Bonheur Royale;
+  font-family:  "Cormorant Garamond", serif;
+  font-style: italic;
 }
 
 /* === CENTER SECTION: SEARCH === */
@@ -210,10 +211,10 @@
   border: none;
   border-radius: 9999px;
   padding: 0.6rem 1.3rem;
-  background: linear-gradient(to right, #8b0000, #a02020);
+ background: linear-gradient(to right, #061b23, #0d394a);
   color: white;
- font-family: 'Gambetta';
-  font-weight: 500;
+
+  font-weight: 300;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -229,21 +230,22 @@
 
 /* -------- GREEN LANGUAGE SELECTOR -------- */
 .language-button-green {
-  display: inline-flex;
+ display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 9999px;
-  padding: 0.6rem 1.3rem;
-  background: linear-gradient(to right, #061b23, #0d394a);
+  border-radius: 50%;
+  padding: 23px 6px;
+ background: linear-gradient(to right, #061b23, #0d394a);
   color: white;
- font-family: 'Gambetta';
+
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(139, 0, 0, 0.2);
+  text-decoration: none;
 }
 
 .language-button-green:hover {
@@ -355,4 +357,8 @@
   .flag-emoji {
     font-size: 16px;
   }
+}
+.header-search .icon {
+  color: #e0e0e0;
+  fill: #e0e0e0;
 }

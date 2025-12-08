@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 100px);
-  /* padding: 40px 20px; */
   background: #ffffff;
 }
 
@@ -15,40 +14,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
 }
 
 .title-main {
-  
   font-size: 72px;
-  /* margin: 0 0 12px 0; */
   font-weight: 700;
   color: #1a1a1a;
   letter-spacing: -1px;
   line-height: 1.1;
   display: flex;
   align-items: baseline;
-  /* gap: 8px; */
   justify-content: center;
-  margin: 32px 0 0px 0;
+  margin: 32px 0 0 0;
 }
 
 /* Wiki light weight (300) + Conflicts bold (700) */
 .title-wiki {
- font-weight: 100;
-    font-style: italic;
-    color: #f8f9fa;
-    font-family: Cormorant Garamond;
-    background: #0c3344;
-    padding: 20px 10px;
-    border-radius: 50%;
-    box-shadow: 3px 3px 12px 0px #7b8b92;
-      
-    scale: 0.9;
+  font-weight: 100;
+  font-style: italic;
+    
+  font-family: Cormorant Garamond;
+  /* background: #0c3344; */
+  padding: 20px 5px;
+  /* border-radius: 50%; */
+  /* box-shadow: 3px 3px 12px 0px #7b8b92;
+  scale: 0.9; */
 }
+
 .title-conflicts {
   font-weight: 800;
-  color: #0c3344;
+     
   font-family: Cormorant Garamond;
 }
 
@@ -56,7 +51,7 @@
   font-size: 35px;
   font-weight: 200;
   margin: 0;
-   color: #0c3344;
+ color:var(--clr-accent-blue);
   letter-spacing: 0.8px;
   font-family: Bonheur Royale;
 }
@@ -69,10 +64,10 @@
   font-weight: 500;
   max-width: 620px;
   line-height: 1.7;
- font-family: Cormorant Garamond;
+  font-family: Cormorant Garamond;
 }
 
-/* Responsive design */
+/* ========================== RESPONSIVE ========================== */
 @media (max-width: 1024px) {
   .home-container {
     padding: 30px 20px;
@@ -101,7 +96,6 @@
   }
 }
 
-/* Mobile-first adjustment for floating countries view */
 @media (max-width: 860px) {
   .home-container {
     padding: 20px 15px;
@@ -140,12 +134,11 @@
     margin-bottom: 0;
   }
 
-  /* Style for mobile quote */
   .mobile-quote {
     font-family: Georgia, "Times New Roman", serif;
     font-style: italic;
     font-size: 14px;
-    color: #8b0000;
+  color:var(--clr-accent-blue);
     text-align: center;
     max-width: 85%;
     line-height: 1.4;
@@ -197,9 +190,10 @@
 
 @media (max-width: 480px) {
   .home-container {
-    padding: 15px 12px;
-    padding-top: 40px;
+    padding: 0px;
+    padding-top: 0px;
     justify-content: flex-start;
+    scrollbar-width: none;
   }
 
   .title-block {
@@ -207,13 +201,13 @@
   }
 
   .title-main {
-    font-size: 36px;
+    font-size: 42px;
     margin-bottom: 6px;
-    gap: 4px;
+    gap: 0px;
   }
 
   .title-sub {
-    font-size: 13px;
+    font-size: 1.3rem;
     letter-spacing: 0.3px;
   }
 
@@ -224,7 +218,8 @@
   }
 }
 
-/* Mobile Home specific styles for animation */
+/* ========================= MOBILE HOME ========================= */
+
 .mobile-home {
   min-height: 100vh;
   display: flex;
@@ -238,7 +233,6 @@
   padding-top: 70px;
 }
 
-/* Added mobile search bar at top of home page */
 .mobile-home-search {
   position: fixed;
   top: 0;
@@ -269,10 +263,6 @@
   background: #fff;
 }
 
-.mobile-search-input::placeholder {
-  color: #999;
-}
-
 .mobile-home.animated {
   justify-content: flex-start;
 }
@@ -301,28 +291,26 @@
   transform: translateY(0);
 }
 
+/* ========================= BUTTONS ========================= */
+
 .admin-button {
- position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #0c3344;
-    color: #ffffff;
-    border: 1px solid #0c3344;
-    padding: 15px 10px;
-    /* font-size: 14px; */
-font-family: 'Gambetta';
-    font-weight: 500;
-    border-radius: 50%;
-  font-family: 'Cormorant Garamond', serif;
-font-style: italic;
- box-shadow: 3px 3px 12px 0px #7b8b92;
-       
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background:var(--clr-accent-blue);
+  color: #ffffff;
+
+  padding: 15px 10px;
+  font-size: 14px;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  border-radius: 50%;
+  box-shadow: 3px 3px 12px 0px #7b8b92;
 }
 
-
 .admin-button:hover {
-  background: #0c3344;
-  color: white;
+  background: var( --off-white);
+  color:var(--clr-accent-blue);
 }
 
 .admin-button-mobile {
@@ -330,11 +318,11 @@ font-style: italic;
   top: 70px;
   right: 16px;
   background: transparent;
-  color: #0c3344;
-  border: 1px solid #0c3344;
+ color:var(--clr-accent-blue);
+ 
   padding: 6px 14px;
   font-size: 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 600;
   text-decoration: none;
   border-radius: 4px;
@@ -343,9 +331,11 @@ font-style: italic;
 }
 
 .admin-button-mobile:hover {
-  background: #0c3344;
-  color: white;
+  background: var(--gray-300);
+  color: var(--gray-600);
 }
+
+/* ========================= MOBILE COUNTRY LIST ========================= */
 
 .mobile-countries-container {
   width: 100%;
@@ -359,13 +349,13 @@ font-style: italic;
 }
 
 .mobile-region-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 18px;
   font-weight: 600;
-  color: #0c3344;
+   color:var(--clr-accent-blue);
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #e0e0e0;
+ 
   letter-spacing: 0.5px;
 }
 
@@ -375,52 +365,7 @@ font-style: italic;
   gap: 12px;
 }
 
-.mobile-country-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1;
-  background: linear-gradient(145deg, #0c3344, #1d546b);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  box-shadow: 0 4px 12px rgba(12, 51, 68, 0.25);
-}
 
-.mobile-country-circle:hover,
-.mobile-country-circle:focus {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(12, 51, 68, 0.35);
-}
-
-.mobile-country-circle.has-conflict {
-  background: linear-gradient(145deg, #8b0000, #a52a2a);
-  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
-}
-
-.mobile-country-circle.has-conflict:hover,
-.mobile-country-circle.has-conflict:focus {
-  box-shadow: 0 6px 20px rgba(139, 0, 0, 0.4);
-}
-
-.country-circle-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  text-align: center;
-}
-
-.country-circle-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
-  line-height: 1.2;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
 
 .country-conflict-badge {
   position: absolute;
@@ -435,7 +380,8 @@ font-style: italic;
 }
 
 @keyframes pulse-badge {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -450,14 +396,13 @@ font-style: italic;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-  
+
   .country-circle-name {
     font-size: 12px;
   }
 }
-/* =============================== */
-/*   ESTILO GENERAL DE LA CITA     */
-/* =============================== */
+
+/* ========================= EPIC QUOTE ========================= */
 
 .epic-quote {
   position: relative;
@@ -465,18 +410,12 @@ font-style: italic;
   opacity: 0;
   transform: translateY(20px) scale(0.98);
   filter: blur(6px);
-  color: #0c3344 !important; /* Color constante */
-
+   color:var(--clr-accent-blue);
   animation: epicEnter 1.8s ease forwards;
-
-  
-
   padding: 1px 18px;
   border-radius: 12px;
 }
 
-
-/* Entrada suave con blur */
 @keyframes epicEnter {
   0% {
     opacity: 0;
@@ -495,29 +434,24 @@ font-style: italic;
   }
 }
 
-
-/* =============================== */
-/* PALABRAS QUE LATE (sutil)       */
-/* =============================== */
-
 .pulse-word {
   display: inline-block;
   animation: pulseSoft 2.8s ease-in-out infinite;
 }
 
 @keyframes pulseSoft {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
-
-
-/* =============================== */
-/* COMILLAS EDITORIALES            */
-/* =============================== */
 
 .epic-quote .quote-start {
   font-size: 42px;
-  color: #0c3344;
+ color:var(--clr-accent-blue);
   margin-right: 6px;
   vertical-align: top;
 }
@@ -529,17 +463,11 @@ font-style: italic;
   vertical-align: top;
 }
 
-
-/* =============================== */
-/* SUBRAYADO Y F IRMA FINAL A.Y.   */
-/* =============================== */
-
 .underline-effect {
   position: relative;
   display: inline-block;
 }
 
-/* Línea animada */
 .underline-effect::after {
   content: "";
   position: absolute;
@@ -554,20 +482,27 @@ font-style: italic;
 }
 
 @keyframes underlineSweep {
-  0% { width: 0%; opacity: 1; }
-  45% { width: 100%; opacity: 1; }
-  100% { width: 100%; opacity: 0; }
+  0% {
+    width: 0%;
+    opacity: 1;
+  }
+  45% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
 }
 
-/* Iniciales A.Y. que aparecen después */
 .underline-effect::before {
- content: "— A.Y.";
-
+  content: "— A.Y.";
   position: absolute;
   right: 0;
   bottom: -30px;
   opacity: 0;
-  color: #0c3344;
+  color:var(--clr-accent-blue);
   font-size: 18px;
   font-family: "Cormorant Garamond", serif;
   font-style: italic;
@@ -576,8 +511,154 @@ font-style: italic;
   animation-delay: 2.5s;
 }
 
-
 @keyframes appearSignature {
-  0% { opacity: 0; transform: translateY(6px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================= REGION TITLE ========================= */
+
+.mobile-region-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 14px;
+  animation: slideInRegion 0.45s ease-out forwards;
+  margin-top: 22px;
+}
+
+.mobile-region-title-animated {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 32px;
+  font-weight: 700;
+  color:var(--clr-accent-blue);
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-arrow-left,
+.mobile-arrow-right {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #1d546b70;
+}
+
+@keyframes slideInRegion {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+/* ========================= ANIMATED COUNTRY LIST ========================= */
+
+.mobile-country-list-animated {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.mobile-country-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  /* font-family: "Cormorant Garamond", serif; */
+  font-size: 20px;
+  font-weight: 600;
+   color:var(--clr-accent-blue);
+  cursor: pointer;
+  animation: slideCountry 0.4s ease forwards;
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.mobile-country-item span {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-country-left-line {
+  width: 3px;
+  height: 30px;
+  background: #0c3344;
+  border-radius: 3px;
+}
+
+@keyframes slideCountry {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========================= SCROLL ZONE ========================= */
+
+.mobile-scroll-zone {
+  /* overflow-y: auto; */
+  max-height: calc(100vh - 230px);
+  padding-bottom: 40px;
+}
+
+/* ========================= DESKTOP ARROWS ========================= */
+
+.desktop-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 46px;
+   color:var(--clr-accent-blue);
+  font-weight: 200;
+  background: rgba(255, 255, 255, 0.78);
+  border: none;
+  border-radius: 14px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(12, 51, 68, 0.28);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.desktop-arrow:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 6px 18px rgba(12, 51, 68, 0.38);
+}
+
+.desktop-arrow:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.desktop-arrow:first-of-type {
+  left: 20px;
+}
+
+.desktop-arrow:last-of-type {
+  right: 20px;
+}
+@media (max-width: 768px) {
+  .admin-button {
+    position: relative;
+    top: 50px;     /* más cerca del título */
+    right: 15px;    /* o ajusta hasta que quede bien */
+    margin-left: auto; /* empuja hacia la derecha */
+    display: block;
+  }
 }

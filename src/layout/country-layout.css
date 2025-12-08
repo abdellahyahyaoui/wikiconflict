@@ -53,8 +53,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: #a0b0b8;
+  /* background:#061b23; */
+  color: #0a181f;
   transition: all 0.2s ease;
 }
 
@@ -122,26 +122,29 @@
 
 /* Refined mobile header for Wikipedia aesthetic */
 .mobile-wiki-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem 1rem;
+  position: relative;
+  width: 100%;
   background: #fff;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
+
 /* Added mobile header top container for logo and menu button side by side */
-.mobile-header-top {
+.mobile-header-top-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  margin-bottom: 0.75rem;
+  align-items: center;
+  
+  padding: 0.75rem 1rem;
+  /* background: #fff; */
+  z-index: 9999;
+ 
 }
+
 
 .mobile-logo-large {
   font-size: 1.8rem;
@@ -217,7 +220,7 @@
 }
 
 .mobile-content-padding {
-  padding: 1rem;
+  padding: 0rem;
 }
 
 /* Styling the mobile header specific elements */
@@ -271,22 +274,92 @@
     font-family: Cormorant Garamond, serif;
     font-style: italic;
     font-weight: 100;
-  color: #ddf5ffd0;
-    background:  #0a2c39;
-    padding: 10px;
+  color: #ffffff;
+        background: linear-gradient(to right, #061b23, #3a4144);
+    padding: 14px 14px;
     border-radius: 50%;
-   box-shadow: 3px 3px 12px 0px #7b8b92;
-      
+   box-shadow: 0px 0px 4px 0px #7b8b92;
+      font-size: 15px;
 
 }
 .logo-conflicts {
   font-family: Cormorant Garamond,serif;
  
   font-weight: 900;
-    color: #0c3344;
+    color: #0e0e0f;
 }
 
 .menu-icon {
   font-size: 1.2rem;
   line-height: 1;
+}
+/* La barra NO se ve en desktop */
+.mobile-only {
+  display: none;
+}
+
+/* SOLO móvil */
+@media (max-width: 860px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .mobile-search-wrapper {
+    position: relative;
+   
+    background: white;
+  }
+
+  .country-content-wrapper {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 860px) {
+
+  .country-layout {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .country-body {
+    overflow-y: auto;
+  }
+}
+.menu-button-fixed {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 12000;
+box-shadow: 0px 0px 4px 0px #7b8b92;
+  padding: 17px 11px;
+  border-radius: 50%;
+
+ background:linear-gradient(to right, #2b2e2f, #0e0e0f);
+  ;
+
+  color: #e8eaea;
+  font-size: 15px;
+  font-weight: 100;
+  font-family: Cormorant Garamond,serif;
+  cursor: pointer;
+border: none;
+  transition: background .20s ease, transform .18s ease;
+}
+
+/* Hover elegante */
+.menu-button-fixed:hover {
+  background: linear-gradient(145deg, #1a1b1b, #2c2d2e);
+  transform: scale(1.02);
+}
+
+/* Activo (estado cerrar) */
+.menu-button-fixed.close-mode {
+  background: linear-gradient(145deg, #131313, #0d0d0d);
+  border: 1px solid #4d4d4d;
+  color: #f1f1f1;
+}
+
+.menu-button-fixed.close-mode:hover {
+  background: linear-gradient(145deg, #1c1c1c, #111111);
+      padding: 4px 15px;
 }

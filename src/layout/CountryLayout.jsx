@@ -110,69 +110,73 @@ export default function CountryLayout() {
   if (loading) return <div className="country-loading">Cargando país {code}...</div>
   if (!meta) return <div className="country-loading">No se encontraron datos para {code}</div>
 
-  if (isMobile && meta) {
-    return (
-      <div className="country-layout mobile-wiki-mode">
-        {/* Mobile Specific Header */}
-        <div className="mobile-wiki-header">
-          <div className="mobile-header-top">
-            <div className="mobile-logo-large" onClick={() => navigate("/")}>
-              <span className="logo-wiki">Wiki</span>
-              <span className="logo-conflicts">Conflicts</span>
-            </div>
+ if (isMobile && meta) {
+  return (
+    <div className="country-layout mobile-wiki-mode">
 
-            <button className="mobile-menu-toggle-btn" onClick={() => setIsMenuOpen(true)}>
-              <div className="hamburger-box">
-                <span className="hamburger-inner"></span>
-              </div>
-              <span className="menu-label">Menú</span>
-            </button>
+      {/* Mobile Header */}
+      <div className="mobile-wiki-header">
+        <div className="mobile-header-top-row">
+          <div className="mobile-logo-large" onClick={() => navigate("/")}>
+            <span className="logo-wiki">Wiki</span>
+            <span className="logo-conflicts">Conflicts</span>
           </div>
+<button
+  className={`menu-button-fixed ${isMenuOpen ? "close-mode" : ""}`}
+  onClick={() => setIsMenuOpen(prev => !prev)}
+>
+  {isMenuOpen ? "Cerrar" : "Menú"}
+</button>
 
-          <div className="mobile-search-bar">
-            <input
-              type="search"
-              className="mobile-search-input"
-              placeholder="Buscar en WikiConflicts..."
-              value={searchTerm}
-              onChange={(e) => handleSearch(e.target.value)}
-              aria-label="Buscar contenido"
-            />
-          </div>
 
-          <h1 className="mobile-country-title">{meta.name}</h1>
+          <div className="mobile-header-spacer" aria-hidden="true" />
         </div>
 
-        {/* Menu Overlay */}
-        {isMenuOpen && (
-          <MobileMenu
-            countryName={meta.name}
-            sections={meta.sections}
-            onClose={() => setIsMenuOpen(false)}
-            onSelectSection={(sectionId) => {
-              handleSelect(sectionId)
-              setIsMenuOpen(false)
-            }}
-            onHome={() => navigate("/")}
-          />
-        )}
+        <h1 className="mobile-country-title-centered">{meta.name}</h1>
 
-        {/* Content Area */}
-        <div className="country-content-wrapper mobile-content-padding">
-          {currentSection ? (
-            <CountryContent
-              countryCode={code}
-              section={currentSection}
-              searchTerm={searchTerm}
-              openMenu={setIsMenuOpen}
-            />
-          ) : (
-            <div className="select-prompt">Seleccione una sección del menú para comenzar.</div>
-          )}
-        </div>
+        
       </div>
-    )
-  }
+
+      {/* Menu Overlay */}
+      {isMenuOpen && (
+        <MobileMenu
+          countryName={meta.name}
+          sections={meta.sections}
+          onClose={() => setIsMenuOpen(false)}
+          onSelectSection={(sectionId) => {
+            handleSelect(sectionId)
+            setIsMenuOpen(false)
+          }}
+          onHome={() => navigate("/")}
+        />
+      )}
+
+      {/* Content */}
+      <div className="country-content-wrapper mobile-content-padding">
+         <div className="mobile-search-wrapper">
+    <input
+      type="search"
+      className="mobile-search-canva"
+      placeholder="Buscar..."
+      value={searchTerm}
+      onChange={(e) => handleSearch(e.target.value)}
+    />
+  </div>
+        {currentSection ? (
+          <CountryContent
+            countryCode={code}
+            section={currentSection}
+            searchTerm={searchTerm}
+            openMenu={setIsMenuOpen}
+          />
+        ) : (
+          <div className="select-prompt">Seleccione una sección del menú para comenzar.</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 
   return (
     <div className="country-layout">

@@ -12,7 +12,7 @@ const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 const europeCountries = [
   "Albania","Andorra","Austria","Belarus","Belgium","Bosnia and Herzegovina",
   "Bulgaria","Croatia","Czech Republic","Denmark","Estonia",
-  "France","Germany","Greece","Hungary","Iceland","Ireland","Italy",
+  "France","Germany","Greece","Hungary","Ireland","Italy",
   "Kosovo","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta",
   "Moldova","Monaco","Montenegro","Netherlands","North Macedonia",
   "Poland","Portugal","Romania","San Marino","Serbia","Slovakia",
@@ -39,7 +39,7 @@ function getCountryId(geo) {
 export default function MapEurope() {
   const [hoveredCountry, setHoveredCountry] = useState(null)
   const [hoveredPlainName, setHoveredPlainName] = useState(null)
-
+const isMobile = typeof window !== "undefined" && window.innerWidth < 860;
   const clickCountry = (id) => {
     window.location.href = `/country/${id}`
   }
@@ -48,7 +48,11 @@ export default function MapEurope() {
     <div className="map-wrapper" style={{ position: "relative" }}>
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 800, center: [10, 50] }}
+         projectionConfig={{
+          scale: isMobile ? 830 : 800,   // ← ESCALA MÓVIL AQUÍ
+          center: [15, 50]
+        }}
+        
         className="composable-map-container"
         style={{ width: "100%", height: "100%" }}
       >

@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext"
 import "./country-content.css"
 import "./timeline.css"
 import MediaGallery from "./MediaGallery"
+import ChaptersOverlay from "../components/ChaptersOverlay"
 
 export default function CountryContent({ countryCode, section, searchTerm = "" }) {
   const { lang, t } = useLanguage()
@@ -22,7 +23,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
   const [filterYear, setFilterYear] = useState("")
   const [filterMonth, setFilterMonth] = useState("")
   const [sectionHeader, setSectionHeader] = useState({ title: "", description: "" })
-
+const [isChaptersPanelOpen, setChaptersPanelOpen] = useState(false)
   const months = [
     { value: 1, label: "Enero" },
     { value: 2, label: "Febrero" },
@@ -586,25 +587,24 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
         <div className="chapters-menu-sticky">
           <h2 className="section-header-inline">{t("conflict-description")}</h2>
           <div className="chapters-nav-container">
-            <button className="chapters-hamburger-btn" onClick={() => setIsChaptersMenuOpen(!isChaptersMenuOpen)}>
-              <span>☰</span> <span>ÍNDICE DE SECCIONES</span>
-            </button>
+            <button className="chapters-index-button"
+  onClick={() => setIsChaptersMenuOpen(!isChaptersMenuOpen)}
+>
+  {/* <span className="index-line">──────</span> */}
+  {/* <span className="index-arrow">&gt;</span> */}
+  <span className="index-text">Índice</span>
+</button>
+
+
             {isChaptersMenuOpen && (
-              <div className="chapters-dropdown-menu">
-                {filteredItems.map((ch) => (
-                  <div
-                    key={ch.id}
-                    className={`chapter-dropdown-item ${selectedItem?.id === ch.id ? "active" : ""}`}
-                    onClick={() => {
-                      setSelectedItem(ch)
-                      setIsChaptersMenuOpen(false)
-                    }}
-                  >
-                    {ch.title}
-                  </div>
-                ))}
-              </div>
-            )}
+  <ChaptersOverlay
+    chapters={filteredItems}
+    selectedId={selectedItem?.id}
+    onSelect={(ch) => setSelectedItem(ch)}
+    onClose={() => setIsChaptersMenuOpen(false)}
+  />
+)}
+
             <div className="chapters-horizontal-menu desktop-only">
               {filteredItems.map((ch) => (
                 <div
@@ -1189,6 +1189,7 @@ export default function CountryContent({ countryCode, section, searchTerm = "" }
     
     return (
       <div className="content-inner">
+        
         <button className="back-button" onClick={() => loadSection()}>
           {t("back-button")}
         </button>
