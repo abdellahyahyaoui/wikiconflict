@@ -153,7 +153,7 @@ export default function CountryLayout() {
 
       {/* Content */}
       <div className="country-content-wrapper mobile-content-padding">
-         <div className="mobile-search-wrapper">
+         {/* <div className="mobile-search-wrapper">
     <input
       type="search"
       className="mobile-search-canva"
@@ -161,7 +161,7 @@ export default function CountryLayout() {
       value={searchTerm}
       onChange={(e) => handleSearch(e.target.value)}
     />
-  </div>
+  </div> */}
         {currentSection ? (
           <CountryContent
             countryCode={code}

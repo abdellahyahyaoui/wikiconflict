@@ -274,19 +274,19 @@
     font-family: Cormorant Garamond, serif;
     font-style: italic;
     font-weight: 100;
-  color: #ffffff;
-        background: linear-gradient(to right, #061b23, #3a4144);
-    padding: 14px 14px;
-    border-radius: 50%;
-   box-shadow: 0px 0px 4px 0px #7b8b92;
-      font-size: 15px;
+  color: #07202b;
+        
+    padding: 4px 0px;
+ 
+
+      font-size: 20px;
 
 }
 .logo-conflicts {
   font-family: Cormorant Garamond,serif;
  
   font-weight: 900;
-    color: #0e0e0f;
+    color: #1d546b;
 }
 
 .menu-icon {
@@ -330,17 +330,17 @@
   top: 12px;
   right: 12px;
   z-index: 12000;
-box-shadow: 0px 0px 4px 0px #7b8b92;
-  padding: 17px 11px;
+
+  padding: 20px 11px;
   border-radius: 50%;
 
- background:linear-gradient(to right, #2b2e2f, #0e0e0f);
-  ;
+ background:#07202bc4;
+  
 
   color: #e8eaea;
   font-size: 15px;
-  font-weight: 100;
-  font-family: Cormorant Garamond,serif;
+  font-weight: 900;
+  /* font-family: Cormorant Garamond,serif; */
   cursor: pointer;
 border: none;
   transition: background .20s ease, transform .18s ease;

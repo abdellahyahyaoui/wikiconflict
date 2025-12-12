@@ -7,7 +7,7 @@
 }
 
 .velum-title {
-  color: #0e0e0f !important;
+  color: #1d546b !important;
   font-size: 18px !important;
 }
 
@@ -15,7 +15,7 @@
   font-size: 1rem;
   padding: 2px 0px;
   cursor: pointer;
-color: #0e0e0f;
+color: #1d546b;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
@@ -29,7 +29,7 @@ color: #0e0e0f;
   font-size: 1rem;
   padding: 6px 12px;
   cursor: pointer;
-color: #0e0e0f;
+color: #1d546b;
   transition: all 0.2s ease;
   
   margin-left: 0;
@@ -59,7 +59,7 @@ color: #0e0e0f;
 
 /* Complete redesign with minimalista aesthetic and improved responsiveness */
 .country-sidebar {
-  width: 220px; /* Reduced from 280px */
+  /* width: 220px; Reduced from 280px */
   min-width:170px;
 
   padding: 0px 30px; /* Reduced padding */
@@ -92,7 +92,7 @@ color: #0e0e0f;
   align-items: center;
   padding: 10px 0;
   user-select: none;
- color: #0e0e0f;
+ color: #1d546b;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
@@ -149,7 +149,7 @@ color: #0e0e0f;
   font-size: 1rem;
   padding: 2px 20px;
   cursor: pointer;
-color: #0e0e0f;
+color: #1d546b;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;
@@ -182,7 +182,7 @@ color: #0e0e0f;
   font-size: 30px; /* Reduced from 26px */
   font-weight: 400; /* Lighter weight looks more elegant */
   margin: 12px 0 16px 0; /* Reduced margin */
-  color: #423e3e;
+  color:#1d546b;
   font-family: var(--wiki-font-serif);
   line-height: 1.2;
   padding-bottom: 16px;
@@ -200,7 +200,7 @@ color: #0e0e0f;
   align-items: center;
   /* padding: 10px 0; */
   user-select: none;
-color: #0e0e0f;
+color: #1d546b;
   text-transform: none;
   letter-spacing: 0.6px;
   transition: color 0.2s ease;
@@ -217,11 +217,11 @@ color: #0e0e0f;
 }
 
 .sidebar-section-item {
-   
-  font-size:1.2rem;
+/*    
+  font-size:0.95rem; */
   padding: 2px 20px;
   cursor: pointer;
-color: #0e0e0f;
+color: #1d546b;
   transition: all 0.2s ease;
   /* border-left: 2px solid transparent; */
   border-radius: 0;

@@ -3,17 +3,17 @@
     {
       "id": "personajes",
       "name": "Personajes",
-      "letters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "y"]
+      "letters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t","u","v","W" ,"x","y","z"]
     },
     {
       "id": "organizaciones",
       "name": "Organizaciones",
-      "letters": ["a", "c", "e", "f", "h", "i", "o", "u"]
+      "letters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t","u","v","W" ,"x","y","z"]
     },
     {
       "id": "conceptos",
       "name": "Conceptos",
-      "letters": ["a", "c", "d", "e", "g", "i", "l", "n", "r", "s"]
+      "letters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t","u","v","W" ,"x","y","z"]
     }
   ]
 }

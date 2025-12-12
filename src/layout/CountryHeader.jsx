@@ -63,7 +63,7 @@ export default function CountryHeader({ onHomeClick = () => {}, onSearch = () =>
           <span className="logo-wiki">Wiki</span>
           <span className="logo-conflicts">conflicts</span>
         </div>
-        <div className="header-quote">La historia contada desde su presente</div>
+        <div className="header-quote">“La memoria de las víctimas es nuestra responsabilidad.”</div>
       </div>
 
       <div className="header-center">
@@ -97,7 +97,7 @@ export default function CountryHeader({ onHomeClick = () => {}, onSearch = () =>
           aria-haspopup="true"
           aria-label="Seleccionar idioma"
         >
-          Language
+         idioma
         </button>
 
         <div className={`language-dropdown ${open ? "open" : ""}`} role="menu">

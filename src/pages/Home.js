@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom"
 import WorldMap from "../components/WorldMap"
 import MapLatinAmerica from "../components/MapLatinAmerica"
 import MapEurope from "../components/MapEurope"
+import MapAsia from "../components/MapAsia"
+import MapAfrica from "../components/MapAfrica"
 
 // ========================== REGIONES ==========================
 
@@ -102,7 +104,42 @@ const regions = [
       { id: "cuba", name: "Cuba", hasConflict: false },
       { id: "haiti", name: "Haití", hasConflict: true },
     ]
-  }
+  },
+  {
+  name: "Asia",
+  countries: [
+    { id: "china", name: "China", hasConflict: true },
+    { id: "india", name: "India", hasConflict: true },
+    { id: "japan", name: "Japón", hasConflict: false },
+    { id: "philippines", name: "Filipinas", hasConflict: false },
+    { id: "vietnam", name: "Vietnam", hasConflict: false },
+    { id: "northkorea", name: "Corea del Norte", hasConflict: false },
+    { id: "southkorea", name: "Corea del Sur", hasConflict: false },
+    { id: "taiwan", name: "Taiwán", hasConflict: false },
+    { id: "pakistan", name: "Pakistán", hasConflict: false },
+    { id: "afghanistan", name: "Afganistán", hasConflict: false },
+    { id: "myanmar", name: "Myanmar", hasConflict: true },
+    
+
+  ]
+},
+{
+  name: "África",
+  countries: [
+    { id: "southafrica", name: "Sudáfrica", hasConflict: false },
+    { id: "ethiopia", name: "Etiopía", hasConflict: true },
+    { id: "somalia", name: "Somalia", hasConflict: true },
+    { id: "drcongo", name: "Rep. Dem. del Congo", hasConflict: true },
+    { id: "nigeria", name: "Nigeria", hasConflict: true },
+    { id: "kenya", name: "Kenia", hasConflict: false },
+    { id: "uganda", name: "Uganda", hasConflict: false },
+    { id: "angola", name: "Angola", hasConflict: false },
+    { id: "tanzania", name: "Tanzania", hasConflict: false },
+    { id: "mozambique", name: "Mozambique", hasConflict: false }
+  ]
+}
+
+
 ]
 
 // ========================== COMPONENTE ==========================
@@ -116,7 +153,9 @@ function Home() {
   const maps = [
     <WorldMap key="arab" />,
     <MapEurope key="europe" />,
-    <MapLatinAmerica key="latam" />
+    <MapLatinAmerica key="latam" />,
+    <MapAsia key="asia" />,
+    <MapAfrica key="africa" />
   ]
 
   const nextMap = () => {

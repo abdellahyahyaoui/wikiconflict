@@ -25,7 +25,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
-  color: #131314;
+  color: #1d546b;
   text-align: center;
 font-family: Cormorant Garamond,serif;
   letter-spacing: -0.5px;
@@ -513,7 +513,7 @@ font-family: Cormorant Garamond,serif;
   font-size: 50px;
   /* font-weight: 300; */
   margin-bottom: 40px;
-  color: #3d3f41;
+  color: #1d546b;
   text-align: left;
   text-align: center;
   font-family: poppins;
@@ -686,7 +686,15 @@ font-family: Cormorant Garamond,serif;
   }
 @media (max-width:760px) {
     .section-header-inline {
-    font-size: 30px;
+   font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #1d546b;
+    margin-bottom: 0.5rem;
+    border-bottom: 3px double #1a6483;
+    padding-bottom: 0.5rem;
    
   }
 }
@@ -776,7 +784,7 @@ font-family: Cormorant Garamond,serif;
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #0c3344;
+  color: #1d546b;
   margin-bottom: 8px;
 }
 
@@ -1209,7 +1217,7 @@ font-family: Cormorant Garamond,serif;
 
 /* VELUM Section Styles */
 .velum-section {
-  background: linear-gradient(135deg, #fafbfc 0%, #f0f2f5 100%);
+
   min-height: 100vh;
 }
 
@@ -1527,7 +1535,7 @@ font-family: poppins;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-align: center;
-  color: #1a6483;
+  color: #1d546b;
   margin-bottom: 0.5rem;
   border-bottom: 3px double #1a6483;
   padding-bottom: 0.5rem;

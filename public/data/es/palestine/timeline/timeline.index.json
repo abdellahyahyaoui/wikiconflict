@@ -18,28 +18,13 @@
       "summary": "Israel ocupa Cisjordania, Gaza, los Altos del Golán y la Península del Sinaí."
     },
     {
-      "id": "primera-intifada",
-      "date": "9 de diciembre de 1987",
-      "year": 1987,
-      "title": "Primera Intifada",
-      "image": "/imagenes/1.png",
-      "summary": "Levantamiento popular palestino contra la ocupación israelí."
-    },
-    {
-      "id": "acuerdos-oslo",
-      "date": "13 de septiembre de 1993",
-      "year": 1993,
-      "title": "Acuerdos de Oslo",
-      "image": "/imagenes/2.png",
-      "summary": "Primeros acuerdos de paz directos entre Israel y la OLP."
-    },
-    {
-      "id": "octubre-2023",
-      "date": "7 de octubre de 2023",
-      "year": 2023,
-      "title": "Escalada en Gaza",
-      "image": "/imagenes/3.png",
-      "summary": "Inicio de la ofensiva militar israelí sobre Gaza tras los ataques de Hamas."
+      "id": "ola-de-frio",
+      "date": "12",
+      "year": 2025,
+      "month": 12,
+      "title": "ola de frio",
+      "summary": "ola de frio extremo que asola agaza",
+      "image": null
     }
   ]
 }

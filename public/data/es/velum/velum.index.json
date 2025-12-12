@@ -1,37 +1,6 @@
 {
   "items": [
     {
-      "id": "demo-layout",
-      "title": "Documentando la Resistencia: Un Viaje Visual",
-      "author": "Equipo WikiConflicts",
-      "date": "2025-12-03",
-      "coverImage": "/imagenes/chohada.png",
-      "excerpt": "Articulo de demostracion que ilustra el diseno L/U con imagenes posicionadas a izquierda y derecha.",
-      "category": "Documentacion",
-      "featured": true,
-      "subtitle": "Historias de resiliencia a traves de imagenes y testimonios",
-      "abstract": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
-      "keywords": [
-        "demo",
-        "layout",
-        "multimedia",
-        "L/U"
-      ]
-    },
-    {
-      "id": "nakba-memoria-viva",
-      "title": "La Nakba: Memoria Viva de un Pueblo",
-      "author": "Dr. Rashid Khalidi",
-      "date": "2024-05-15",
-      "coverImage": "/imagenes/10.png",
-      "excerpt": "Un recorrido por los eventos de 1948 y su impacto duradero en la identidad palestina.",
-      "category": "Historia",
-      "featured": true,
-      "subtitle": "",
-      "abstract": "Toda nuestra historia, nuestras ideologías y nuestros pensamientos…\ntodo lo que hoy creemos nos ha llegado siempre a través de libros. Miles de ellos.\nY, sin embargo, solo sobrevivieron aquellos que nacieron de la experiencia real, de la herida abierta, de la voz quebrada por el dolor.\nNo por su fina prosa ni por su valor literario, sino porque eran auténticos.\nEl ser humano ha demostrado siempre una sensibilidad inquebrantable para distinguir entre lo genuino y lo falso.\nTambién para reconocer la verdad allí donde se transmite a través de palabras.\nPorque el dolor siempre encontró en las palabras un cauce para expresarse. Y la verdad, por dura que fuese, siempre supo abrirse camino en ellas.\nLo que hoy tienes en tus manos quiere ser parte de esa memoria que permanece. Y es desde esa verdad que nace esta obra.\nNo es una publicación cualquiera.\nEs un testimonio colectivo, vivo.",
-      "keywords": []
-    },
-    {
       "id": "mujeres-resistencia",
       "title": "Mujeres en la Resistencia",
       "author": "Dra. Leila Ahmed",
